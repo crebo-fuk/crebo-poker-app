@@ -46,27 +46,27 @@ export const RecordItem = ({ record, onDelete, exchange, onUpdate }: Props) => {
       <div className="flex-1 min-w-0">
         <div className="flex gap-3 items-center">
           <p className="text-xs">{record.date}</p>
-          {isITM && (
-            <p className="rounded text-xs ring ring-black px-1 py-0.5">ITM</p>
-          )}
           <p className="text-xs">{record.tableSize}Max</p>
+          {isITM && (
+            <p className="rounded text-xs ring ring-black px-0.5 py-px">ITM</p>
+          )}
           {isEditing && <div className="text-xs text-blue-600">編集中...</div>}
         </div>
         {!isEditing ? (
-          <p className="text-sm">{record.name}</p>
+          <p className="text-sm mt-1">{record.name}</p>
         ) : (
           <input
-            className="border pl-1 rounded ml-1 mt-1 w-[30%]"
+            className="border pl-1 rounded mt-1 w-[50%] text-sm"
             value={draftName}
             onChange={(e) => setDraftName(e.target.value)}
           />
         )}
-        <div className="flex">
+        <div className="flex mt-1">
           <div className="text-left text-xs flex">
             <p>Buy-in:</p>
             <p className="pl-1 text-red-500">{exchange(record.buyIn)}</p>
           </div>
-          <div className="text-left text-xs flex">
+          <div className="text-left text-xs flex ml-1">
             <p>Buy-out:</p>
             {!isEditing ? (
               <p
@@ -78,7 +78,7 @@ export const RecordItem = ({ record, onDelete, exchange, onUpdate }: Props) => {
               </p>
             ) : (
               <input
-                className="border pl-1 rounded ml-1 w-[20%]"
+                className="border pl-1 rounded ml-1 w-[50%]"
                 inputMode="numeric"
                 value={draftBuyOut}
                 onChange={(e) => setDraftBuyOut(e.target.value)}
@@ -87,7 +87,7 @@ export const RecordItem = ({ record, onDelete, exchange, onUpdate }: Props) => {
             )}
           </div>
           <div className="items-center">
-            <div className="text-left text-xs flex">
+            <div className="text-left text-xs flex ml-1">
               <p>収支:</p>
               <p
                 className={`pl-1 ${
@@ -109,7 +109,7 @@ export const RecordItem = ({ record, onDelete, exchange, onUpdate }: Props) => {
         {!isEditing ? (
           <button
             type="button"
-            className="text-sm border rounded px-2 py-1 cursor-pointer"
+            className="text-xs border rounded px-2 py-1 cursor-pointer"
             onClick={startEdit}
           >
             編集
@@ -118,14 +118,14 @@ export const RecordItem = ({ record, onDelete, exchange, onUpdate }: Props) => {
           <div className="flex flex-col gap-1">
             <button
               type="button"
-              className="text-sm border rounded px-2 py-1 cursor-pointer"
+              className="text-xs border rounded px-2 py-1 cursor-pointer"
               onClick={saveBuyOut}
             >
               保存
             </button>
             <button
               type="button"
-              className="text-sm border rounded px-2 py-1 cursor-pointer"
+              className="text-xs border rounded px-2 py-1 cursor-pointer"
               onClick={cancelEdit}
             >
               取消
