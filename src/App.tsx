@@ -179,17 +179,17 @@ function App() {
   };
 
   return (
-    <div className="h-[100vh]">
-      <div className="h-[90vh]">
-        <div className="mb-1 border-b">
+    <div className="min-h-screen flex flex-col">
+      <div className="">
+        <header className="mb-1 border-b">
           <h1 className="flex items-center justify-center text-xl">
             ポーカー収支管理アプリ
           </h1>
           <div className="flex items-center justify-between">
-            <div className="flex items-center justify-end gap-1 text-sm">
-              <div className="text-sm">レート更新</div>
+            <div className="flex items-center justify-end gap-1 text-xs">
+              <div className="">レート更新</div>
               <button
-                className="ml-1 rounded cursor-pointer text-xl"
+                className="ml-1 rounded cursor-pointer text-sm"
                 onClick={() => handleFetchRate()}
               >
                 🔄
@@ -197,7 +197,7 @@ function App() {
               <div>{rateMessage}</div>
             </div>
             <div>
-              <div className="flex items-center justify-end gap-1 text-sm">
+              <div className="flex items-center justify-end gap-1 text-xs">
                 <p className="pb-1">円表示(USD/JPY {USD_to_JPY})</p>
                 <input
                   className="ml-1 w-3 h-3"
@@ -208,7 +208,7 @@ function App() {
               </div>
             </div>
           </div>
-        </div>
+        </header>
         {(screen === "home" || screen === "tmList" || screen === "form") && (
           <div>
             <div className="pb-1 pt-1 flex items-center justify-center">
@@ -245,7 +245,7 @@ function App() {
           {/* ==============履歴一覧============== */}
           {/* ===年月別フィルタリング=== */}
           {(screen === "home" || screen === "tmList") && (
-            <div className="flex min-h-[11vh]">
+            <div className="flex">
               <div>
                 <div className="flex">
                   <button
@@ -397,7 +397,7 @@ function App() {
         </div>
       </div>
       {/* ==============画面下部ボタン============== */}
-      <div className="border-t p-3 grid grid-cols-3">
+      <div className="flex-1 border-t p-3 grid grid-cols-3">
         <button
           onClick={() => {
             setScreen("chart");
