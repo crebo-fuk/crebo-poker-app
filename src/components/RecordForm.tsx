@@ -42,18 +42,18 @@ export const RecordForm = ({ onAdd }: Props) => {
   const numTableSize: number[] = [6, 9];
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <p className="text-left p-2">日付</p>
       <input
         type="date"
-        className="text-left ring rounded-xl p-2 min-w-full"
+        className="text-left border rounded-xl p-2 w-[95%]"
         {...register("date", { required: "入力してください" })}
       />
       <div className="grid grid-cols-2 gap-3">
         <div>
           <p className="text-left p-2">トーナメント名</p>
           <input
-            className="text-left ring rounded-xl p-2 min-w-full"
+            className="text-left border rounded-xl p-2 w-full"
             {...register("name", { required: "入力してください" })}
           />
           {errors.name && (
@@ -86,7 +86,7 @@ export const RecordForm = ({ onAdd }: Props) => {
           <p className="text-left p-2">Buy-in (USD)</p>
           <input
             type="number"
-            className="text-left ring rounded-xl p-2 min-w-full"
+            className="text-left ring rounded-xl p-2 w-full"
             {...register("buyIn")}
           />
         </div>
@@ -94,7 +94,7 @@ export const RecordForm = ({ onAdd }: Props) => {
           <p className="text-left p-2">Buy-out (USD)</p>
           <input
             type="number"
-            className="text-left ring rounded-xl p-2 min-w-full"
+            className="text-left ring rounded-xl p-2 w-full"
             {...register("buyOut")}
           />
         </div>
