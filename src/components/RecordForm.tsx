@@ -1,5 +1,6 @@
 import type { RecordItems, FormValues } from "../types/type";
 import { useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 
 // ==============入力フォーム==============
 type Props = { onAdd: (newRecord: RecordItems) => void };
@@ -19,6 +20,7 @@ export const RecordForm = ({ onAdd }: Props) => {
       tableSize: undefined,
     },
   });
+
   const onSubmit = (values: FormValues) => {
     const buyInNum = Number(values.buyIn);
     const buyOutNum = Number(values.buyOut);
@@ -29,7 +31,7 @@ export const RecordForm = ({ onAdd }: Props) => {
     if (Number.isNaN(buyInNum) || Number.isNaN(buyOutNum)) return;
 
     const newRecord: RecordItems = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       date: date,
       name: name,
       buyIn: buyInNum,

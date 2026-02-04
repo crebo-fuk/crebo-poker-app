@@ -3,6 +3,7 @@ import { useState } from "react";
 import { TournamentList } from "./TournamentList";
 import { HandList } from "./HandList";
 import { HandForm } from "./HandForm";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   tournaments: RecordItems[];
@@ -57,7 +58,7 @@ export const HandHistory = ({
     }
 
     const newHand: HandItem = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       tournamentId: selectedTournamentId,
       heroPos,
       heroHand,
