@@ -41,14 +41,14 @@ export const HandList = ({
   return (
     <div className="flex-1 overflow-y-auto overscroll-contain p-3 w-full">
       <div className="flex items-center justify-between">
-        <div className="flex gap-5">
+        <div className="flex gap-2 text-xs">
           <div>ハンド数: {totalHands}</div>
           <div className="text-green-600">WIN: {totalWin}</div>
           <div className="text-red-600">LOSE: {totalLose}</div>
           <div className="text-gray-600">CHOP: {totalChop}</div>
           <div>勝率: {winRate}%</div>
         </div>
-        <div className="flex gap-3 mr-3">
+        <div className="flex gap-3 mr-3 text-xs">
           <div>HEROポジション</div>
           <select
             className="border w-25"

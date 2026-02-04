@@ -104,7 +104,7 @@ export const HandHistory = ({
       <div className="">
         <div className="flex items-center justify-between m-3">
           <button
-            className="cursor-pointer border rounded-2xl p-2"
+            className="cursor-pointer border rounded-2xl p-2 text-sm"
             onClick={() => {
               setTournamentId(null);
               setIsFormOpen(false);
@@ -114,7 +114,7 @@ export const HandHistory = ({
             一覧へ
           </button>
           <button
-            className="cursor-pointer border rounded-2xl p-2"
+            className="cursor-pointer border rounded-2xl p-2 text-sm"
             onClick={() => setIsFormOpen((prev) => !prev)}
           >
             ハンド新規作成＋
@@ -122,9 +122,14 @@ export const HandHistory = ({
         </div>
         {/* ==============選択されたトーナメント============== */}
         {selectedTournament != null && (
-          <div className="border rounded-2xl p-4 m-3 bg-gray-200">
-            <div className="text-sm">{selectedTournament.date}</div>
-            <div className="text-xl font-bold">{selectedTournament.name}</div>
+          <div className="border rounded-2xl p-2 m-3 bg-gray-200">
+            <div className="flex justify-between">
+              <div className="text-xs">{selectedTournament.date}</div>
+              <div className="text-xs flex items-center justify-center">
+                {selectedTournament.tableSize}Max
+              </div>
+            </div>
+            <div className="text-sm font-bold">{selectedTournament.name}</div>
           </div>
         )}
         {/* ==============ハンド新規登録フォーム============== */}
