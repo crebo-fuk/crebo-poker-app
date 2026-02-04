@@ -311,7 +311,7 @@ function App() {
         )}
         {/* ===履歴詳細=== */}
         {(screen === "home" || screen === "tmList") && (
-          <div className="h-[45vh] overflow-y-auto overscroll-contain p-3">
+          <div className="h-[45vh] overflow-y-auto overscroll-contain p-3 pb-20">
             <RecordList
               records={filteredRecords}
               onDelete={handleDelete}
