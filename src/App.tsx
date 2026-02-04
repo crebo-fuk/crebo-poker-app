@@ -222,7 +222,7 @@ function App() {
                     setSelectedMonth(null);
                     setSelectedDay(null);
                   }}
-                  className="border-b p-2 mt-1 min-w-full cursor-pointer"
+                  className={`border-b p-2 mt-1 min-w-full cursor-pointer ${(screen === "home" || screen === "tmList") && "text-green-500"}`}
                 >
                   履歴一覧
                 </button>
@@ -230,7 +230,7 @@ function App() {
                   onClick={() => {
                     setScreen("form");
                   }}
-                  className="border-b p-2 mt-1 min-w-full cursor-pointer"
+                  className={`border-b p-2 mt-1 min-w-full cursor-pointer ${screen === "form" && "text-green-500"}`}
                 >
                   ＋新規登録
                 </button>
@@ -405,7 +405,7 @@ function App() {
           グラフ
         </button>
         <button
-          className={`cursor-pointer ${screen === "home" && "text-green-500"}`}
+          className={`cursor-pointer ${(screen === "home" || screen === "tmList" || screen === "form") && "text-green-500"}`}
           onClick={() => {
             setScreen("home");
             setSelectedYear(null);
