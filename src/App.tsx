@@ -180,44 +180,41 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="">
-        <header className="mb-1 border-b">
-          <h1 className="flex items-center justify-center text-xl">
-            ポーカー収支管理アプリ
-          </h1>
-          <div className="flex items-center justify-between">
+      <header className="mb-1 h-[35%]">
+        <h1 className="flex items-center justify-center text-xl">
+          ポーカー収支管理アプリ
+        </h1>
+        <div className="flex items-center justify-between border-b">
+          <div className="flex items-center justify-end gap-1 text-xs">
+            <div className="">レート更新</div>
+            <button
+              className="ml-1 rounded cursor-pointer text-sm"
+              onClick={() => handleFetchRate()}
+            >
+              🔄
+            </button>
+            <div>{rateMessage}</div>
+          </div>
+          <div>
             <div className="flex items-center justify-end gap-1 text-xs">
-              <div className="">レート更新</div>
-              <button
-                className="ml-1 rounded cursor-pointer text-sm"
-                onClick={() => handleFetchRate()}
-              >
-                🔄
-              </button>
-              <div>{rateMessage}</div>
-            </div>
-            <div>
-              <div className="flex items-center justify-end gap-1 text-xs">
-                <p className="pb-1">円表示(USD/JPY {USD_to_JPY})</p>
-                <input
-                  className="ml-1 w-3 h-3"
-                  type="checkbox"
-                  checked={isJPY}
-                  onChange={(e) => setIsJPY(e.target.checked)}
-                ></input>
-              </div>
+              <p className="pb-1">円表示(USD/JPY {USD_to_JPY})</p>
+              <input
+                className="ml-1 w-3 h-3"
+                type="checkbox"
+                checked={isJPY}
+                onChange={(e) => setIsJPY(e.target.checked)}
+              ></input>
             </div>
           </div>
-        </header>
+        </div>
         {(screen === "home" || screen === "tmList" || screen === "form") && (
           <div>
             <div className="pb-1 pt-1 flex items-center justify-center">
               【{periodLabel}】
             </div>
             <Summary records={filteredRecords} exchange={exchangeMoney} />
-
             <div>
-              <div className="grid grid-cols-2 m-2">
+              <div className="grid grid-cols-2">
                 <button
                   onClick={() => {
                     setScreen("tmList");
@@ -225,7 +222,7 @@ function App() {
                     setSelectedMonth(null);
                     setSelectedDay(null);
                   }}
-                  className="border-b p-4 mt-3 min-w-full cursor-pointer"
+                  className="border-b p-2 mt-1 min-w-full cursor-pointer"
                 >
                   履歴一覧
                 </button>
@@ -233,7 +230,7 @@ function App() {
                   onClick={() => {
                     setScreen("form");
                   }}
-                  className="border-b p-4 mt-3 min-w-full cursor-pointer"
+                  className="border-b p-2 mt-1 min-w-full cursor-pointer"
                 >
                   ＋新規登録
                 </button>
@@ -241,11 +238,94 @@ function App() {
             </div>
           </div>
         )}
-        <div>
-          {/* ==============履歴一覧============== */}
-          {/* ===年月別フィルタリング=== */}
-          {(screen === "home" || screen === "tmList") && (
-            <div className="flex">
+      </header>
+      <main className="flex-1 h-[50vh]">
+        {/* ==============履歴一覧============== */}
+        {/* ===年月別フィルタリング=== */}
+        {(screen === "home" || screen === "tmList") && (
+          <div className="flex h-[10vh]">
+            <div>
+              <div className="flex">
+                <button
+                  className={`items-left border rounded text-sm p-0.5 m-0.5 cursor-pointer ${selectedYear === null && selectedMonth === null ? "bg-gray-300" : ""}`}
+                  onClick={() => {
+                    setSelectedYear(null);
+                    setSelectedMonth(null);
+                    setSelectedDay(null);
+                  }}
+                >
+                  全期間
+                </button>
+                <div className="flex">
+                  {years.map((year) => {
+                    return (
+                      <button
+                        key={year}
+                        className={`border rounded flex items-left text-sm p-0.5 m-0.5 cursor-pointer ${selectedYear === year ? "bg-gray-300" : ""}`}
+                        onClick={() => {
+                          setSelectedYear(year);
+                          setSelectedMonth(null);
+                          setSelectedDay(null);
+                        }}
+                      >
+                        {year}年
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="flex">
+                {selectedYear !== null &&
+                  months.map((month) => {
+                    return (
+                      <button
+                        key={month}
+                        className={`border rounded flex items-left text-sm p-0.5 m-0.5 cursor-pointer ${selectedMonth === month ? "bg-gray-300" : ""}`}
+                        onClick={() => {
+                          setSelectedMonth(month);
+                          setSelectedDay(null);
+                        }}
+                      >
+                        {month}月
+                      </button>
+                    );
+                  })}
+              </div>
+              <div className="flex">
+                {selectedMonth !== null &&
+                  days.map((day) => {
+                    return (
+                      <div key={day}>
+                        <button
+                          className={`border rounded flex items-left text-sm p-0.5 m-0.5 cursor-pointer ${selectedDay === day ? "bg-gray-300" : ""}`}
+                          onClick={() => setSelectedDay(day)}
+                        >
+                          {day}日
+                        </button>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+        )}
+        {/* ===履歴詳細=== */}
+        {(screen === "home" || screen === "tmList") && (
+          <div className="h-[45vh] overflow-y-auto overscroll-contain p-3">
+            <RecordList
+              records={filteredRecords}
+              onDelete={handleDelete}
+              exchange={exchangeMoney}
+              onUpdate={handleUpdate}
+            />
+          </div>
+        )}
+        {/* ==============新規登録フォーム============== */}
+        <div>{screen === "form" && <RecordForm onAdd={handleAddRecord} />}</div>
+        {/* ==============グラフ============== */}
+        {screen === "chart" && (
+          <div>
+            <div className="flex min-h-[11vh]">
               <div>
                 <div className="flex">
                   <button
@@ -293,111 +373,26 @@ function App() {
                       );
                     })}
                 </div>
-                <div className="flex">
-                  {selectedMonth !== null &&
-                    days.map((day) => {
-                      return (
-                        <div key={day}>
-                          <button
-                            className={`border rounded flex items-left text-sm p-0.5 m-0.5 cursor-pointer ${selectedDay === day ? "bg-gray-300" : ""}`}
-                            onClick={() => setSelectedDay(day)}
-                          >
-                            {day}日
-                          </button>
-                        </div>
-                      );
-                    })}
-                </div>
               </div>
             </div>
-          )}
-          {/* ===履歴詳細=== */}
-          {(screen === "home" || screen === "tmList") && (
-            <div className="h-[40vh] overflow-y-auto overscroll-contain p-3">
-              <RecordList
-                records={filteredRecords}
-                onDelete={handleDelete}
-                exchange={exchangeMoney}
-                onUpdate={handleUpdate}
-              />
-            </div>
-          )}
-          {/* ==============新規登録フォーム============== */}
-          <div>
-            {screen === "form" && <RecordForm onAdd={handleAddRecord} />}
-          </div>
-          {/* ==============グラフ============== */}
-          {screen === "chart" && (
-            <div>
-              <div className="flex min-h-[11vh]">
-                <div>
-                  <div className="flex">
-                    <button
-                      className={`items-left border rounded text-sm p-0.5 m-0.5 cursor-pointer ${selectedYear === null && selectedMonth === null ? "bg-gray-300" : ""}`}
-                      onClick={() => {
-                        setSelectedYear(null);
-                        setSelectedMonth(null);
-                        setSelectedDay(null);
-                      }}
-                    >
-                      全期間
-                    </button>
-                    <div className="flex">
-                      {years.map((year) => {
-                        return (
-                          <button
-                            key={year}
-                            className={`border rounded flex items-left text-sm p-0.5 m-0.5 cursor-pointer ${selectedYear === year ? "bg-gray-300" : ""}`}
-                            onClick={() => {
-                              setSelectedYear(year);
-                              setSelectedMonth(null);
-                              setSelectedDay(null);
-                            }}
-                          >
-                            {year}年
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <div className="flex">
-                    {selectedYear !== null &&
-                      months.map((month) => {
-                        return (
-                          <button
-                            key={month}
-                            className={`border rounded flex items-left text-sm p-0.5 m-0.5 cursor-pointer ${selectedMonth === month ? "bg-gray-300" : ""}`}
-                            onClick={() => {
-                              setSelectedMonth(month);
-                              setSelectedDay(null);
-                            }}
-                          >
-                            {month}月
-                          </button>
-                        );
-                      })}
-                  </div>
-                </div>
-              </div>
-              <CashFlowChart
-                records={filteredRecords}
-                periodLabel={periodLabel}
-              />
-            </div>
-          )}
-          {/* ==============ハンド履歴============== */}
-          {screen === "hand" && (
-            <HandHistory
-              tournaments={filteredRecords}
-              onAddHand={handleAddHand}
-              hands={hands}
-              onDeleteHand={handleDeleteHand}
+            <CashFlowChart
+              records={filteredRecords}
+              periodLabel={periodLabel}
             />
-          )}
-        </div>
-      </div>
+          </div>
+        )}
+        {/* ==============ハンド履歴============== */}
+        {screen === "hand" && (
+          <HandHistory
+            tournaments={filteredRecords}
+            onAddHand={handleAddHand}
+            hands={hands}
+            onDeleteHand={handleDeleteHand}
+          />
+        )}
+      </main>
       {/* ==============画面下部ボタン============== */}
-      <div className="flex-1 border-t p-3 grid grid-cols-3">
+      <div className="fixed bottom-0 left-8 right-8 border-t grid grid-cols-3 p-2">
         <button
           onClick={() => {
             setScreen("chart");
