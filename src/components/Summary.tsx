@@ -48,17 +48,17 @@ export const Summary = ({ records, exchange }: Props) => {
         </div>
         <div className="grid grid-cols-2">
           <div className="border rounded-xl mt-1 mr-2 mb-2 p-2 text-left">
-            <p>ITM率</p>
+            <p>
+              ITM({itmCount}/{totalTmCount})
+            </p>
             <div className="flex">
-              <p className="text-cyan-700 text-xl">{itmRate}%</p>
-              <p className=" flex items-center justify-center">
-                ({itmCount}/{totalTmCount})
-              </p>
+              <p className="text-cyan-700 text-sm">{itmRate}%</p>
+              <p className=" flex items-center justify-center text-xs"></p>
             </div>
           </div>
           <div className="border rounded-xl mt-1 mr-2 mb-2 p-2 text-left">
             <p>ROI</p>
-            <p className="text-xl">{Roi}%</p>
+            <p className="text-sm">{Roi}%</p>
           </div>
         </div>
       </div>
