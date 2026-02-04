@@ -42,66 +42,61 @@ export const RecordForm = ({ onAdd }: Props) => {
   const numTableSize: number[] = [6, 9];
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-      <p className="text-left p-2">日付</p>
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full px-3">
+      <p className="text-left">日付</p>
       <input
         type="date"
-        className="text-left border rounded-xl p-2 w-[95%]"
+        className="text-left border rounded-xl p-1 w-full appearance-none"
         {...register("date", { required: "入力してください" })}
       />
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <p className="text-left p-2">トーナメント名</p>
-          <input
-            className="text-left border rounded-xl p-2 w-full"
-            {...register("name", { required: "入力してください" })}
-          />
-          {errors.name && (
-            <p className="text-sm text-red-500">{errors.name.message}</p>
-          )}
-        </div>
-        <div className="">
-          <p className="p-2 text-left">テーブル人数</p>
-          <select
-            className="w-full border rounded-xl h-10 pl-3"
-            {...register("tableSize", {
-              valueAsNumber: true,
-              required: "選択してください",
-            })}
-          >
-            <option value="">選択してください</option>
-            {numTableSize.map((n) => (
-              <option key={n} value={n}>
-                {n}人
-              </option>
-            ))}
-          </select>
-          {errors.tableSize && (
-            <p className="text-sm text-red-500">{errors.tableSize.message}</p>
-          )}
-        </div>
-      </div>
+      <p className="text-left mt-1">トーナメント名</p>
+      <input
+        className="text-left border rounded-xl p-1 w-full"
+        {...register("name", { required: "入力してください" })}
+      />
+      {errors.name && (
+        <p className="text-sm text-red-500">{errors.name.message}</p>
+      )}
+      <p className="text-left mt-1">テーブル人数</p>
+      <select
+        className="w-full border rounded-xl pl-3 p-1"
+        {...register("tableSize", {
+          valueAsNumber: true,
+          required: "選択してください",
+        })}
+      >
+        <option value="">選択してください</option>
+        {numTableSize.map((n) => (
+          <option key={n} value={n}>
+            {n}人
+          </option>
+        ))}
+      </select>
+      {errors.tableSize && (
+        <p className="text-sm text-red-500">{errors.tableSize.message}</p>
+      )}
+
       <div className="grid grid-cols-2 gap-3">
         <div className="text-left">
-          <p className="text-left p-2">Buy-in (USD)</p>
+          <p className="text-left mt-1">Buy-in (USD)</p>
           <input
             type="number"
-            className="text-left ring rounded-xl p-2 w-full"
+            className="ring rounded-xl p-1 w-full"
             {...register("buyIn")}
           />
         </div>
         <div className="text-left">
-          <p className="text-left p-2">Buy-out (USD)</p>
+          <p className="mt-1">Buy-out (USD)</p>
           <input
             type="number"
-            className="text-left ring rounded-xl p-2 w-full"
+            className="text-left ring rounded-xl p-1 w-full"
             {...register("buyOut")}
           />
         </div>
       </div>
       <button
         type="submit"
-        className="ring rounded-xl min-w-full p-2 mt-4 bg-green-300 cursor-pointer"
+        className="ring rounded-xl min-w-full p-1 mt-5 bg-green-300 cursor-pointer"
       >
         登録する
       </button>
