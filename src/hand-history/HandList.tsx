@@ -137,12 +137,22 @@ export const HandList = ({
                   </div>
                 </div>
               </div>
-              <button
-                className="pr-3 cursor-pointer"
-                onClick={() => onDeleteHand(hand)}
-              >
-                ×
-              </button>
+              <div className="flex gap-8">
+                <div className="text">
+                  <button
+                    className={`border rounded py-1 px-2 ${reviewHandIds.includes(hand.id) && "text-red-500"}`}
+                    onClick={() => toggleReviewHand(hand.id)}
+                  >
+                    要復習{reviewHandIds.includes(hand.id) ? "✓" : ""}
+                  </button>
+                </div>
+                <button
+                  className="pr-3 cursor-pointer"
+                  onClick={() => onDeleteHand(hand)}
+                >
+                  ×
+                </button>
+              </div>
             </div>
             <div className="">
               <div className="flex items-left">
