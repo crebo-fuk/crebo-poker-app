@@ -75,20 +75,30 @@ export const HandList = ({
           </div>
         </div>
       </div>
-      <div className="flex gap-3 mt-3 mb-3 text-xs">
-        <div>HEROポジション</div>
-        <select
-          className="border w-25"
-          value={selectedHeroPos}
-          onChange={(e) => setSelectedHeroPos(e.target.value)}
-        >
-          <option value="ALL">ALL</option>
-          {filteredHeroPos.map((pos) => (
-            <option key={pos} className="">
-              {pos}
-            </option>
-          ))}
-        </select>
+      <div className="text-xs flex justify-between">
+        <div className="flex gap-3 mt-3 mb-3">
+          <div>HEROポジション</div>
+          <select
+            className="border w-25"
+            value={selectedHeroPos}
+            onChange={(e) => setSelectedHeroPos(e.target.value)}
+          >
+            <option value="ALL">ALL</option>
+            {filteredHeroPos.map((pos) => (
+              <option key={pos} className="">
+                {pos}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex gap-3 mt-3 mb-3 mr-3">
+          <div>要復習のみ</div>
+          <input
+            type="checkbox"
+            checked={onlyReview}
+            onChange={(e) => setOnlyReview(e.target.checked)}
+          />
+        </div>
       </div>
 
       {reviewFilterHands.map((hand: HandItem) => {
@@ -140,7 +150,7 @@ export const HandList = ({
               <div className="flex gap-8">
                 <div className="text">
                   <button
-                    className={`border rounded py-1 px-2 ${reviewHandIds.includes(hand.id) && "text-red-500"}`}
+                    className={`border rounded py-1 px-2 ${reviewHandIds.includes(hand.id) && "text-red-500 bg-gray-200"}`}
                     onClick={() => toggleReviewHand(hand.id)}
                   >
                     要復習{reviewHandIds.includes(hand.id) ? "✓" : ""}
