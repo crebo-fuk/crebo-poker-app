@@ -3,6 +3,7 @@ import { useState } from "react";
 import { TournamentList } from "./TournamentList";
 import { HandList } from "./HandList";
 import { HandForm } from "./HandForm";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   tournaments: RecordItems[];
@@ -57,7 +58,7 @@ export const HandHistory = ({
     }
 
     const newHand: HandItem = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       tournamentId: selectedTournamentId,
       heroPos,
       heroHand,
@@ -99,11 +100,11 @@ export const HandHistory = ({
 
   //==============トーナメント選択時==============
   return (
-    <div className="h-[80vh] flex flex-col">
+    <div className="h-[75vh] flex flex-col">
       <div className="">
         <div className="flex items-center justify-between m-3">
           <button
-            className="cursor-pointer border rounded-2xl p-2"
+            className="cursor-pointer border rounded-2xl p-2 text-sm"
             onClick={() => {
               setTournamentId(null);
               setIsFormOpen(false);
@@ -113,7 +114,7 @@ export const HandHistory = ({
             一覧へ
           </button>
           <button
-            className="cursor-pointer border rounded-2xl p-2"
+            className="cursor-pointer border rounded-2xl p-2 text-sm"
             onClick={() => setIsFormOpen((prev) => !prev)}
           >
             ハンド新規作成＋
@@ -121,9 +122,14 @@ export const HandHistory = ({
         </div>
         {/* ==============選択されたトーナメント============== */}
         {selectedTournament != null && (
-          <div className="border rounded-2xl p-4 m-3 bg-gray-200">
-            <div className="text-sm">{selectedTournament.date}</div>
-            <div className="text-xl font-bold">{selectedTournament.name}</div>
+          <div className="border rounded-2xl p-2 m-3 bg-gray-200">
+            <div className="flex justify-between">
+              <div className="text-xs">{selectedTournament.date}</div>
+              <div className="text-xs flex items-center justify-center">
+                {selectedTournament.tableSize}Max
+              </div>
+            </div>
+            <div className="text-sm font-bold">{selectedTournament.name}</div>
           </div>
         )}
         {/* ==============ハンド新規登録フォーム============== */}
@@ -135,7 +141,7 @@ export const HandHistory = ({
         )}
       </div>
       {/* ==============ハンド履歴============== */}
-      {selectedTournament != null && (
+      {selectedTournament != null && isFormOpen !== true && (
         <HandList
           hands={filteredHands}
           selectedMemoId={selectedMemoId}

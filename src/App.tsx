@@ -179,7 +179,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col p-1">
       <header className="mb-1 h-[35%]">
         <h1 className="flex items-center justify-center text-xl">
           ポーカー収支管理アプリ
@@ -222,7 +222,7 @@ function App() {
                     setSelectedMonth(null);
                     setSelectedDay(null);
                   }}
-                  className="border-b p-2 mt-1 min-w-full cursor-pointer"
+                  className={`border-b p-2 mt-1 min-w-full cursor-pointer ${(screen === "home" || screen === "tmList") && "text-green-500"}`}
                 >
                   履歴一覧
                 </button>
@@ -230,7 +230,7 @@ function App() {
                   onClick={() => {
                     setScreen("form");
                   }}
-                  className="border-b p-2 mt-1 min-w-full cursor-pointer"
+                  className={`border-b p-2 mt-1 min-w-full cursor-pointer ${screen === "form" && "text-green-500"}`}
                 >
                   ＋新規登録
                 </button>
@@ -239,7 +239,7 @@ function App() {
           </div>
         )}
       </header>
-      <main className="flex-1 h-[50vh]">
+      <main className="flex-1 h-[50vh] pb-20">
         {/* ==============履歴一覧============== */}
         {/* ===年月別フィルタリング=== */}
         {(screen === "home" || screen === "tmList") && (
@@ -280,7 +280,7 @@ function App() {
                     return (
                       <button
                         key={month}
-                        className={`border rounded flex items-left text-sm p-0.5 m-0.5 cursor-pointer ${selectedMonth === month ? "bg-gray-300" : ""}`}
+                        className={`border rounded flex items-left text-[10px] p-0.5 m-0.5 cursor-pointer ${selectedMonth === month ? "bg-gray-300" : ""}`}
                         onClick={() => {
                           setSelectedMonth(month);
                           setSelectedDay(null);
@@ -297,7 +297,7 @@ function App() {
                     return (
                       <div key={day}>
                         <button
-                          className={`border rounded flex items-left text-sm p-0.5 m-0.5 cursor-pointer ${selectedDay === day ? "bg-gray-300" : ""}`}
+                          className={`border rounded flex items-left text-[10px] p-0.5 m-0.5 cursor-pointer ${selectedDay === day ? "bg-gray-300" : ""}`}
                           onClick={() => setSelectedDay(day)}
                         >
                           {day}日
@@ -311,7 +311,7 @@ function App() {
         )}
         {/* ===履歴詳細=== */}
         {(screen === "home" || screen === "tmList") && (
-          <div className="h-[45vh] overflow-y-auto overscroll-contain p-3">
+          <div className="h-[32vh] overflow-y-auto overscroll-contain p-1 mt-3">
             <RecordList
               records={filteredRecords}
               onDelete={handleDelete}
@@ -392,7 +392,7 @@ function App() {
         )}
       </main>
       {/* ==============画面下部ボタン============== */}
-      <div className="fixed bottom-0 left-8 right-8 border-t grid grid-cols-3 p-2">
+      <div className="fixed bottom-0 left-1 right-1 border-t grid grid-cols-3 p-2">
         <button
           onClick={() => {
             setScreen("chart");
@@ -405,7 +405,7 @@ function App() {
           グラフ
         </button>
         <button
-          className={`cursor-pointer ${screen === "home" && "text-green-500"}`}
+          className={`cursor-pointer ${(screen === "home" || screen === "tmList" || screen === "form") && "text-green-500"}`}
           onClick={() => {
             setScreen("home");
             setSelectedYear(null);
