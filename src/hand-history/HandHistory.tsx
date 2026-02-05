@@ -10,6 +10,8 @@ type Props = {
   onAddHand: (newHand: HandItem) => void;
   hands: HandItem[];
   onDeleteHand: (hand: HandItem) => void;
+  reviewHandIds: string[];
+  toggleReviewHand: (id: string) => void;
 };
 
 export const HandHistory = ({
@@ -17,6 +19,8 @@ export const HandHistory = ({
   onAddHand,
   hands,
   onDeleteHand,
+  toggleReviewHand,
+  reviewHandIds,
 }: Props) => {
   const [selectedTournamentId, setTournamentId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState<true | false>(false);
@@ -147,6 +151,8 @@ export const HandHistory = ({
           selectedMemoId={selectedMemoId}
           onDeleteHand={onDeleteHand}
           toggleMemo={toggleMemo}
+          reviewHandIds={reviewHandIds}
+          toggleReviewHand={toggleReviewHand}
         />
       )}
     </div>

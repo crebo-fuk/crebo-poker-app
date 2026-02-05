@@ -6,6 +6,8 @@ type Props = {
   selectedMemoId: string | null;
   onDeleteHand: (hand: HandItem) => void;
   toggleMemo: (id: string) => void;
+  reviewHandIds: string[];
+  toggleReviewHand: (id: string) => void;
 };
 
 export const HandList = ({
@@ -13,6 +15,8 @@ export const HandList = ({
   selectedMemoId,
   onDeleteHand,
   toggleMemo,
+  reviewHandIds,
+  toggleReviewHand,
 }: Props) => {
   const splitCard = (hand: string) => {
     const result: string[] = [];
@@ -37,6 +41,13 @@ export const HandList = ({
   const totalChop = posFilteredHands.filter((h) => h.result === "CHOP").length;
   const winRate =
     totalHands > 0 ? Math.round((totalWin / totalHands) * 100) : 0;
+
+  //----------復習（review）表示フィルター----------
+  const [onlyReview, setOnlyReview] = useState(false);
+
+  const reviewFilterHands = onlyReview
+    ? posFilteredHands.filter((h) => reviewHandIds.includes(h.id))
+    : posFilteredHands;
 
   return (
     <div className="flex-1 overflow-y-auto overscroll-contain p-3 w-full">
@@ -80,7 +91,7 @@ export const HandList = ({
         </select>
       </div>
 
-      {posFilteredHands.map((hand: HandItem) => {
+      {reviewFilterHands.map((hand: HandItem) => {
         const isOpenMemo = selectedMemoId === hand.id;
         const resultWin = hand.result === "WIN";
         const resultLose = hand.result === "LOSE";
