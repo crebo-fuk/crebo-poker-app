@@ -193,10 +193,10 @@ function App() {
             >
               🔄
             </button>
-            <div>{rateMessage}</div>
+            <div className="text-[8px]">{rateMessage}</div>
           </div>
           <div>
-            <div className="flex items-center justify-end gap-1 text-xs">
+            <div className="flex items-center justify-end gap-1 text-[10px]">
               <p className="pb-1">円表示(USD/JPY {USD_to_JPY})</p>
               <input
                 className="ml-1 w-3 h-3"
