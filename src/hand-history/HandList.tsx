@@ -41,7 +41,7 @@ export const HandList = ({
   return (
     <div className="flex-1 overflow-y-auto overscroll-contain p-3 w-full">
       <div className="flex items-center justify-between">
-        <div className="flex gap-2 text-xs">
+        <div className="flex gap-3 text-xs">
           <div>
             <div>ハンド数</div>
             <div>{totalHands}</div>

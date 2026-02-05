@@ -141,7 +141,7 @@ export const HandHistory = ({
         )}
       </div>
       {/* ==============ハンド履歴============== */}
-      {selectedTournament != null && (
+      {selectedTournament != null && isFormOpen !== true && (
         <HandList
           hands={filteredHands}
           selectedMemoId={selectedMemoId}
