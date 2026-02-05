@@ -60,7 +60,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
       className="p-1 my-3 flex-1 text-xs w-full items-center justify-center"
       onSubmit={handleSubmit(submit)}
     >
-      <div className="mb-3">ハンド新規作成フォーム</div>
+      <div className="mb-3 text-sm font-semibold">ハンド新規作成フォーム</div>
       <div className="overflow-y-auto overscroll-contain h-[50vh]">
         <div className="flex items-center justify-between w-full gap-5 mb-2">
           <div className="w-[70%]">
@@ -193,7 +193,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
           <div className="w-full">
             <div>(Flop)</div>
             <input
-              className="border rounded-xl h-7 pl-2 w-full"
+              className="border rounded-xl h-7 pl-2 w-full min-w-0"
               type="text"
               placeholder="KsJsJd"
               {...register("flop", {
@@ -282,12 +282,14 @@ BTN 5bb"
             {...register("memo")}
           />
         </div>
-        <button
-          type="submit"
-          className="ring rounded-xl min-w-full p-2 mt-4 m-2 bg-green-300 cursor-pointer"
-        >
-          登録する
-        </button>
+        <div className="p-2">
+          <button
+            type="submit"
+            className="ring rounded-xl w-full mt-6 mb-2 pt-2 pb-2 min-w-0 bg-green-300 cursor-pointer"
+          >
+            登録する
+          </button>
+        </div>
       </div>
     </form>
   );

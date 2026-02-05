@@ -100,7 +100,7 @@ export const HandHistory = ({
 
   //==============トーナメント選択時==============
   return (
-    <div className="h-[80vh] flex flex-col">
+    <div className="h-[75vh] flex flex-col">
       <div className="">
         <div className="flex items-center justify-between m-3">
           <button
