@@ -17,7 +17,7 @@ export const TournamentList = ({ tournaments, onSelectTournament }: Props) => {
             key={tournament.id}
           >
             <div className="text-xs">{tournament.date}</div>
-            <div className="text-sm">{tournament.name}</div>
+            <div className="text-sm font-semibold">{tournament.name}</div>
             <div className="text-sm">{tournament.tableSize}Max</div>
           </button>
         ))}

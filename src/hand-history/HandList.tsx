@@ -42,28 +42,44 @@ export const HandList = ({
     <div className="flex-1 overflow-y-auto overscroll-contain p-3 w-full">
       <div className="flex items-center justify-between">
         <div className="flex gap-2 text-xs">
-          <div>ハンド数: {totalHands}</div>
-          <div className="text-green-600">WIN: {totalWin}</div>
-          <div className="text-red-600">LOSE: {totalLose}</div>
-          <div className="text-gray-600">CHOP: {totalChop}</div>
-          <div>勝率: {winRate}%</div>
-        </div>
-        <div className="flex gap-3 mr-3 text-xs">
-          <div>HEROポジション</div>
-          <select
-            className="border w-25"
-            value={selectedHeroPos}
-            onChange={(e) => setSelectedHeroPos(e.target.value)}
-          >
-            <option value="ALL">ALL</option>
-            {filteredHeroPos.map((pos) => (
-              <option key={pos} className="">
-                {pos}
-              </option>
-            ))}
-          </select>
+          <div>
+            <div>ハンド数</div>
+            <div>{totalHands}</div>
+          </div>
+          <div>
+            <div className="text-green-600">WIN</div>
+            <div>{totalWin}</div>
+          </div>
+          <div>
+            <div className="text-red-600">LOSE</div>
+            <div>{totalLose}</div>
+          </div>
+          <div>
+            <div className="text-gray-600">CHOP</div>
+            <div>{totalChop}</div>
+          </div>
+          <div>
+            <div>勝率</div>
+            <div>{winRate}%</div>
+          </div>
         </div>
       </div>
+      <div className="flex gap-3 mt-3 text-xs">
+        <div>HEROポジション</div>
+        <select
+          className="border w-25"
+          value={selectedHeroPos}
+          onChange={(e) => setSelectedHeroPos(e.target.value)}
+        >
+          <option value="ALL">ALL</option>
+          {filteredHeroPos.map((pos) => (
+            <option key={pos} className="">
+              {pos}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {posFilteredHands.map((hand: HandItem) => {
         const isOpenMemo = selectedMemoId === hand.id;
         const resultWin = hand.result === "WIN";
