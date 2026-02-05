@@ -177,7 +177,7 @@ export const HandList = ({
                           splitCard(hand.flop).map((f, i) => (
                             <div
                               key={i}
-                              className="border rounded-sm text-sm w-7 h-11 flex items-center justify-center"
+                              className="border rounded-sm text-sm w-7 h-11 flex items-center justify-center "
                             >
                               {f}
                             </div>
@@ -198,7 +198,7 @@ export const HandList = ({
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 w-full text-left h-30">
+                  <div className="grid grid-cols-4 w-full text-left h-30 bg-gray-200 rounded-xl">
                     <div className="border-r ml-2">
                       <div>プリフロップ</div>
                       <div className="whitespace-pre-wrap mt-2">
