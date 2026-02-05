@@ -147,9 +147,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
             </div>
           </div>
           <div className="m-2">
-            <div className="text-red-500 flex items-center justify-center">
-              V S
-            </div>
+            <div className="flex items-center justify-center">勝敗</div>
             <select
               className="border pl-1 h-7 rounded-xl"
               {...register("result", { required: "選択してください" })}

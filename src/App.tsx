@@ -10,6 +10,7 @@ import { HandHistory } from "./hand-history/HandHistory";
 function App() {
   const STORAGE_KEY = "poker_record";
   const HAND_STORAGE_KEY = "poker_hand_record";
+  const REVIEW_HAND_STORAGE_KEY = "poker_review_hand_ids";
 
   //==============トーナメント履歴削除用関数==============
   const handleDelete = (record: RecordItems) => {
@@ -175,6 +176,22 @@ function App() {
       const newHands = prev.filter((h) => h.id !== hand.id);
       localStorage.setItem(HAND_STORAGE_KEY, JSON.stringify(newHands));
       return newHands;
+    });
+  };
+
+  //==============復習したいハンド履歴==============
+  const [reviewHandIds, setReviewHandIds] = useState<string[]>(() => {
+    const stored = localStorage.getItem(REVIEW_HAND_STORAGE_KEY);
+    return stored ? (JSON.parse(stored) as string[]) : [];
+  });
+
+  const toggleReviewHands = (id: string) => {
+    setReviewHandIds((prev) => {
+      const next = prev.includes(id)
+        ? prev.filter((h) => h !== id)
+        : [id, ...prev];
+      localStorage.setItem(REVIEW_HAND_STORAGE_KEY, JSON.stringify(next));
+      return next;
     });
   };
 
@@ -388,6 +405,8 @@ function App() {
             onAddHand={handleAddHand}
             hands={hands}
             onDeleteHand={handleDeleteHand}
+            reviewHandIds={reviewHandIds}
+            toggleReviewHand={toggleReviewHands}
           />
         )}
       </main>

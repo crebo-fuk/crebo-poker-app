@@ -6,6 +6,8 @@ type Props = {
   selectedMemoId: string | null;
   onDeleteHand: (hand: HandItem) => void;
   toggleMemo: (id: string) => void;
+  reviewHandIds: string[];
+  toggleReviewHand: (id: string) => void;
 };
 
 export const HandList = ({
@@ -13,6 +15,8 @@ export const HandList = ({
   selectedMemoId,
   onDeleteHand,
   toggleMemo,
+  reviewHandIds,
+  toggleReviewHand,
 }: Props) => {
   const splitCard = (hand: string) => {
     const result: string[] = [];
@@ -37,6 +41,13 @@ export const HandList = ({
   const totalChop = posFilteredHands.filter((h) => h.result === "CHOP").length;
   const winRate =
     totalHands > 0 ? Math.round((totalWin / totalHands) * 100) : 0;
+
+  //----------復習（review）表示フィルター----------
+  const [onlyReview, setOnlyReview] = useState(false);
+
+  const reviewFilterHands = onlyReview
+    ? posFilteredHands.filter((h) => reviewHandIds.includes(h.id))
+    : posFilteredHands;
 
   return (
     <div className="flex-1 overflow-y-auto overscroll-contain p-3 w-full">
@@ -64,23 +75,33 @@ export const HandList = ({
           </div>
         </div>
       </div>
-      <div className="flex gap-3 mt-3 mb-3 text-xs">
-        <div>HEROポジション</div>
-        <select
-          className="border w-25"
-          value={selectedHeroPos}
-          onChange={(e) => setSelectedHeroPos(e.target.value)}
-        >
-          <option value="ALL">ALL</option>
-          {filteredHeroPos.map((pos) => (
-            <option key={pos} className="">
-              {pos}
-            </option>
-          ))}
-        </select>
+      <div className="text-xs flex justify-between">
+        <div className="flex gap-3 mt-3 mb-3">
+          <div>HEROポジション</div>
+          <select
+            className="border w-25"
+            value={selectedHeroPos}
+            onChange={(e) => setSelectedHeroPos(e.target.value)}
+          >
+            <option value="ALL">ALL</option>
+            {filteredHeroPos.map((pos) => (
+              <option key={pos} className="">
+                {pos}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex gap-3 mt-3 mb-3 mr-3">
+          <div>要復習のみ</div>
+          <input
+            type="checkbox"
+            checked={onlyReview}
+            onChange={(e) => setOnlyReview(e.target.checked)}
+          />
+        </div>
       </div>
 
-      {posFilteredHands.map((hand: HandItem) => {
+      {reviewFilterHands.map((hand: HandItem) => {
         const isOpenMemo = selectedMemoId === hand.id;
         const resultWin = hand.result === "WIN";
         const resultLose = hand.result === "LOSE";
@@ -126,12 +147,22 @@ export const HandList = ({
                   </div>
                 </div>
               </div>
-              <button
-                className="pr-3 cursor-pointer"
-                onClick={() => onDeleteHand(hand)}
-              >
-                ×
-              </button>
+              <div className="flex gap-8">
+                <div className="text">
+                  <button
+                    className={`border rounded py-1 px-2 ${reviewHandIds.includes(hand.id) && "text-red-500 bg-gray-200"}`}
+                    onClick={() => toggleReviewHand(hand.id)}
+                  >
+                    要復習{reviewHandIds.includes(hand.id) ? "✓" : ""}
+                  </button>
+                </div>
+                <button
+                  className="pr-3 cursor-pointer"
+                  onClick={() => onDeleteHand(hand)}
+                >
+                  ×
+                </button>
+              </div>
             </div>
             <div className="">
               <div className="flex items-left">
@@ -177,7 +208,7 @@ export const HandList = ({
                           splitCard(hand.flop).map((f, i) => (
                             <div
                               key={i}
-                              className="border rounded-sm text-sm w-7 h-11 flex items-center justify-center"
+                              className="border rounded-sm text-sm w-7 h-11 flex items-center justify-center "
                             >
                               {f}
                             </div>
@@ -198,7 +229,7 @@ export const HandList = ({
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 w-full text-left h-30">
+                  <div className="grid grid-cols-4 w-full text-left h-30 bg-gray-200 rounded-xl">
                     <div className="border-r ml-2">
                       <div>プリフロップ</div>
                       <div className="whitespace-pre-wrap mt-2">
