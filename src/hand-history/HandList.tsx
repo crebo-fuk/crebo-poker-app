@@ -42,10 +42,11 @@ export const HandList = ({
     : posFilteredHands;
 
   //----------ハンド勝率集計----------
-  const totalHands = reviewFilterHands.length;
-  const totalWin = reviewFilterHands.filter((h) => h.result === "WIN").length;
-  const totalLose = reviewFilterHands.filter((h) => h.result === "LOSE").length;
-  const totalChop = reviewFilterHands.filter((h) => h.result === "CHOP").length;
+  const shownHands = reviewFilterHands; //適宜filterかかったハンドを変える
+  const totalHands = shownHands.length;
+  const totalWin = shownHands.filter((h) => h.result === "WIN").length;
+  const totalLose = shownHands.filter((h) => h.result === "LOSE").length;
+  const totalChop = shownHands.filter((h) => h.result === "CHOP").length;
   const winRate =
     totalHands > 0 ? Math.round((totalWin / totalHands) * 100) : 0;
 
@@ -101,7 +102,7 @@ export const HandList = ({
         </div>
       </div>
 
-      {reviewFilterHands.map((hand: HandItem) => {
+      {shownHands.map((hand: HandItem) => {
         const isOpenMemo = selectedMemoId === hand.id;
         const resultWin = hand.result === "WIN";
         const resultLose = hand.result === "LOSE";
