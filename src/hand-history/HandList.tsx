@@ -34,20 +34,20 @@ export const HandList = ({
       : hands.filter((h) => h.heroPos === selectedHeroPos);
   const filteredHeroPos = Array.from(new Set(hands.map((h) => h.heroPos)));
 
-  //----------ハンド勝率集計----------
-  const totalHands = posFilteredHands.length;
-  const totalWin = posFilteredHands.filter((h) => h.result === "WIN").length;
-  const totalLose = posFilteredHands.filter((h) => h.result === "LOSE").length;
-  const totalChop = posFilteredHands.filter((h) => h.result === "CHOP").length;
-  const winRate =
-    totalHands > 0 ? Math.round((totalWin / totalHands) * 100) : 0;
-
   //----------復習（review）表示フィルター----------
   const [onlyReview, setOnlyReview] = useState(false);
 
   const reviewFilterHands = onlyReview
     ? posFilteredHands.filter((h) => reviewHandIds.includes(h.id))
     : posFilteredHands;
+
+  //----------ハンド勝率集計----------
+  const totalHands = reviewFilterHands.length;
+  const totalWin = reviewFilterHands.filter((h) => h.result === "WIN").length;
+  const totalLose = reviewFilterHands.filter((h) => h.result === "LOSE").length;
+  const totalChop = reviewFilterHands.filter((h) => h.result === "CHOP").length;
+  const winRate =
+    totalHands > 0 ? Math.round((totalWin / totalHands) * 100) : 0;
 
   return (
     <div className="flex-1 overflow-y-auto overscroll-contain p-3 w-full">
