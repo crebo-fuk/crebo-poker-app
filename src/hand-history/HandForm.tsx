@@ -1,6 +1,7 @@
 import type { HandFormValue } from "../types/type";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { HandSelectModal } from "./HandSelectModal";
 
 type Props = {
   onSubmit: (value: HandFormValue) => void;
@@ -35,8 +36,6 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     },
   });
 
-  const [isHeroHandSelect, setIsHeroHandSelect] = useState(false);
-
   const positions9Max: string[] = [
     "",
     "UTG",
@@ -58,6 +57,17 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     onSubmit(value);
     reset();
   };
+
+  //-----ハンドセレクトのModal作成-----
+  const [isHeroHandModal, setIsHeroHandModal] = useState(false);
+  const [isVillainHandModal, setIsVillainHandModal] = useState(false);
+  const closeHeroHandModal = () => {
+    setIsHeroHandModal(false);
+  };
+  const closeVillainHandModal = () => {
+    setIsVillainHandModal(false);
+  };
+
   return (
     <>
       <form
@@ -132,8 +142,9 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               <div className="w-full">
                 <div>(Heroハンド)</div>
                 <button
+                  type="button"
                   className="border"
-                  onClick={() => setIsHeroHandSelect(true)}
+                  onClick={() => setIsHeroHandModal(true)}
                 >
                   選択する
                 </button>
@@ -300,27 +311,12 @@ BTN 5bb"
           </div>
         </div>
       </form>
-      {isHeroHandSelect && (
-        <div className="fixed inset-0 z-50">
-          {/* 背景 */}
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setIsHeroHandSelect(false)}
-          />
-
-          {/* 中身 */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-6 shadow-lg">
-            <h2 className="font-bold mb-4">Hero Hand モーダル</h2>
-
-            <button
-              type="button"
-              className="border rounded px-3 py-1"
-              onClick={() => setIsHeroHandSelect(false)}
-            >
-              閉じる
-            </button>
-          </div>
-        </div>
+      {/*-----ハンドセレクトモーダル----- */}
+      {/*---heroHand用--- */}
+      {isHeroHandModal && <HandSelectModal onClose={closeHeroHandModal} />}
+      {/*---villainHand用--- */}
+      {isVillainHandModal && (
+        <HandSelectModal onClose={closeVillainHandModal} />
       )}
     </>
   );
