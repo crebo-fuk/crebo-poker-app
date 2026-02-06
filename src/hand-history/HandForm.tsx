@@ -1,6 +1,7 @@
 import type { HandFormValue } from "../types/type";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { HandSelectModal } from "./HandSelectModal";
 
 type Props = {
   onSubmit: (value: HandFormValue) => void;
@@ -35,8 +36,6 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     },
   });
 
-  const [isHeroHandSelect, setIsHeroHandSelect] = useState(false);
-
   const positions9Max: string[] = [
     "",
     "UTG",
@@ -58,6 +57,25 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     onSubmit(value);
     reset();
   };
+
+  //-----ハンドセレクトのModal作成-----
+  const [isHeroHandModal, setIsHeroHandModal] = useState(false);
+  const [isVillainHandModal, setIsVillainHandModal] = useState(false);
+  const [selectedHeroHand, setSelectedHeroHand] = useState<string[]>([]);
+  const [selectedVillainHand, setSelectedVillainHand] = useState<string[]>([]);
+  const closeHeroHandModal = () => {
+    setIsHeroHandModal(false);
+  };
+  const closeVillainHandModal = () => {
+    setIsVillainHandModal(false);
+  };
+  const handdleAddHeroHand = (card: string) => {
+    setSelectedHeroHand((prev) => [...prev, card]);
+  };
+  const hanndleAddVillainHand = (card: string) => {
+    setSelectedVillainHand((prev) => [...prev, card]);
+  };
+
   return (
     <>
       <form
@@ -131,12 +149,29 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               </div>
               <div className="w-full">
                 <div>(Heroハンド)</div>
-                <button
-                  className="border"
-                  onClick={() => setIsHeroHandSelect(true)}
-                >
-                  選択する
-                </button>
+                <div className="flex items-center justify-center gap-3">
+                  <div>
+                    <div>1枚目</div>
+                    <button
+                      type="button"
+                      className="border"
+                      onClick={() => setIsHeroHandModal(true)}
+                    >
+                      選択する
+                    </button>
+                  </div>
+                  <div>
+                    <div>2枚目</div>
+                    <button
+                      type="button"
+                      className="border"
+                      onClick={() => setIsHeroHandModal(true)}
+                    >
+                      選択する
+                    </button>
+                  </div>
+                </div>
+                <div>{selectedHeroHand}</div>
                 <input
                   className="border w-full p-2 rounded-xl h-7"
                   type="text"
@@ -187,6 +222,13 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               </div>
               <div className="w-full">
                 <div>(villainハンド)</div>
+                <button
+                  type="button"
+                  className="border"
+                  onClick={() => setIsHeroHandModal(true)}
+                >
+                  選択する
+                </button>
                 <input
                   className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
                   type="text"
@@ -300,27 +342,12 @@ BTN 5bb"
           </div>
         </div>
       </form>
-      {isHeroHandSelect && (
-        <div className="fixed inset-0 z-50">
-          {/* 背景 */}
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setIsHeroHandSelect(false)}
-          />
-
-          {/* 中身 */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-6 shadow-lg">
-            <h2 className="font-bold mb-4">Hero Hand モーダル</h2>
-
-            <button
-              type="button"
-              className="border rounded px-3 py-1"
-              onClick={() => setIsHeroHandSelect(false)}
-            >
-              閉じる
-            </button>
-          </div>
-        </div>
+      {/*-----ハンドセレクトモーダル----- */}
+      {/*---heroHand用--- */}
+      {isHeroHandModal && <HandSelectModal onClose={closeHeroHandModal} onAddSelectedHand={handdleAddHeroHand}/>}
+      {/*---villainHand用--- */}
+      {isVillainHandModal && (
+        <HandSelectModal onClose={closeVillainHandModal} />
       )}
     </>
   );
