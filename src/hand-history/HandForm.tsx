@@ -61,11 +61,19 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   //-----ハンドセレクトのModal作成-----
   const [isHeroHandModal, setIsHeroHandModal] = useState(false);
   const [isVillainHandModal, setIsVillainHandModal] = useState(false);
+  const [selectedHeroHand, setSelectedHeroHand] = useState<string[]>([]);
+  const [selectedVillainHand, setSelectedVillainHand] = useState<string[]>([]);
   const closeHeroHandModal = () => {
     setIsHeroHandModal(false);
   };
   const closeVillainHandModal = () => {
     setIsVillainHandModal(false);
+  };
+  const handdleAddHeroHand = (card: string) => {
+    setSelectedHeroHand((prev) => [...prev, card]);
+  };
+  const hanndleAddVillainHand = (card: string) => {
+    setSelectedVillainHand((prev) => [...prev, card]);
   };
 
   return (
