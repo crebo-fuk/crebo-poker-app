@@ -149,13 +149,29 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               </div>
               <div className="w-full">
                 <div>(Heroハンド)</div>
-                <button
-                  type="button"
-                  className="border"
-                  onClick={() => setIsHeroHandModal(true)}
-                >
-                  選択する
-                </button>
+                <div className="flex items-center justify-center gap-3">
+                  <div>
+                    <div>1枚目</div>
+                    <button
+                      type="button"
+                      className="border"
+                      onClick={() => setIsHeroHandModal(true)}
+                    >
+                      選択する
+                    </button>
+                  </div>
+                  <div>
+                    <div>2枚目</div>
+                    <button
+                      type="button"
+                      className="border"
+                      onClick={() => setIsHeroHandModal(true)}
+                    >
+                      選択する
+                    </button>
+                  </div>
+                </div>
+                <div>{selectedHeroHand}</div>
                 <input
                   className="border w-full p-2 rounded-xl h-7"
                   type="text"
@@ -328,7 +344,7 @@ BTN 5bb"
       </form>
       {/*-----ハンドセレクトモーダル----- */}
       {/*---heroHand用--- */}
-      {isHeroHandModal && <HandSelectModal onClose={closeHeroHandModal} />}
+      {isHeroHandModal && <HandSelectModal onClose={closeHeroHandModal} onAddSelectedHand={handdleAddHeroHand}/>}
       {/*---villainHand用--- */}
       {isVillainHandModal && (
         <HandSelectModal onClose={closeVillainHandModal} />
