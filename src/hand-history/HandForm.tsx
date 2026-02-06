@@ -1,5 +1,6 @@
 import type { HandFormValue } from "../types/type";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 type Props = {
   onSubmit: (value: HandFormValue) => void;
@@ -34,6 +35,8 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     },
   });
 
+  const [isHeroHandSelect, setIsHeroHandSelect] = useState(false);
+
   const positions9Max: string[] = [
     "",
     "UTG",
@@ -56,239 +59,269 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     reset();
   };
   return (
-    <form
-      className="p-1 my-3 flex-1 text-xs w-full items-center justify-center"
-      onSubmit={handleSubmit(submit)}
-    >
-      <div className="mb-3 text-sm font-semibold">ハンド新規作成フォーム</div>
-      <div className="overflow-y-auto overscroll-contain h-[50vh]">
-        <div className="flex items-center justify-between w-full gap-5 mb-2">
-          <div className="w-[70%]">
-            <div>(blind)</div>
-            <div className="flex gap-2">
-              <div className="flex items-center justify-center">SB</div>
-              <div>
-                <input
-                  className="border rounded-xl w-full p-2 h-7"
-                  type="number"
-                  placeholder="600"
-                  {...register("blindSB", {
-                    valueAsNumber: true,
-                    required: "入力してください",
-                  })}
-                />
-                {errors.blindSB && (
-                  <p className="text-xs text-red-500">
-                    {errors.blindSB.message}
-                  </p>
-                )}
+    <>
+      <form
+        className="p-1 my-3 flex-1 text-xs w-full items-center justify-center"
+        onSubmit={handleSubmit(submit)}
+      >
+        <div className="mb-3 text-sm font-semibold">ハンド新規作成フォーム</div>
+        <div className="overflow-y-auto overscroll-contain h-[50vh]">
+          <div className="flex items-center justify-between w-full gap-5 mb-2">
+            <div className="w-[70%]">
+              <div>(blind)</div>
+              <div className="flex gap-2">
+                <div className="flex items-center justify-center">SB</div>
+                <div>
+                  <input
+                    className="border rounded-xl w-full p-2 h-7"
+                    type="number"
+                    placeholder="600"
+                    {...register("blindSB", {
+                      valueAsNumber: true,
+                      required: "入力してください",
+                    })}
+                  />
+                  {errors.blindSB && (
+                    <p className="text-xs text-red-500">
+                      {errors.blindSB.message}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center justify-center">BB</div>
+                <div>
+                  <input
+                    className="border rounded-xl w-full p-2 h-7"
+                    type="number"
+                    placeholder="1200"
+                    {...register("blindBB", {
+                      valueAsNumber: true,
+                      required: "入力してください",
+                    })}
+                  />
+                  {errors.blindBB && (
+                    <p className="text-xs text-red-500">
+                      {errors.blindBB.message}
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="flex items-center justify-center">BB</div>
-              <div>
+            </div>
+            <div className="">
+              <div>(ES)</div>
+              <input
+                className="border rounded-xl w-full p-2 h-7"
+                placeholder="65000"
+                type="number"
+                {...register("stack")}
+              />
+            </div>
+          </div>
+          <div className=" mt-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="w-full">
+                <div>(Heroポジション)</div>
+                <select
+                  className="border w-full p-2 rounded-xl h-7"
+                  {...register("heroPos")}
+                >
+                  {positions.map((p) => (
+                    <option key={p}>{p}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-full">
+                <div>(Heroハンド)</div>
+                <button
+                  className="border"
+                  onClick={() => setIsHeroHandSelect(true)}
+                >
+                  選択する
+                </button>
                 <input
-                  className="border rounded-xl w-full p-2 h-7"
-                  type="number"
-                  placeholder="1200"
-                  {...register("blindBB", {
-                    valueAsNumber: true,
-                    required: "入力してください",
+                  className="border w-full p-2 rounded-xl h-7"
+                  type="text"
+                  maxLength={4}
+                  placeholder="AhQh"
+                  {...register("heroHand", {
+                    minLength: {
+                      value: 4,
+                      message: "ハンドは4文字(2枚)で入力してください",
+                    },
                   })}
                 />
-                {errors.blindBB && (
+                {errors.heroHand && (
                   <p className="text-xs text-red-500">
-                    {errors.blindBB.message}
+                    {errors.heroHand.message}
                   </p>
                 )}
               </div>
             </div>
-          </div>
-          <div className="">
-            <div>(ES)</div>
-            <input
-              className="border rounded-xl w-full p-2 h-7"
-              placeholder="65000"
-              type="number"
-              {...register("stack")}
-            />
-          </div>
-        </div>
-        <div className=" mt-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="w-full">
-              <div>(Heroポジション)</div>
+            <div className="m-2">
+              <div className="flex items-center justify-center">勝敗</div>
               <select
-                className="border w-full p-2 rounded-xl h-7"
-                {...register("heroPos")}
+                className="border pl-1 h-7 rounded-xl"
+                {...register("result", { required: "選択してください" })}
               >
-                {positions.map((p) => (
-                  <option key={p}>{p}</option>
+                <option value="">選択</option>
+                {results.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
                 ))}
               </select>
+              {errors.result && (
+                <p className="text-xs text-red-500">{errors.result.message}</p>
+              )}
             </div>
+            <div className="flex items-center justify-between gap-3">
+              <div className="w-full">
+                <div>(Villainポジション)</div>
+                <select
+                  className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
+                  {...register("villainPos")}
+                >
+                  {positions.map((p) => (
+                    <option key={p}>{p}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="w-full">
+                <div>(villainハンド)</div>
+                <input
+                  className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
+                  type="text"
+                  maxLength={4}
+                  placeholder="ThTs"
+                  {...register("villainHand")}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 mt-3 gap-1">
             <div className="w-full">
-              <div>(Heroハンド)</div>
+              <div>(Flop)</div>
               <input
-                className="border w-full p-2 rounded-xl h-7"
+                className="border rounded-xl h-7 pl-2 w-full min-w-0"
                 type="text"
-                maxLength={4}
-                placeholder="AhQh"
-                {...register("heroHand", {
-                  minLength: {
-                    value: 4,
-                    message: "ハンドは4文字(2枚)で入力してください",
-                  },
+                placeholder="KsJsJd"
+                {...register("flop", {
+                  maxLength: { value: 6, message: "Flopは6文字(3枚)までです" },
                 })}
               />
-              {errors.heroHand && (
-                <p className="text-xs text-red-500">
-                  {errors.heroHand.message}
-                </p>
+              {errors.flop && (
+                <p className="text-sm text-red-500">{errors.flop.message}</p>
+              )}
+            </div>
+            <div className="w-full">
+              <div>(Turn)</div>
+              <input
+                className="border rounded-xl h-7 pl-2 w-full"
+                type="text"
+                placeholder="3h"
+                {...register("turn", {
+                  maxLength: { value: 2, message: "Turnは2文字(1枚)までです" },
+                })}
+              />
+              {errors.turn && (
+                <p className="text-sm text-red-500">{errors.turn.message}</p>
+              )}
+            </div>
+            <div className="w-full">
+              <div>(River)</div>
+              <input
+                className="border rounded-xl h-7 pl-2 w-full"
+                type="text"
+                placeholder="9h"
+                {...register("river", {
+                  maxLength: { value: 2, message: "Riverは2文字(1枚)までです" },
+                })}
+              />
+              {errors.river && (
+                <p className="text-sm text-red-500">{errors.river.message}</p>
               )}
             </div>
           </div>
-          <div className="m-2">
-            <div className="flex items-center justify-center">勝敗</div>
-            <select
-              className="border pl-1 h-7 rounded-xl"
-              {...register("result", { required: "選択してください" })}
-            >
-              <option value="">選択</option>
-              {results.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-            {errors.result && (
-              <p className="text-xs text-red-500">{errors.result.message}</p>
-            )}
-          </div>
-          <div className="flex items-center justify-between gap-3">
-            <div className="w-full">
-              <div>(Villainポジション)</div>
-              <select
-                className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
-                {...register("villainPos")}
-              >
-                {positions.map((p) => (
-                  <option key={p}>{p}</option>
-                ))}
-              </select>
+          <div className="mt-3">
+            <div className="">
+              <div>Preflop アクション</div>
+              <textarea
+                className="border rounded-xl p-2 w-full"
+                rows={2}
+                placeholder="UTG r2.5bb
+BTN c"
+                {...register("preflopAction")}
+              />
             </div>
-            <div className="w-full">
-              <div>(villainハンド)</div>
-              <input
-                className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
-                type="text"
-                maxLength={4}
-                placeholder="ThTs"
-                {...register("villainHand")}
+            <div className="">
+              <div>Flop アクション</div>
+              <textarea
+                className="border rounded-xl p-2 w-full"
+                rows={2}
+                placeholder="××"
+                {...register("flopAction")}
+              />
+            </div>
+            <div className="">
+              <div>Turn アクション</div>
+              <textarea
+                className="border rounded-xl p-2 w-full"
+                rows={2}
+                placeholder="hero ×/c 
+BTN 3bb"
+                {...register("turnAction")}
+              />
+            </div>
+            <div className="">
+              <div>River アクション</div>
+              <textarea
+                className="border rounded-xl p-2 w-full"
+                rows={2}
+                placeholder="hero c/f
+BTN 5bb"
+                {...register("riverAction")}
               />
             </div>
           </div>
-        </div>
-        <div className="grid grid-cols-3 mt-3 gap-1">
-          <div className="w-full">
-            <div>(Flop)</div>
-            <input
-              className="border rounded-xl h-7 pl-2 w-full min-w-0"
-              type="text"
-              placeholder="KsJsJd"
-              {...register("flop", {
-                maxLength: { value: 6, message: "Flopは6文字(3枚)までです" },
-              })}
+          <div>
+            <div className="text-left mt-3 text-break p-2">メモ（任意）</div>
+            <textarea
+              className="items-left w-full border rounded-xl p-2"
+              rows={4}
+              {...register("memo")}
             />
-            {errors.flop && (
-              <p className="text-sm text-red-500">{errors.flop.message}</p>
-            )}
           </div>
-          <div className="w-full">
-            <div>(Turn)</div>
-            <input
-              className="border rounded-xl h-7 pl-2 w-full"
-              type="text"
-              placeholder="3h"
-              {...register("turn", {
-                maxLength: { value: 2, message: "Turnは2文字(1枚)までです" },
-              })}
-            />
-            {errors.turn && (
-              <p className="text-sm text-red-500">{errors.turn.message}</p>
-            )}
-          </div>
-          <div className="w-full">
-            <div>(River)</div>
-            <input
-              className="border rounded-xl h-7 pl-2 w-full"
-              type="text"
-              placeholder="9h"
-              {...register("river", {
-                maxLength: { value: 2, message: "Riverは2文字(1枚)までです" },
-              })}
-            />
-            {errors.river && (
-              <p className="text-sm text-red-500">{errors.river.message}</p>
-            )}
+          <div className="p-2">
+            <button
+              type="submit"
+              className="ring rounded-xl w-full mt-6 mb-2 pt-2 pb-2 min-w-0 bg-green-300 cursor-pointer"
+            >
+              登録する
+            </button>
           </div>
         </div>
-        <div className="mt-3">
-          <div className="">
-            <div>Preflop アクション</div>
-            <textarea
-              className="border rounded-xl p-2 w-full"
-              rows={2}
-              placeholder="UTG r2.5bb
-BTN c"
-              {...register("preflopAction")}
-            />
-          </div>
-          <div className="">
-            <div>Flop アクション</div>
-            <textarea
-              className="border rounded-xl p-2 w-full"
-              rows={2}
-              placeholder="××"
-              {...register("flopAction")}
-            />
-          </div>
-          <div className="">
-            <div>Turn アクション</div>
-            <textarea
-              className="border rounded-xl p-2 w-full"
-              rows={2}
-              placeholder="hero ×/c 
-BTN 3bb"
-              {...register("turnAction")}
-            />
-          </div>
-          <div className="">
-            <div>River アクション</div>
-            <textarea
-              className="border rounded-xl p-2 w-full"
-              rows={2}
-              placeholder="hero c/f
-BTN 5bb"
-              {...register("riverAction")}
-            />
-          </div>
-        </div>
-        <div>
-          <div className="text-left mt-3 text-break p-2">メモ（任意）</div>
-          <textarea
-            className="items-left w-full border rounded-xl p-2"
-            rows={4}
-            {...register("memo")}
+      </form>
+      {isHeroHandSelect && (
+        <div className="fixed inset-0 z-50">
+          {/* 背景 */}
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setIsHeroHandSelect(false)}
           />
+
+          {/* 中身 */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-6 shadow-lg">
+            <h2 className="font-bold mb-4">Hero Hand モーダル</h2>
+
+            <button
+              type="button"
+              className="border rounded px-3 py-1"
+              onClick={() => setIsHeroHandSelect(false)}
+            >
+              閉じる
+            </button>
+          </div>
         </div>
-        <div className="p-2">
-          <button
-            type="submit"
-            className="ring rounded-xl w-full mt-6 mb-2 pt-2 pb-2 min-w-0 bg-green-300 cursor-pointer"
-          >
-            登録する
-          </button>
-        </div>
-      </div>
-    </form>
+      )}
+    </>
   );
 };
