@@ -70,9 +70,11 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     setIsVillainHandModal(false);
   };
   const handleAddHeroHand = (card: string) => {
+    if (selectedHeroHand.length === 2) return;
     setSelectedHeroHand((prev) => [...prev, card]);
   };
   const handleAddVillainHand = (card: string) => {
+    if (selectedVillainHand.length === 2) return;
     setSelectedVillainHand((prev) => [...prev, card]);
   };
 

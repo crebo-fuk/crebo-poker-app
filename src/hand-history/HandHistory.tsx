@@ -117,12 +117,22 @@ export const HandHistory = ({
           >
             一覧へ
           </button>
-          <button
-            className="cursor-pointer border rounded-2xl p-2 text-sm"
-            onClick={() => setIsFormOpen((prev) => !prev)}
-          >
-            ハンド新規作成＋
-          </button>
+          {!isFormOpen && (
+            <button
+              className="cursor-pointer border rounded-2xl p-2 text-sm"
+              onClick={() => setIsFormOpen(true)}
+            >
+              ハンド新規作成＋
+            </button>
+          )}
+          {isFormOpen && (
+            <button
+              className="cursor-pointer border rounded-2xl px-4 py-2 text-sm"
+              onClick={() => setIsFormOpen(false)}
+            >
+              戻る
+            </button>
+          )}
         </div>
         {/* ==============選択されたトーナメント============== */}
         {selectedTournament != null && (
