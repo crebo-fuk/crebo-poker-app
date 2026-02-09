@@ -85,6 +85,14 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
       return next;
     });
   };
+  const handleAddFlopCard = (card: string) => {
+    setSelectedFlopCard((prev) => {
+      if (prev.length === 3) return prev;
+      const next = [...prev, card];
+      if (next.length === 3) setValue("flop", next.join(""));
+      return next;
+    });
+  };
   const handleAddTurnCard = (card: string) => {
     setSelectedTurnCard((prev) => {
       if (prev !== "") return prev;
@@ -173,7 +181,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                   ))}
                 </select>
               </div>
-              {/*-----Heroハンド詳細-----*/}
+              {/*--------Heroハンド詳細--------*/}
               <div className="w-full">
                 <div>(Heroハンド)</div>
                 <div className="flex items-center justify-center gap-3">
@@ -249,7 +257,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               <p className="text-xs text-red-500">{errors.result.message}</p>
             )}
           </div>
-          {/*-----villainハンド詳細-----*/}
+          {/*--------villainハンド詳細--------*/}
           <div className="flex items-center justify-between gap-3">
             <div className="w-full">
               <div>(Villainポジション)</div>
@@ -320,21 +328,83 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
             </div>
           </div>
           <div className="grid grid-cols-3 mt-3 gap-1">
+            {/*-----FlopCard選択-----*/}
             <div className="w-full">
               <div>(Flop)</div>
-              <input
-                className="border rounded-xl h-7 pl-2 w-full min-w-0"
-                type="text"
-                placeholder="KsJsJd"
-                {...register("flop", {
-                  maxLength: { value: 6, message: "Flopは6文字(3枚)までです" },
-                })}
-              />
-              {errors.flop && (
-                <p className="text-sm text-red-500">{errors.flop.message}</p>
-              )}
+              <div className="flex items-center justify-center gap-3">
+                {selectedFlopCard.length === 0 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => setSelectedModal("flop")}
+                  >
+                    ＋
+                  </button>
+                )}
+                {selectedFlopCard.length >= 1 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => {
+                      setSelectedModal("flop");
+                      setSelectedFlopCard([]);
+                    }}
+                  >
+                    {selectedFlopCard[0]}
+                  </button>
+                )}
+                {selectedFlopCard.length <= 1 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => setSelectedModal("flop")}
+                  >
+                    ＋
+                  </button>
+                )}
+                {selectedFlopCard.length >= 2 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => {
+                      setSelectedModal("flop");
+                      setSelectedFlopCard((prev) => {
+                        const next = [prev[0]];
+                        return next;
+                      });
+                    }}
+                  >
+                    {selectedFlopCard[1]}
+                  </button>
+                )}
+                {selectedFlopCard.length <= 2 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => setSelectedModal("flop")}
+                  >
+                    ＋
+                  </button>
+                )}
+                {selectedFlopCard.length === 3 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => {
+                      setSelectedModal("flop");
+                      setSelectedFlopCard((prev) => {
+                        const next = [prev[0], prev[1]];
+                        return next;
+                      });
+                    }}
+                  >
+                    {selectedFlopCard[2]}
+                  </button>
+                )}
+              </div>
+              <input type="hidden" {...register("flop")} />
             </div>
-            {/*-----TurnCard選択-----*/}
+            {/*--------TurnCard選択--------*/}
             <div className="w-full">
               <div>(Turn)</div>
               {selectedTurnCard === "" && (
@@ -446,7 +516,7 @@ BTN 5bb"
           </div>
         </div>
       </form>
-      {/*-----ハンドセレクトモーダル----- */}
+      {/*--------ハンドセレクトモーダル-------- */}
       {/*---heroHand用--- */}
       {selectedModal === "heroHand" && (
         <HandSelectModal
@@ -459,6 +529,13 @@ BTN 5bb"
         <HandSelectModal
           onClose={closeModal}
           onAddSelectedCard={handleAddVillainHand}
+        />
+      )}
+      {/*---FlopCard用--- */}
+      {selectedModal === "flop" && (
+        <HandSelectModal
+          onClose={closeModal}
+          onAddSelectedCard={handleAddFlopCard}
         />
       )}
       {/*---TurnCard用--- */}
