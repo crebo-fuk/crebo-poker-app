@@ -60,16 +60,12 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   };
 
   //-----ハンドセレクトのModal作成-----
-  const [isVillainHandModal, setIsVillainHandModal] = useState(false);
-  const [isFlopModal, setIsFlopModal] = useState(false);
-  const [isTurnModal, setIsTurnModal] = useState(false);
-  const [isRiverModal, setIsRiverModal] = useState(false);
   const [selectedModal, setSelectedModal] = useState<SelectedModal>(null);
   const [selectedHeroHand, setSelectedHeroHand] = useState<string[]>([]);
   const [selectedVillainHand, setSelectedVillainHand] = useState<string[]>([]);
-  const [selectedFlop, setSelectedFlop] = useState<string[]>([]);
-  const [selectedTurn, setSelectedTurn] = useState<string>("");
-  const [selectedRiver, setSelectedRiver] = useState<string>("");
+  const [selectedFlopCard, setSelectedFlopCard] = useState<string[]>([]);
+  const [selectedTurnCard, setSelectedTurnCard] = useState<string>("");
+  const [selectedRiverCard, setSelectedRiverCard] = useState<string>("");
   const closeModal = () => {
     setSelectedModal(null);
   };
@@ -86,6 +82,14 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
       if (prev.length === 2) return prev;
       const next = [...prev, card];
       if (next.length === 2) setValue("villainHand", next.join(""));
+      return next;
+    });
+  };
+  const handleAddTurnCard = (card: string) => {
+    setSelectedTurnCard((prev) => {
+      if (prev !== "") return prev;
+      const next = card;
+      if (next !== "") setValue("turn", next);
       return next;
     });
   };
@@ -305,7 +309,6 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               <input type="hidden" {...register("villainHand")} />
             </div>
           </div>
-
           <div className="grid grid-cols-3 mt-3 gap-1">
             <div className="w-full">
               <div>(Flop)</div>
@@ -323,14 +326,28 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
             </div>
             <div className="w-full">
               <div>(Turn)</div>
-              <input
-                className="border rounded-xl h-7 pl-2 w-full"
-                type="text"
-                placeholder="3h"
-                {...register("turn", {
-                  maxLength: { value: 2, message: "Turnは2文字(1枚)までです" },
-                })}
-              />
+              {selectedTurnCard === "" && (
+                <button
+                  type="button"
+                  className="border w-7 h-10 rounded"
+                  onClick={() => setSelectedModal("turn")}
+                >
+                  ＋
+                </button>
+              )}
+              {selectedTurnCard !== "" && (
+                <button
+                  type="button"
+                  className="border w-7 h-10 rounded bg-gray-200"
+                  onClick={() => {
+                    setSelectedModal("turn");
+                    setSelectedTurnCard("");
+                  }}
+                >
+                  {selectedTurnCard}
+                </button>
+              )}
+              <input type="hidden" {...register("turn")} />
               {errors.turn && (
                 <p className="text-sm text-red-500">{errors.turn.message}</p>
               )}
@@ -422,6 +439,13 @@ BTN 5bb"
         <HandSelectModal
           onClose={closeModal}
           onAddSelectedCard={handleAddVillainHand}
+        />
+      )}
+      {/*---TurnCard用--- */}
+      {selectedModal === "turn" && (
+        <HandSelectModal
+          onClose={closeModal}
+          onAddSelectedCard={handleAddTurnCard}
         />
       )}
     </>
