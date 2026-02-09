@@ -93,6 +93,14 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
       return next;
     });
   };
+  const handleAddRiverCard = (card: string) => {
+    setSelectedRiverCard((prev) => {
+      if (prev !== "") return prev;
+      const next = card;
+      if (next !== "") setValue("river", next);
+      return next;
+    });
+  };
 
   return (
     <>
@@ -165,6 +173,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                   ))}
                 </select>
               </div>
+              {/*-----Heroハンド詳細-----*/}
               <div className="w-full">
                 <div>(Heroハンド)</div>
                 <div className="flex items-center justify-center gap-3">
@@ -240,6 +249,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               <p className="text-xs text-red-500">{errors.result.message}</p>
             )}
           </div>
+          {/*-----villainハンド詳細-----*/}
           <div className="flex items-center justify-between gap-3">
             <div className="w-full">
               <div>(Villainポジション)</div>
@@ -324,6 +334,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 <p className="text-sm text-red-500">{errors.flop.message}</p>
               )}
             </div>
+            {/*-----TurnCard選択-----*/}
             <div className="w-full">
               <div>(Turn)</div>
               {selectedTurnCard === "" && (
@@ -348,23 +359,32 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 </button>
               )}
               <input type="hidden" {...register("turn")} />
-              {errors.turn && (
-                <p className="text-sm text-red-500">{errors.turn.message}</p>
-              )}
             </div>
+            {/*-----RiverCard選択-----*/}
             <div className="w-full">
               <div>(River)</div>
-              <input
-                className="border rounded-xl h-7 pl-2 w-full"
-                type="text"
-                placeholder="9h"
-                {...register("river", {
-                  maxLength: { value: 2, message: "Riverは2文字(1枚)までです" },
-                })}
-              />
-              {errors.river && (
-                <p className="text-sm text-red-500">{errors.river.message}</p>
+              {selectedRiverCard === "" && (
+                <button
+                  type="button"
+                  className="border w-7 h-10 rounded"
+                  onClick={() => setSelectedModal("river")}
+                >
+                  ＋
+                </button>
               )}
+              {selectedRiverCard !== "" && (
+                <button
+                  type="button"
+                  className="border w-7 h-10 rounded bg-gray-200"
+                  onClick={() => {
+                    setSelectedModal("river");
+                    setSelectedRiverCard("");
+                  }}
+                >
+                  {selectedRiverCard}
+                </button>
+              )}
+              <input type="hidden" {...register("river")} />
             </div>
           </div>
           <div className="mt-3">
@@ -446,6 +466,13 @@ BTN 5bb"
         <HandSelectModal
           onClose={closeModal}
           onAddSelectedCard={handleAddTurnCard}
+        />
+      )}
+      {/*---RiverCard用--- */}
+      {selectedModal === "river" && (
+        <HandSelectModal
+          onClose={closeModal}
+          onAddSelectedCard={handleAddRiverCard}
         />
       )}
     </>
