@@ -153,110 +153,140 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 <div>(Heroハンド)</div>
                 <div className="flex items-center justify-center gap-3">
                   <div>
-                    <div>1枚目</div>
+                    {selectedHeroHand.length === 0 && (
+                      <button
+                        type="button"
+                        className="border w-7 h-10 rounded"
+                        onClick={() => setIsHeroHandModal(true)}
+                      >
+                        ＋
+                      </button>
+                    )}
+                    {selectedHeroHand.length >= 1 && (
+                      <button
+                        type="button"
+                        className="border w-7 h-10 rounded bg-gray-200"
+                        onClick={() => {
+                          setIsHeroHandModal(true);
+                          setSelectedHeroHand([]);
+                        }}
+                      >
+                        {selectedHeroHand[0]}
+                      </button>
+                    )}
+                  </div>
+
+                  {selectedHeroHand.length <= 1 && (
+                    <div>
+                      <button
+                        type="button"
+                        className="border w-7 h-10 rounded"
+                        onClick={() => setIsHeroHandModal(true)}
+                      >
+                        ＋
+                      </button>
+                    </div>
+                  )}
+                  {selectedHeroHand.length === 2 && (
                     <button
                       type="button"
-                      className="border"
-                      onClick={() => setIsHeroHandModal(true)}
+                      className="border w-7 h-10 rounded bg-gray-200"
+                      onClick={() => {
+                        setIsHeroHandModal(true);
+                        setSelectedHeroHand([]);
+                      }}
                     >
-                      選択する
+                      {selectedHeroHand[1]}
                     </button>
-                  </div>
-                  <div>
-                    <div>2枚目</div>
-                    <button
-                      type="button"
-                      className="border"
-                      onClick={() => setIsHeroHandModal(true)}
-                    >
-                      選択する
-                    </button>
-                  </div>
+                  )}
                 </div>
-                <div>{selectedHeroHand}</div>
-                <input
-                  className="border w-full p-2 rounded-xl h-7"
-                  type="text"
-                  maxLength={4}
-                  placeholder="AhQh"
-                  {...register("heroHand", {
-                    minLength: {
-                      value: 4,
-                      message: "ハンドは4文字(2枚)で入力してください",
-                    },
-                  })}
-                />
-                {errors.heroHand && (
-                  <p className="text-xs text-red-500">
-                    {errors.heroHand.message}
-                  </p>
-                )}
               </div>
-            </div>
-            <div className="m-2">
-              <div className="flex items-center justify-center">勝敗</div>
-              <select
-                className="border pl-1 h-7 rounded-xl"
-                {...register("result", { required: "選択してください" })}
-              >
-                <option value="">選択</option>
-                {results.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </select>
-              {errors.result && (
-                <p className="text-xs text-red-500">{errors.result.message}</p>
-              )}
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <div className="w-full">
-                <div>(Villainポジション)</div>
-                <select
-                  className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
-                  {...register("villainPos")}
-                >
-                  {positions.map((p) => (
-                    <option key={p}>{p}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="w-full">
-                <div>(villainハンド)</div>
-                <div className="flex items-center justify-center gap-3">
-                  <div>
-                    <div>1枚目</div>
-                    <button
-                      type="button"
-                      className="border"
-                      onClick={() => setIsVillainHandModal(true)}
-                    >
-                      選択する
-                    </button>
-                  </div>
-                  <div>
-                    <div>2枚目</div>
-                    <button
-                      type="button"
-                      className="border"
-                      onClick={() => setIsVillainHandModal(true)}
-                    >
-                      選択する
-                    </button>
-                  </div>
-                </div>
-                <div>{selectedVillainHand}</div>
-                <input
-                  className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
-                  type="text"
-                  maxLength={4}
-                  placeholder="ThTs"
-                  {...register("villainHand")}
-                />
-              </div>
+              <input type="hidden" {...register("heroHand")} />
             </div>
           </div>
+          <div className="m-2">
+            <div className="flex items-center justify-center">勝敗</div>
+            <select
+              className="border pl-1 h-7 rounded-xl"
+              {...register("result", { required: "選択してください" })}
+            >
+              <option value="">選択</option>
+              {results.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+            {errors.result && (
+              <p className="text-xs text-red-500">{errors.result.message}</p>
+            )}
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="w-full">
+              <div>(Villainポジション)</div>
+              <select
+                className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
+                {...register("villainPos")}
+              >
+                {positions.map((p) => (
+                  <option key={p}>{p}</option>
+                ))}
+              </select>
+            </div>
+            <div className="w-full">
+              <div>(villainハンド)</div>
+              <div className="flex items-center justify-center gap-3">
+                <div>
+                  {selectedVillainHand.length === 0 && (
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded"
+                      onClick={() => setIsVillainHandModal(true)}
+                    >
+                      ＋
+                    </button>
+                  )}
+                  {selectedVillainHand.length >= 1 && (
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded bg-gray-200"
+                      onClick={() => {
+                        setIsVillainHandModal(true);
+                        setSelectedVillainHand([]);
+                      }}
+                    >
+                      {selectedVillainHand[0]}
+                    </button>
+                  )}
+                </div>
+                {selectedVillainHand.length <= 1 && (
+                  <div>
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded"
+                      onClick={() => setIsVillainHandModal(true)}
+                    >
+                      ＋
+                    </button>
+                  </div>
+                )}
+                {selectedVillainHand.length === 2 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded bg-gray-200"
+                    onClick={() => {
+                      setIsVillainHandModal(true);
+                      setSelectedVillainHand([]);
+                    }}
+                  >
+                    {selectedVillainHand[1]}
+                  </button>
+                )}
+              </div>
+              <input type="hidden" {...register("villainHand")} />
+            </div>
+          </div>
+
           <div className="grid grid-cols-3 mt-3 gap-1">
             <div className="w-full">
               <div>(Flop)</div>
