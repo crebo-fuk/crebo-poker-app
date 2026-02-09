@@ -1,6 +1,6 @@
 import type { HandFormValue } from "../types/type";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HandSelectModal } from "./HandSelectModal";
 
 type Props = {
@@ -12,6 +12,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<HandFormValue>({
@@ -70,12 +71,20 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     setIsVillainHandModal(false);
   };
   const handleAddHeroHand = (card: string) => {
-    if (selectedHeroHand.length === 2) return;
-    setSelectedHeroHand((prev) => [...prev, card]);
+    setSelectedHeroHand((prev) => {
+      if (prev.length === 2) return prev;
+      const next = [...prev, card];
+      if (next.length === 2) setValue("heroHand", next.join(""));
+      return next;
+    });
   };
   const handleAddVillainHand = (card: string) => {
-    if (selectedVillainHand.length === 2) return;
-    setSelectedVillainHand((prev) => [...prev, card]);
+    setSelectedVillainHand((prev) => {
+      if (prev.length === 2) return prev;
+      const next = [...prev, card];
+      if (next.length === 2) setValue("villainHand", next.join(""));
+      return next;
+    });
   };
 
   return (
@@ -175,7 +184,6 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                       </button>
                     )}
                   </div>
-
                   {selectedHeroHand.length <= 1 && (
                     <div>
                       <button
