@@ -69,3 +69,5 @@ export type Card = {
   rank: Rank;
   suit: Suit;
 }
+
+export type SelectedModal = "heroHand" | "villainHand" | "flop" | "turn" | "river" | null

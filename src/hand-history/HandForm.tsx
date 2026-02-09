@@ -1,4 +1,4 @@
-import type { HandFormValue } from "../types/type";
+import type { HandFormValue, SelectedModal } from "../types/type";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
@@ -60,15 +60,18 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   };
 
   //-----ハンドセレクトのModal作成-----
-  const [isHeroHandModal, setIsHeroHandModal] = useState(false);
   const [isVillainHandModal, setIsVillainHandModal] = useState(false);
+  const [isFlopModal, setIsFlopModal] = useState(false);
+  const [isTurnModal, setIsTurnModal] = useState(false);
+  const [isRiverModal, setIsRiverModal] = useState(false);
+  const [selectedModal, setSelectedModal] = useState<SelectedModal>(null);
   const [selectedHeroHand, setSelectedHeroHand] = useState<string[]>([]);
   const [selectedVillainHand, setSelectedVillainHand] = useState<string[]>([]);
-  const closeHeroHandModal = () => {
-    setIsHeroHandModal(false);
-  };
-  const closeVillainHandModal = () => {
-    setIsVillainHandModal(false);
+  const [selectedFlop, setSelectedFlop] = useState<string[]>([]);
+  const [selectedTurn, setSelectedTurn] = useState<string>("");
+  const [selectedRiver, setSelectedRiver] = useState<string>("");
+  const closeModal = () => {
+    setSelectedModal(null);
   };
   const handleAddHeroHand = (card: string) => {
     setSelectedHeroHand((prev) => {
@@ -166,7 +169,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                       <button
                         type="button"
                         className="border w-7 h-10 rounded"
-                        onClick={() => setIsHeroHandModal(true)}
+                        onClick={() => setSelectedModal("heroHand")}
                       >
                         ＋
                       </button>
@@ -176,7 +179,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                         type="button"
                         className="border w-7 h-10 rounded bg-gray-200"
                         onClick={() => {
-                          setIsHeroHandModal(true);
+                          setSelectedModal("heroHand");
                           setSelectedHeroHand([]);
                         }}
                       >
@@ -189,7 +192,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                       <button
                         type="button"
                         className="border w-7 h-10 rounded"
-                        onClick={() => setIsHeroHandModal(true)}
+                        onClick={() => setSelectedModal("heroHand")}
                       >
                         ＋
                       </button>
@@ -200,7 +203,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                       type="button"
                       className="border w-7 h-10 rounded bg-gray-200"
                       onClick={() => {
-                        setIsHeroHandModal(true);
+                        setSelectedModal("heroHand");
                         setSelectedHeroHand((prev) => {
                           if (prev.length <= 1) return prev;
                           const next = [prev[0]];
@@ -253,7 +256,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                     <button
                       type="button"
                       className="border w-7 h-10 rounded"
-                      onClick={() => setIsVillainHandModal(true)}
+                      onClick={() => setSelectedModal("villainHand")}
                     >
                       ＋
                     </button>
@@ -263,7 +266,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                       type="button"
                       className="border w-7 h-10 rounded bg-gray-200"
                       onClick={() => {
-                        setIsVillainHandModal(true);
+                        setSelectedModal("villainHand");
                         setSelectedVillainHand([]);
                       }}
                     >
@@ -276,7 +279,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                     <button
                       type="button"
                       className="border w-7 h-10 rounded"
-                      onClick={() => setIsVillainHandModal(true)}
+                      onClick={() => setSelectedModal("villainHand")}
                     >
                       ＋
                     </button>
@@ -287,7 +290,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                     type="button"
                     className="border w-7 h-10 rounded bg-gray-200"
                     onClick={() => {
-                      setIsVillainHandModal(true);
+                      setSelectedModal("villainHand");
                       setSelectedVillainHand((prev) => {
                         if (prev.length <= 1) return prev;
                         const next = [prev[0]];
@@ -408,17 +411,17 @@ BTN 5bb"
       </form>
       {/*-----ハンドセレクトモーダル----- */}
       {/*---heroHand用--- */}
-      {isHeroHandModal && (
+      {selectedModal === "heroHand" && (
         <HandSelectModal
-          onClose={closeHeroHandModal}
-          onAddSelectedHand={handleAddHeroHand}
+          onClose={closeModal}
+          onAddSelectedCard={handleAddHeroHand}
         />
       )}
       {/*---villainHand用--- */}
-      {isVillainHandModal && (
+      {selectedModal === "villainHand" && (
         <HandSelectModal
-          onClose={closeVillainHandModal}
-          onAddSelectedHand={handleAddVillainHand}
+          onClose={closeModal}
+          onAddSelectedCard={handleAddVillainHand}
         />
       )}
     </>
