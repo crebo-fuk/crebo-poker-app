@@ -344,7 +344,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 {selectedFlopCard.length >= 1 && (
                   <button
                     type="button"
-                    className="border w-7 h-10 rounded"
+                    className="border w-7 h-10 rounded bg-gray-200"
                     onClick={() => {
                       setSelectedModal("flop");
                       setSelectedFlopCard([]);
@@ -365,7 +365,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 {selectedFlopCard.length >= 2 && (
                   <button
                     type="button"
-                    className="border w-7 h-10 rounded"
+                    className="border w-7 h-10 rounded bg-gray-200"
                     onClick={() => {
                       setSelectedModal("flop");
                       setSelectedFlopCard((prev) => {
@@ -389,7 +389,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 {selectedFlopCard.length === 3 && (
                   <button
                     type="button"
-                    className="border w-7 h-10 rounded"
+                    className="border w-7 h-10 rounded bg-gray-200"
                     onClick={() => {
                       setSelectedModal("flop");
                       setSelectedFlopCard((prev) => {
