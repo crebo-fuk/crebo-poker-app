@@ -1,9 +1,9 @@
 type Props = {
   onClose: () => void;
-  onAddSelectedHand: (card: string) => void;
+  onAddSelectedCard: (card: string) => void;
 };
 
-export const HandSelectModal = ({ onClose, onAddSelectedHand }: Props) => {
+export const HandSelectModal = ({ onClose, onAddSelectedCard }: Props) => {
   const suit = ["s", "h", "d", "c"];
   const rank = [
     "A",
@@ -36,7 +36,7 @@ export const HandSelectModal = ({ onClose, onAddSelectedHand }: Props) => {
                 className="border runded-xl px-0.5 py-1"
                 onClick={() => {
                   onClose();
-                  onAddSelectedHand(c);
+                  onAddSelectedCard(c);
                 }}
               >
                 {c}

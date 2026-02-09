@@ -1,4 +1,4 @@
-import type { HandFormValue } from "../types/type";
+import type { HandFormValue, SelectedModal } from "../types/type";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
@@ -12,6 +12,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<HandFormValue>({
@@ -59,23 +60,54 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   };
 
   //-----ハンドセレクトのModal作成-----
-  const [isHeroHandModal, setIsHeroHandModal] = useState(false);
-  const [isVillainHandModal, setIsVillainHandModal] = useState(false);
+  const [selectedModal, setSelectedModal] = useState<SelectedModal>(null);
   const [selectedHeroHand, setSelectedHeroHand] = useState<string[]>([]);
   const [selectedVillainHand, setSelectedVillainHand] = useState<string[]>([]);
-  const closeHeroHandModal = () => {
-    setIsHeroHandModal(false);
-  };
-  const closeVillainHandModal = () => {
-    setIsVillainHandModal(false);
+  const [selectedFlopCard, setSelectedFlopCard] = useState<string[]>([]);
+  const [selectedTurnCard, setSelectedTurnCard] = useState<string>("");
+  const [selectedRiverCard, setSelectedRiverCard] = useState<string>("");
+  const closeModal = () => {
+    setSelectedModal(null);
   };
   const handleAddHeroHand = (card: string) => {
-    if (selectedHeroHand.length === 2) return;
-    setSelectedHeroHand((prev) => [...prev, card]);
+    setSelectedHeroHand((prev) => {
+      if (prev.length === 2) return prev;
+      const next = [...prev, card];
+      if (next.length === 2) setValue("heroHand", next.join(""));
+      return next;
+    });
   };
   const handleAddVillainHand = (card: string) => {
-    if (selectedVillainHand.length === 2) return;
-    setSelectedVillainHand((prev) => [...prev, card]);
+    setSelectedVillainHand((prev) => {
+      if (prev.length === 2) return prev;
+      const next = [...prev, card];
+      if (next.length === 2) setValue("villainHand", next.join(""));
+      return next;
+    });
+  };
+  const handleAddFlopCard = (card: string) => {
+    setSelectedFlopCard((prev) => {
+      if (prev.length === 3) return prev;
+      const next = [...prev, card];
+      if (next.length === 3) setValue("flop", next.join(""));
+      return next;
+    });
+  };
+  const handleAddTurnCard = (card: string) => {
+    setSelectedTurnCard((prev) => {
+      if (prev !== "") return prev;
+      const next = card;
+      if (next !== "") setValue("turn", next);
+      return next;
+    });
+  };
+  const handleAddRiverCard = (card: string) => {
+    setSelectedRiverCard((prev) => {
+      if (prev !== "") return prev;
+      const next = card;
+      if (next !== "") setValue("river", next);
+      return next;
+    });
   };
 
   return (
@@ -149,156 +181,280 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                   ))}
                 </select>
               </div>
+              {/*--------Heroハンド詳細--------*/}
               <div className="w-full">
                 <div>(Heroハンド)</div>
                 <div className="flex items-center justify-center gap-3">
                   <div>
-                    <div>1枚目</div>
+                    {selectedHeroHand.length === 0 && (
+                      <button
+                        type="button"
+                        className="border w-7 h-10 rounded"
+                        onClick={() => setSelectedModal("heroHand")}
+                      >
+                        ＋
+                      </button>
+                    )}
+                    {selectedHeroHand.length >= 1 && (
+                      <button
+                        type="button"
+                        className="border w-7 h-10 rounded bg-gray-200"
+                        onClick={() => {
+                          setSelectedModal("heroHand");
+                          setSelectedHeroHand([]);
+                        }}
+                      >
+                        {selectedHeroHand[0]}
+                      </button>
+                    )}
+                  </div>
+                  {selectedHeroHand.length <= 1 && (
+                    <div>
+                      <button
+                        type="button"
+                        className="border w-7 h-10 rounded"
+                        onClick={() => setSelectedModal("heroHand")}
+                      >
+                        ＋
+                      </button>
+                    </div>
+                  )}
+                  {selectedHeroHand.length === 2 && (
                     <button
                       type="button"
-                      className="border"
-                      onClick={() => setIsHeroHandModal(true)}
+                      className="border w-7 h-10 rounded bg-gray-200"
+                      onClick={() => {
+                        setSelectedModal("heroHand");
+                        setSelectedHeroHand((prev) => {
+                          if (prev.length <= 1) return prev;
+                          const next = [prev[0]];
+                          return next;
+                        });
+                      }}
                     >
-                      選択する
+                      {selectedHeroHand[1]}
                     </button>
-                  </div>
-                  <div>
-                    <div>2枚目</div>
-                    <button
-                      type="button"
-                      className="border"
-                      onClick={() => setIsHeroHandModal(true)}
-                    >
-                      選択する
-                    </button>
-                  </div>
+                  )}
                 </div>
-                <div>{selectedHeroHand}</div>
-                <input
-                  className="border w-full p-2 rounded-xl h-7"
-                  type="text"
-                  maxLength={4}
-                  placeholder="AhQh"
-                  {...register("heroHand", {
-                    minLength: {
-                      value: 4,
-                      message: "ハンドは4文字(2枚)で入力してください",
-                    },
-                  })}
-                />
-                {errors.heroHand && (
-                  <p className="text-xs text-red-500">
-                    {errors.heroHand.message}
-                  </p>
-                )}
               </div>
+              <input type="hidden" {...register("heroHand")} />
             </div>
-            <div className="m-2">
-              <div className="flex items-center justify-center">勝敗</div>
+          </div>
+          <div className="m-2">
+            <div className="flex items-center justify-center">勝敗</div>
+            <select
+              className="border pl-1 h-7 rounded-xl"
+              {...register("result", { required: "選択してください" })}
+            >
+              <option value="">選択</option>
+              {results.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+            {errors.result && (
+              <p className="text-xs text-red-500">{errors.result.message}</p>
+            )}
+          </div>
+          {/*--------villainハンド詳細--------*/}
+          <div className="flex items-center justify-between gap-3">
+            <div className="w-full">
+              <div>(Villainポジション)</div>
               <select
-                className="border pl-1 h-7 rounded-xl"
-                {...register("result", { required: "選択してください" })}
+                className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
+                {...register("villainPos")}
               >
-                <option value="">選択</option>
-                {results.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
+                {positions.map((p) => (
+                  <option key={p}>{p}</option>
                 ))}
               </select>
-              {errors.result && (
-                <p className="text-xs text-red-500">{errors.result.message}</p>
-              )}
             </div>
-            <div className="flex items-center justify-between gap-3">
-              <div className="w-full">
-                <div>(Villainポジション)</div>
-                <select
-                  className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
-                  {...register("villainPos")}
-                >
-                  {positions.map((p) => (
-                    <option key={p}>{p}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="w-full">
-                <div>(villainハンド)</div>
-                <div className="flex items-center justify-center gap-3">
-                  <div>
-                    <div>1枚目</div>
+            <div className="w-full">
+              <div>(villainハンド)</div>
+              <div className="flex items-center justify-center gap-3">
+                <div>
+                  {selectedVillainHand.length === 0 && (
                     <button
                       type="button"
-                      className="border"
-                      onClick={() => setIsVillainHandModal(true)}
+                      className="border w-7 h-10 rounded"
+                      onClick={() => setSelectedModal("villainHand")}
                     >
-                      選択する
+                      ＋
                     </button>
-                  </div>
-                  <div>
-                    <div>2枚目</div>
+                  )}
+                  {selectedVillainHand.length >= 1 && (
                     <button
                       type="button"
-                      className="border"
-                      onClick={() => setIsVillainHandModal(true)}
+                      className="border w-7 h-10 rounded bg-gray-200"
+                      onClick={() => {
+                        setSelectedModal("villainHand");
+                        setSelectedVillainHand([]);
+                      }}
                     >
-                      選択する
+                      {selectedVillainHand[0]}
                     </button>
-                  </div>
+                  )}
                 </div>
-                <div>{selectedVillainHand}</div>
-                <input
-                  className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
-                  type="text"
-                  maxLength={4}
-                  placeholder="ThTs"
-                  {...register("villainHand")}
-                />
+                {selectedVillainHand.length <= 1 && (
+                  <div>
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded"
+                      onClick={() => setSelectedModal("villainHand")}
+                    >
+                      ＋
+                    </button>
+                  </div>
+                )}
+                {selectedVillainHand.length === 2 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded bg-gray-200"
+                    onClick={() => {
+                      setSelectedModal("villainHand");
+                      setSelectedVillainHand((prev) => {
+                        if (prev.length <= 1) return prev;
+                        const next = [prev[0]];
+                        return next;
+                      });
+                    }}
+                  >
+                    {selectedVillainHand[1]}
+                  </button>
+                )}
               </div>
+              <input type="hidden" {...register("villainHand")} />
             </div>
           </div>
           <div className="grid grid-cols-3 mt-3 gap-1">
+            {/*-----FlopCard選択-----*/}
             <div className="w-full">
               <div>(Flop)</div>
-              <input
-                className="border rounded-xl h-7 pl-2 w-full min-w-0"
-                type="text"
-                placeholder="KsJsJd"
-                {...register("flop", {
-                  maxLength: { value: 6, message: "Flopは6文字(3枚)までです" },
-                })}
-              />
-              {errors.flop && (
-                <p className="text-sm text-red-500">{errors.flop.message}</p>
-              )}
+              <div className="flex items-center justify-center gap-3">
+                {selectedFlopCard.length === 0 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => setSelectedModal("flop")}
+                  >
+                    ＋
+                  </button>
+                )}
+                {selectedFlopCard.length >= 1 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => {
+                      setSelectedModal("flop");
+                      setSelectedFlopCard([]);
+                    }}
+                  >
+                    {selectedFlopCard[0]}
+                  </button>
+                )}
+                {selectedFlopCard.length <= 1 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => setSelectedModal("flop")}
+                  >
+                    ＋
+                  </button>
+                )}
+                {selectedFlopCard.length >= 2 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => {
+                      setSelectedModal("flop");
+                      setSelectedFlopCard((prev) => {
+                        const next = [prev[0]];
+                        return next;
+                      });
+                    }}
+                  >
+                    {selectedFlopCard[1]}
+                  </button>
+                )}
+                {selectedFlopCard.length <= 2 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => setSelectedModal("flop")}
+                  >
+                    ＋
+                  </button>
+                )}
+                {selectedFlopCard.length === 3 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded"
+                    onClick={() => {
+                      setSelectedModal("flop");
+                      setSelectedFlopCard((prev) => {
+                        const next = [prev[0], prev[1]];
+                        return next;
+                      });
+                    }}
+                  >
+                    {selectedFlopCard[2]}
+                  </button>
+                )}
+              </div>
+              <input type="hidden" {...register("flop")} />
             </div>
+            {/*--------TurnCard選択--------*/}
             <div className="w-full">
               <div>(Turn)</div>
-              <input
-                className="border rounded-xl h-7 pl-2 w-full"
-                type="text"
-                placeholder="3h"
-                {...register("turn", {
-                  maxLength: { value: 2, message: "Turnは2文字(1枚)までです" },
-                })}
-              />
-              {errors.turn && (
-                <p className="text-sm text-red-500">{errors.turn.message}</p>
+              {selectedTurnCard === "" && (
+                <button
+                  type="button"
+                  className="border w-7 h-10 rounded"
+                  onClick={() => setSelectedModal("turn")}
+                >
+                  ＋
+                </button>
               )}
+              {selectedTurnCard !== "" && (
+                <button
+                  type="button"
+                  className="border w-7 h-10 rounded bg-gray-200"
+                  onClick={() => {
+                    setSelectedModal("turn");
+                    setSelectedTurnCard("");
+                  }}
+                >
+                  {selectedTurnCard}
+                </button>
+              )}
+              <input type="hidden" {...register("turn")} />
             </div>
+            {/*-----RiverCard選択-----*/}
             <div className="w-full">
               <div>(River)</div>
-              <input
-                className="border rounded-xl h-7 pl-2 w-full"
-                type="text"
-                placeholder="9h"
-                {...register("river", {
-                  maxLength: { value: 2, message: "Riverは2文字(1枚)までです" },
-                })}
-              />
-              {errors.river && (
-                <p className="text-sm text-red-500">{errors.river.message}</p>
+              {selectedRiverCard === "" && (
+                <button
+                  type="button"
+                  className="border w-7 h-10 rounded"
+                  onClick={() => setSelectedModal("river")}
+                >
+                  ＋
+                </button>
               )}
+              {selectedRiverCard !== "" && (
+                <button
+                  type="button"
+                  className="border w-7 h-10 rounded bg-gray-200"
+                  onClick={() => {
+                    setSelectedModal("river");
+                    setSelectedRiverCard("");
+                  }}
+                >
+                  {selectedRiverCard}
+                </button>
+              )}
+              <input type="hidden" {...register("river")} />
             </div>
           </div>
           <div className="mt-3">
@@ -360,19 +516,40 @@ BTN 5bb"
           </div>
         </div>
       </form>
-      {/*-----ハンドセレクトモーダル----- */}
+      {/*--------ハンドセレクトモーダル-------- */}
       {/*---heroHand用--- */}
-      {isHeroHandModal && (
+      {selectedModal === "heroHand" && (
         <HandSelectModal
-          onClose={closeHeroHandModal}
-          onAddSelectedHand={handleAddHeroHand}
+          onClose={closeModal}
+          onAddSelectedCard={handleAddHeroHand}
         />
       )}
       {/*---villainHand用--- */}
-      {isVillainHandModal && (
+      {selectedModal === "villainHand" && (
         <HandSelectModal
-          onClose={closeVillainHandModal}
-          onAddSelectedHand={handleAddVillainHand}
+          onClose={closeModal}
+          onAddSelectedCard={handleAddVillainHand}
+        />
+      )}
+      {/*---FlopCard用--- */}
+      {selectedModal === "flop" && (
+        <HandSelectModal
+          onClose={closeModal}
+          onAddSelectedCard={handleAddFlopCard}
+        />
+      )}
+      {/*---TurnCard用--- */}
+      {selectedModal === "turn" && (
+        <HandSelectModal
+          onClose={closeModal}
+          onAddSelectedCard={handleAddTurnCard}
+        />
+      )}
+      {/*---RiverCard用--- */}
+      {selectedModal === "river" && (
+        <HandSelectModal
+          onClose={closeModal}
+          onAddSelectedCard={handleAddRiverCard}
         />
       )}
     </>
