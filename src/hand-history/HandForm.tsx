@@ -1,6 +1,6 @@
 import type { HandFormValue } from "../types/type";
 import { useForm } from "react-hook-form";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
 
 type Props = {
@@ -201,7 +201,11 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                       className="border w-7 h-10 rounded bg-gray-200"
                       onClick={() => {
                         setIsHeroHandModal(true);
-                        setSelectedHeroHand([]);
+                        setSelectedHeroHand((prev) => {
+                          if (prev.length <= 1) return prev;
+                          const next = [prev[0]];
+                          return next;
+                        });
                       }}
                     >
                       {selectedHeroHand[1]}
@@ -284,7 +288,11 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                     className="border w-7 h-10 rounded bg-gray-200"
                     onClick={() => {
                       setIsVillainHandModal(true);
-                      setSelectedVillainHand([]);
+                      setSelectedVillainHand((prev) => {
+                        if (prev.length <= 1) return prev;
+                        const next = [prev[0]];
+                        return next;
+                      });
                     }}
                   >
                     {selectedVillainHand[1]}
