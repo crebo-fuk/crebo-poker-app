@@ -235,169 +235,104 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 type="hidden"
                 {...register("heroHand", { required: "選択してください" })}
               />
+              <div className="m-2">
+                <div className="flex items-center justify-center">勝敗</div>
+                <select
+                  className="border pl-1 h-7 rounded-xl"
+                  {...register("result", { required: "選択してください" })}
+                >
+                  <option value="">選択</option>
+                  {results.map((r) => (
+                    <option key={r} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+                {errors.result && (
+                  <p className="text-xs text-red-500">
+                    {errors.result.message}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-          <div className="m-2">
-            <div className="flex items-center justify-center">勝敗</div>
-            <select
-              className="border pl-1 h-7 rounded-xl"
-              {...register("result", { required: "選択してください" })}
-            >
-              <option value="">選択</option>
-              {results.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-            {errors.result && (
-              <p className="text-xs text-red-500">{errors.result.message}</p>
-            )}
-          </div>
-          {/*--------villainハンド詳細--------*/}
-          <div className="flex items-center justify-between gap-3">
+
+          <div className="flex mt-3 gap-1">
+            {/*-----FlopCard選択-----*/}
             <div className="w-full">
-              <div>(Villainポジション)</div>
-              <select
-                className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
-                {...register("villainPos")}
-              >
-                {positions.map((p) => (
-                  <option key={p}>{p}</option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full">
-              <div>(villainハンド)</div>
-              <div className="flex items-center justify-center gap-3">
-                <div>
-                  {selectedVillainHand.length === 0 && (
+              <div className="w-[40vw]">
+                <div>(Flop)</div>
+                <div className="flex items-center justify-center gap-3">
+                  {selectedFlopCard.length === 0 && (
                     <button
                       type="button"
                       className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("villainHand")}
+                      onClick={() => setSelectedModal("flop")}
                     >
                       ＋
                     </button>
                   )}
-                  {selectedVillainHand.length >= 1 && (
+                  {selectedFlopCard.length >= 1 && (
                     <button
                       type="button"
                       className="border w-7 h-10 rounded bg-gray-200"
                       onClick={() => {
-                        setSelectedModal("villainHand");
-                        setSelectedVillainHand([]);
+                        setSelectedModal("flop");
+                        setSelectedFlopCard([]);
                       }}
                     >
-                      {selectedVillainHand[0]}
+                      {selectedFlopCard[0]}
                     </button>
                   )}
-                </div>
-                {selectedVillainHand.length <= 1 && (
-                  <div>
+                  {selectedFlopCard.length <= 1 && (
                     <button
                       type="button"
                       className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("villainHand")}
+                      onClick={() => setSelectedModal("flop")}
                     >
                       ＋
                     </button>
-                  </div>
-                )}
-                {selectedVillainHand.length === 2 && (
-                  <button
-                    type="button"
-                    className="border w-7 h-10 rounded bg-gray-200"
-                    onClick={() => {
-                      setSelectedModal("villainHand");
-                      setSelectedVillainHand((prev) => {
-                        if (prev.length <= 1) return prev;
-                        const next = [prev[0]];
-                        return next;
-                      });
-                    }}
-                  >
-                    {selectedVillainHand[1]}
-                  </button>
-                )}
-              </div>
-              <input type="hidden" {...register("villainHand")} />
-            </div>
-          </div>
-          <div className="grid grid-cols-3 mt-3 gap-1">
-            {/*-----FlopCard選択-----*/}
-            <div className="w-full">
-              <div>(Flop)</div>
-              <div className="flex items-center justify-center gap-3">
-                {selectedFlopCard.length === 0 && (
-                  <button
-                    type="button"
-                    className="border w-7 h-10 rounded"
-                    onClick={() => setSelectedModal("flop")}
-                  >
-                    ＋
-                  </button>
-                )}
-                {selectedFlopCard.length >= 1 && (
-                  <button
-                    type="button"
-                    className="border w-7 h-10 rounded bg-gray-200"
-                    onClick={() => {
-                      setSelectedModal("flop");
-                      setSelectedFlopCard([]);
-                    }}
-                  >
-                    {selectedFlopCard[0]}
-                  </button>
-                )}
-                {selectedFlopCard.length <= 1 && (
-                  <button
-                    type="button"
-                    className="border w-7 h-10 rounded"
-                    onClick={() => setSelectedModal("flop")}
-                  >
-                    ＋
-                  </button>
-                )}
-                {selectedFlopCard.length >= 2 && (
-                  <button
-                    type="button"
-                    className="border w-7 h-10 rounded bg-gray-200"
-                    onClick={() => {
-                      setSelectedModal("flop");
-                      setSelectedFlopCard((prev) => {
-                        const next = [prev[0]];
-                        return next;
-                      });
-                    }}
-                  >
-                    {selectedFlopCard[1]}
-                  </button>
-                )}
-                {selectedFlopCard.length <= 2 && (
-                  <button
-                    type="button"
-                    className="border w-7 h-10 rounded"
-                    onClick={() => setSelectedModal("flop")}
-                  >
-                    ＋
-                  </button>
-                )}
-                {selectedFlopCard.length === 3 && (
-                  <button
-                    type="button"
-                    className="border w-7 h-10 rounded bg-gray-200"
-                    onClick={() => {
-                      setSelectedModal("flop");
-                      setSelectedFlopCard((prev) => {
-                        const next = [prev[0], prev[1]];
-                        return next;
-                      });
-                    }}
-                  >
-                    {selectedFlopCard[2]}
-                  </button>
-                )}
+                  )}
+                  {selectedFlopCard.length >= 2 && (
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded bg-gray-200"
+                      onClick={() => {
+                        setSelectedModal("flop");
+                        setSelectedFlopCard((prev) => {
+                          const next = [prev[0]];
+                          return next;
+                        });
+                      }}
+                    >
+                      {selectedFlopCard[1]}
+                    </button>
+                  )}
+                  {selectedFlopCard.length <= 2 && (
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded"
+                      onClick={() => setSelectedModal("flop")}
+                    >
+                      ＋
+                    </button>
+                  )}
+                  {selectedFlopCard.length === 3 && (
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded bg-gray-200"
+                      onClick={() => {
+                        setSelectedModal("flop");
+                        setSelectedFlopCard((prev) => {
+                          const next = [prev[0], prev[1]];
+                          return next;
+                        });
+                      }}
+                    >
+                      {selectedFlopCard[2]}
+                    </button>
+                  )}
+                </div>
               </div>
               <input type="hidden" {...register("flop")} />
             </div>
@@ -502,6 +437,76 @@ BTN 5bb"
               rows={4}
               {...register("memo")}
             />
+          </div>
+          {/*--------villainハンド詳細--------*/}
+          <div className="flex items-center justify-between gap-3">
+            <div className="w-full">
+              <div>(Villainポジション)</div>
+              <select
+                className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
+                {...register("villainPos")}
+              >
+                {positions.map((p) => (
+                  <option key={p}>{p}</option>
+                ))}
+              </select>
+            </div>
+            <div className="w-full">
+              <div>(villainハンド)</div>
+              <div className="flex items-center justify-center gap-3">
+                <div>
+                  {selectedVillainHand.length === 0 && (
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded"
+                      onClick={() => setSelectedModal("villainHand")}
+                    >
+                      ＋
+                    </button>
+                  )}
+                  {selectedVillainHand.length >= 1 && (
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded bg-gray-200"
+                      onClick={() => {
+                        setSelectedModal("villainHand");
+                        setSelectedVillainHand([]);
+                      }}
+                    >
+                      {selectedVillainHand[0]}
+                    </button>
+                  )}
+                </div>
+                {selectedVillainHand.length <= 1 && (
+                  <div>
+                    <button
+                      type="button"
+                      className="border w-7 h-10 rounded"
+                      onClick={() => setSelectedModal("villainHand")}
+                    >
+                      ＋
+                    </button>
+                  </div>
+                )}
+                {selectedVillainHand.length === 2 && (
+                  <button
+                    type="button"
+                    className="border w-7 h-10 rounded bg-gray-200"
+                    onClick={() => {
+                      setSelectedModal("villainHand");
+                      setSelectedVillainHand((prev) => {
+                        if (prev.length <= 1) return prev;
+                        const next = [prev[0]];
+                        return next;
+                      });
+                    }}
+                  >
+                    {selectedVillainHand[1]}
+                  </button>
+                )}
+              </div>
+              <input type="hidden" {...register("villainHand")} />
+            </div>
           </div>
           <div className="p-2">
             <button
