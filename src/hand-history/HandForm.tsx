@@ -109,6 +109,13 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
       return next;
     });
   };
+  const disableCards = [
+    ...selectedHeroHand,
+    ...selectedVillainHand,
+    ...selectedFlopCard,
+    ...(selectedTurnCard ? [selectedTurnCard] : []),
+    ...(selectedRiverCard ? [selectedRiverCard] : []),
+  ];
 
   return (
     <>
@@ -524,6 +531,7 @@ BTN 5bb"
         <HandSelectModal
           onClose={closeModal}
           onAddSelectedCard={handleAddHeroHand}
+          disableCards={disableCards}
         />
       )}
       {/*---villainHand用--- */}
@@ -531,6 +539,7 @@ BTN 5bb"
         <HandSelectModal
           onClose={closeModal}
           onAddSelectedCard={handleAddVillainHand}
+          disableCards={disableCards}
         />
       )}
       {/*---FlopCard用--- */}
@@ -538,6 +547,7 @@ BTN 5bb"
         <HandSelectModal
           onClose={closeModal}
           onAddSelectedCard={handleAddFlopCard}
+          disableCards={disableCards}
         />
       )}
       {/*---TurnCard用--- */}
@@ -545,6 +555,7 @@ BTN 5bb"
         <HandSelectModal
           onClose={closeModal}
           onAddSelectedCard={handleAddTurnCard}
+          disableCards={disableCards}
         />
       )}
       {/*---RiverCard用--- */}
@@ -552,6 +563,7 @@ BTN 5bb"
         <HandSelectModal
           onClose={closeModal}
           onAddSelectedCard={handleAddRiverCard}
+          disableCards={disableCards}
         />
       )}
     </>

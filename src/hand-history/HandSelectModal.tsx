@@ -1,9 +1,14 @@
 type Props = {
   onClose: () => void;
   onAddSelectedCard: (card: string) => void;
+  disableCards: string[];
 };
 
-export const HandSelectModal = ({ onClose, onAddSelectedCard }: Props) => {
+export const HandSelectModal = ({
+  onClose,
+  onAddSelectedCard,
+  disableCards,
+}: Props) => {
   const suit = ["s", "h", "d", "c"];
   const rank = [
     "A",
@@ -27,10 +32,11 @@ export const HandSelectModal = ({ onClose, onAddSelectedCard }: Props) => {
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/40" onClick={() => onClose()} />
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-6 shadow-lg w-[96vw]">
-        <h2 className="font-bold mb-4">HandSelect</h2>
+        <h2 className="font-bold mb-4">CardSelect</h2>
         <div className="grid grid-cols-4 gap-1">
           {cardList.map((c) => {
-            return (
+            const isDisable = disableCards.includes(c);
+            return !isDisable ? (
               <button
                 key={c}
                 className="border runded-xl px-0.5 py-1"
@@ -41,6 +47,10 @@ export const HandSelectModal = ({ onClose, onAddSelectedCard }: Props) => {
               >
                 {c}
               </button>
+            ) : (
+              <div key={c} className="border runded-xl px-0.5 py-1 bg-gray-300">
+                {c}
+              </div>
             );
           })}
         </div>
