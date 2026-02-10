@@ -56,11 +56,6 @@ export const HandHistory = ({
     const turnAction = value.turnAction.trim();
     const riverAction = value.riverAction.trim();
 
-    if (!heroPos || !heroHand) {
-      alert("Heroポジション・Heroハンドを入力してください");
-      return;
-    }
-
     const newHand: HandItem = {
       id: uuidv4(),
       tournamentId: selectedTournamentId,
