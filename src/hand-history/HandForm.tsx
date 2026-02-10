@@ -128,16 +128,8 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                     className="border rounded-xl w-full p-2 h-7"
                     type="number"
                     placeholder="600"
-                    {...register("blindSB", {
-                      valueAsNumber: true,
-                      required: "入力してください",
-                    })}
+                    {...register("blindSB")}
                   />
-                  {errors.blindSB && (
-                    <p className="text-xs text-red-500">
-                      {errors.blindSB.message}
-                    </p>
-                  )}
                 </div>
                 <div className="flex items-center justify-center">BB</div>
                 <div>
@@ -145,16 +137,8 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                     className="border rounded-xl w-full p-2 h-7"
                     type="number"
                     placeholder="1200"
-                    {...register("blindBB", {
-                      valueAsNumber: true,
-                      required: "入力してください",
-                    })}
+                    {...register("blindBB")}
                   />
-                  {errors.blindBB && (
-                    <p className="text-xs text-red-500">
-                      {errors.blindBB.message}
-                    </p>
-                  )}
                 </div>
               </div>
             </div>
@@ -174,12 +158,17 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 <div>(Heroポジション)</div>
                 <select
                   className="border w-full p-2 rounded-xl h-7"
-                  {...register("heroPos")}
+                  {...register("heroPos", { required: "選択してください。" })}
                 >
                   {positions.map((p) => (
                     <option key={p}>{p}</option>
                   ))}
                 </select>
+                {errors.heroPos && (
+                  <p className="text-xs text-red-500">
+                    {errors.heroPos.message}
+                  </p>
+                )}
               </div>
               {/*--------Heroハンド詳細--------*/}
               <div className="w-full">
@@ -236,8 +225,16 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                     </button>
                   )}
                 </div>
+                {errors.heroHand && (
+                  <p className="text-xs text-red-500">
+                    {errors.heroHand.message}
+                  </p>
+                )}
               </div>
-              <input type="hidden" {...register("heroHand")} />
+              <input
+                type="hidden"
+                {...register("heroHand", { required: "選択してください" })}
+              />
             </div>
           </div>
           <div className="m-2">
