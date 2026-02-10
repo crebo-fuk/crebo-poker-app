@@ -1,5 +1,5 @@
 import type { HandFormValue, SelectedModal } from "../types/type";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
 
@@ -14,6 +14,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     handleSubmit,
     setValue,
     reset,
+    control,
     formState: { errors },
   } = useForm<HandFormValue>({
     defaultValues: {
@@ -116,6 +117,12 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     ...(selectedTurnCard ? [selectedTurnCard] : []),
     ...(selectedRiverCard ? [selectedRiverCard] : []),
   ];
+
+  //-----VillainShowDown-----
+  const { fields, append, remove } = useFieldArray({
+    name: "villains",
+    control,
+  });
 
   return (
     <>
@@ -444,6 +451,12 @@ BTN 5bb"
               rows={4}
               {...register("memo")}
             />
+          </div>
+          <div className="flex text-left mt-3 p-2">
+            <div className="flex items-center mr-2">ショーダウン</div>
+            <button type="button" className="text-break p-1 border rounded-xl">
+              ＋追加
+            </button>
           </div>
           {/*--------villainハンド詳細--------*/}
           <div className="flex items-center justify-between gap-3">
