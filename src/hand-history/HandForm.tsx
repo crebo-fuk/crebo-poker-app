@@ -1,4 +1,4 @@
-import type { HandFormValue, SelectedModal } from "../types/type";
+import type { HandFormValue, SelectedModal, Target } from "../types/type";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
@@ -62,61 +62,42 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
 
   //-----ハンドセレクトのModal作成-----
   const [selectedModal, setSelectedModal] = useState<SelectedModal>(null);
-  const [selectedHeroHand, setSelectedHeroHand] = useState<string[]>([]);
-  const [selectedVillainHand, setSelectedVillainHand] = useState<string[]>([]);
-  const [selectedFlopCard, setSelectedFlopCard] = useState<string[]>([]);
-  const [selectedTurnCard, setSelectedTurnCard] = useState<string>("");
-  const [selectedRiverCard, setSelectedRiverCard] = useState<string>("");
+  const [selectedCard, setSelectedCard] = useState<Record<Target, string[]>>({
+    heroHand: [],
+    villainHand: [],
+    flop: [],
+    turn: [],
+    river: [],
+  });
+  const maxLength: Record<Target, number> = {
+    heroHand: 2,
+    villainHand: 2,
+    flop: 3,
+    turn: 1,
+    river: 1,
+  };
   const closeModal = () => {
     setSelectedModal(null);
   };
-  const handleAddHeroHand = (card: string) => {
-    setSelectedHeroHand((prev) => {
-      if (prev.length === 2) return prev;
-      const next = [...prev, card];
-      if (next.length === 2) setValue("heroHand", next.join(""));
-      return next;
+
+  //-----ハンドセレクト関数・一本化-----
+  const addCard = (target: Target, card: string) => {
+    setSelectedCard((prev) => {
+      if (prev[target].length >= maxLength[target]) return prev;
+      const next = [...prev[target], card];
+      if (next.length === maxLength[target]) setValue(target, next.join(""));
+      return {
+        ...prev,
+        [target]: next,
+      };
     });
   };
-  const handleAddVillainHand = (card: string) => {
-    setSelectedVillainHand((prev) => {
-      if (prev.length === 2) return prev;
-      const next = [...prev, card];
-      if (next.length === 2) setValue("villainHand", next.join(""));
-      return next;
-    });
-  };
-  const handleAddFlopCard = (card: string) => {
-    setSelectedFlopCard((prev) => {
-      if (prev.length === 3) return prev;
-      const next = [...prev, card];
-      if (next.length === 3) setValue("flop", next.join(""));
-      return next;
-    });
-  };
-  const handleAddTurnCard = (card: string) => {
-    setSelectedTurnCard((prev) => {
-      if (prev !== "") return prev;
-      const next = card;
-      if (next !== "") setValue("turn", next);
-      return next;
-    });
-  };
-  const handleAddRiverCard = (card: string) => {
-    setSelectedRiverCard((prev) => {
-      if (prev !== "") return prev;
-      const next = card;
-      if (next !== "") setValue("river", next);
-      return next;
-    });
-  };
-  const disableCards = [
-    ...selectedHeroHand,
-    ...selectedVillainHand,
-    ...selectedFlopCard,
-    ...(selectedTurnCard ? [selectedTurnCard] : []),
-    ...(selectedRiverCard ? [selectedRiverCard] : []),
-  ];
+  const handleAddHeroHand = (card: string) => addCard("heroHand", card);
+  const handleAddVillainHand = (card: string) => addCard("villainHand", card);
+  const handleAddFlopCard = (card: string) => addCard("flop", card);
+  const handleAddTurnCard = (card: string) => addCard("turn", card);
+  const handleAddRiverCard = (card: string) => addCard("river", card);
+  const disableCards = Object.values(selectedCard).flat();
 
   //-----VillainShowDown-----
   const { fields, append, remove } = useFieldArray({

@@ -72,6 +72,8 @@ export type Card = {
 
 export type SelectedModal = "heroHand" | "villainHand" | "flop" | "turn" | "river" | null
 
+export type Target = "heroHand" | "villainHand" | "flop" | "turn" | "river" 
+
 export type VillainForm = {
   pos: string;
   hand: string;
