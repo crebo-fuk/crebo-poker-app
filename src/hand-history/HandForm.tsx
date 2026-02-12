@@ -62,7 +62,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
 
   //-----ハンドセレクトのModal作成-----
   const [selectedModal, setSelectedModal] = useState<SelectedModal>(null);
-  const [selectedCard, setSelectedCard] = useState<Record<Target, string[]>>({
+  const [selectedCards, setSelectedCards] = useState<Record<Target, string[]>>({
     heroHand: [],
     villainHand: [],
     flop: [],
@@ -82,7 +82,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
 
   //-----ハンドセレクト関数・一本化-----
   const addCard = (target: Target, card: string) => {
-    setSelectedCard((prev) => {
+    setSelectedCards((prev) => {
       if (prev[target].length >= maxLength[target]) return prev;
       const next = [...prev[target], card];
       if (next.length === maxLength[target]) setValue(target, next.join(""));
@@ -97,7 +97,47 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   const handleAddFlopCard = (card: string) => addCard("flop", card);
   const handleAddTurnCard = (card: string) => addCard("turn", card);
   const handleAddRiverCard = (card: string) => addCard("river", card);
-  const disableCards = Object.values(selectedCard).flat();
+  const disableCards = Object.values(selectedCards).flat();
+
+  const renderCardSlots = (target: Target) => {
+    const selected = selectedCards[target]; // string[]
+    const slots = Array.from({ length: maxLength[target] });
+
+    return (
+      <div className="flex items-center justify-center gap-3">
+        {slots.map((_, i) => {
+          const v = selected[i]; // i枠目のカード（なければ undefined）
+
+          return (
+            <button
+              key={`${target}-${i}`}
+              type="button"
+              className={`border w-7 h-10 rounded ${v ? "bg-gray-200" : ""}`}
+              onClick={() => {
+                // その枠から選び直し：i以降を削ってモーダル開く
+                setSelectedCards((prev) => {
+                  const nextArr = prev[target].slice(0, i);
+                  const next = { ...prev, [target]: nextArr };
+
+                  // フォームも同期（今の仕様なら）
+                  setValue(target, nextArr.join(""), {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+
+                  return next;
+                });
+
+                setSelectedModal(target); // ここでモーダル開く
+              }}
+            >
+              {v ?? "＋"}
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
 
   //-----VillainShowDown-----
   const { fields, append, remove } = useFieldArray({
@@ -168,58 +208,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               {/*--------Heroハンド詳細--------*/}
               <div className="w-full">
                 <div>(Heroハンド)</div>
-                <div className="flex items-center justify-center gap-3">
-                  <div>
-                    {selectedHeroHand.length === 0 && (
-                      <button
-                        type="button"
-                        className="border w-7 h-10 rounded"
-                        onClick={() => setSelectedModal("heroHand")}
-                      >
-                        ＋
-                      </button>
-                    )}
-                    {selectedHeroHand.length >= 1 && (
-                      <button
-                        type="button"
-                        className="border w-7 h-10 rounded bg-gray-200"
-                        onClick={() => {
-                          setSelectedModal("heroHand");
-                          setSelectedHeroHand([]);
-                        }}
-                      >
-                        {selectedHeroHand[0]}
-                      </button>
-                    )}
-                  </div>
-                  {selectedHeroHand.length <= 1 && (
-                    <div>
-                      <button
-                        type="button"
-                        className="border w-7 h-10 rounded"
-                        onClick={() => setSelectedModal("heroHand")}
-                      >
-                        ＋
-                      </button>
-                    </div>
-                  )}
-                  {selectedHeroHand.length === 2 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("heroHand");
-                        setSelectedHeroHand((prev) => {
-                          if (prev.length <= 1) return prev;
-                          const next = [prev[0]];
-                          return next;
-                        });
-                      }}
-                    >
-                      {selectedHeroHand[1]}
-                    </button>
-                  )}
-                </div>
+                {renderCardSlots("heroHand")}
                 {errors.heroHand && (
                   <p className="text-xs text-red-500">
                     {errors.heroHand.message}
@@ -257,130 +246,20 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
             <div className="w-full">
               <div className="w-[40vw]">
                 <div>(Flop)</div>
-                <div className="flex items-center justify-center gap-3">
-                  {selectedFlopCard.length === 0 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("flop")}
-                    >
-                      ＋
-                    </button>
-                  )}
-                  {selectedFlopCard.length >= 1 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("flop");
-                        setSelectedFlopCard([]);
-                      }}
-                    >
-                      {selectedFlopCard[0]}
-                    </button>
-                  )}
-                  {selectedFlopCard.length <= 1 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("flop")}
-                    >
-                      ＋
-                    </button>
-                  )}
-                  {selectedFlopCard.length >= 2 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("flop");
-                        setSelectedFlopCard((prev) => {
-                          const next = [prev[0]];
-                          return next;
-                        });
-                      }}
-                    >
-                      {selectedFlopCard[1]}
-                    </button>
-                  )}
-                  {selectedFlopCard.length <= 2 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("flop")}
-                    >
-                      ＋
-                    </button>
-                  )}
-                  {selectedFlopCard.length === 3 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("flop");
-                        setSelectedFlopCard((prev) => {
-                          const next = [prev[0], prev[1]];
-                          return next;
-                        });
-                      }}
-                    >
-                      {selectedFlopCard[2]}
-                    </button>
-                  )}
-                </div>
+                {renderCardSlots("flop")}
               </div>
               <input type="hidden" {...register("flop")} />
             </div>
             {/*--------TurnCard選択--------*/}
             <div className="w-full">
               <div>(Turn)</div>
-              {selectedTurnCard === "" && (
-                <button
-                  type="button"
-                  className="border w-7 h-10 rounded"
-                  onClick={() => setSelectedModal("turn")}
-                >
-                  ＋
-                </button>
-              )}
-              {selectedTurnCard !== "" && (
-                <button
-                  type="button"
-                  className="border w-7 h-10 rounded bg-gray-200"
-                  onClick={() => {
-                    setSelectedModal("turn");
-                    setSelectedTurnCard("");
-                  }}
-                >
-                  {selectedTurnCard}
-                </button>
-              )}
+              {renderCardSlots("turn")}
               <input type="hidden" {...register("turn")} />
             </div>
             {/*-----RiverCard選択-----*/}
             <div className="w-full">
               <div>(River)</div>
-              {selectedRiverCard === "" && (
-                <button
-                  type="button"
-                  className="border w-7 h-10 rounded"
-                  onClick={() => setSelectedModal("river")}
-                >
-                  ＋
-                </button>
-              )}
-              {selectedRiverCard !== "" && (
-                <button
-                  type="button"
-                  className="border w-7 h-10 rounded bg-gray-200"
-                  onClick={() => {
-                    setSelectedModal("river");
-                    setSelectedRiverCard("");
-                  }}
-                >
-                  {selectedRiverCard}
-                </button>
-              )}
+              {renderCardSlots("river")}
               <input type="hidden" {...register("river")} />
             </div>
           </div>
@@ -454,58 +333,7 @@ BTN 5bb"
             </div>
             <div className="w-full">
               <div>(villainハンド)</div>
-              <div className="flex items-center justify-center gap-3">
-                <div>
-                  {selectedVillainHand.length === 0 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("villainHand")}
-                    >
-                      ＋
-                    </button>
-                  )}
-                  {selectedVillainHand.length >= 1 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("villainHand");
-                        setSelectedVillainHand([]);
-                      }}
-                    >
-                      {selectedVillainHand[0]}
-                    </button>
-                  )}
-                </div>
-                {selectedVillainHand.length <= 1 && (
-                  <div>
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("villainHand")}
-                    >
-                      ＋
-                    </button>
-                  </div>
-                )}
-                {selectedVillainHand.length === 2 && (
-                  <button
-                    type="button"
-                    className="border w-7 h-10 rounded bg-gray-200"
-                    onClick={() => {
-                      setSelectedModal("villainHand");
-                      setSelectedVillainHand((prev) => {
-                        if (prev.length <= 1) return prev;
-                        const next = [prev[0]];
-                        return next;
-                      });
-                    }}
-                  >
-                    {selectedVillainHand[1]}
-                  </button>
-                )}
-              </div>
+              {renderCardSlots("villainHand")}
               <input type="hidden" {...register("villainHand")} />
             </div>
           </div>
