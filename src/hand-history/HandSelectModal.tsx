@@ -26,7 +26,6 @@ export const HandSelectModal = ({
     "2",
   ];
   const cardList = rank.map((r) => suit.map((s) => `${r}${s}`)).flat();
-  console.log(cardList);
 
   return (
     <div className="fixed inset-0 z-50">

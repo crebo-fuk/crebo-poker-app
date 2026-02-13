@@ -1,7 +1,13 @@
-import type { HandFormValue, SelectedModal } from "../types/type";
+import type {
+  HandFormValue,
+  SelectedModal,
+  Target,
+  Actions,
+} from "../types/type";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
+import { ActButton } from "./PosButton";
 
 type Props = {
   onSubmit: (value: HandFormValue) => void;
@@ -13,6 +19,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     reset,
     control,
     formState: { errors },
@@ -39,7 +46,6 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   });
 
   const positions9Max: string[] = [
-    "",
     "UTG",
     "UTG+1",
     "MP",
@@ -50,7 +56,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     "SB",
     "BB",
   ];
-  const positions6Max: string[] = ["", "UTG", "MP", "CO", "BTN", "SB", "BB"];
+  const positions6Max: string[] = ["UTG", "MP", "CO", "BTN", "SB", "BB"];
   const positions = tableSize === 9 ? positions9Max : positions6Max;
 
   const results = ["WIN", "LOSE", "CHOP"];
@@ -62,61 +68,90 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
 
   //-----ハンドセレクトのModal作成-----
   const [selectedModal, setSelectedModal] = useState<SelectedModal>(null);
-  const [selectedHeroHand, setSelectedHeroHand] = useState<string[]>([]);
-  const [selectedVillainHand, setSelectedVillainHand] = useState<string[]>([]);
-  const [selectedFlopCard, setSelectedFlopCard] = useState<string[]>([]);
-  const [selectedTurnCard, setSelectedTurnCard] = useState<string>("");
-  const [selectedRiverCard, setSelectedRiverCard] = useState<string>("");
+  const [selectedCards, setSelectedCards] = useState<Record<Target, string[]>>({
+    heroHand: [],
+    villainHand: [],
+    flop: [],
+    turn: [],
+    river: [],
+  });
+  const maxLength: Record<Target, number> = {
+    heroHand: 2,
+    villainHand: 2,
+    flop: 3,
+    turn: 1,
+    river: 1,
+  };
   const closeModal = () => {
     setSelectedModal(null);
   };
-  const handleAddHeroHand = (card: string) => {
-    setSelectedHeroHand((prev) => {
-      if (prev.length === 2) return prev;
-      const next = [...prev, card];
-      if (next.length === 2) setValue("heroHand", next.join(""));
-      return next;
+
+  //-----ハンドセレクト関数・一本化-----
+  const addCard = (target: Target, card: string) => {
+    setSelectedCards((prev) => {
+      if (prev[target].length >= maxLength[target]) return prev;
+      const next = [...prev[target], card];
+      if (next.length === maxLength[target]) setValue(target, next.join(""));
+      return {
+        ...prev,
+        [target]: next,
+      };
     });
   };
-  const handleAddVillainHand = (card: string) => {
-    setSelectedVillainHand((prev) => {
-      if (prev.length === 2) return prev;
-      const next = [...prev, card];
-      if (next.length === 2) setValue("villainHand", next.join(""));
-      return next;
-    });
+  const handleAddHeroHand = (card: string) => addCard("heroHand", card);
+  const handleAddVillainHand = (card: string) => addCard("villainHand", card);
+  const handleAddFlopCard = (card: string) => addCard("flop", card);
+  const handleAddTurnCard = (card: string) => addCard("turn", card);
+  const handleAddRiverCard = (card: string) => addCard("river", card);
+  const disableCards = Object.values(selectedCards).flat();
+
+  const renderCardSlots = (target: Target) => {
+    const selected = selectedCards[target]; // string[]
+    const slots = Array.from({ length: maxLength[target] });
+
+    return (
+      <div className="flex items-center justify-center gap-3">
+        {slots.map((_, i) => {
+          const v = selected[i]; // i枠目のカード（なければ undefined）
+
+          return (
+            <button
+              key={`${target}-${i}`}
+              type="button"
+              className={`border w-7 h-10 rounded ${v ? "bg-gray-200" : ""}`}
+              onClick={() => {
+                // その枠から選び直し：i以降を削ってモーダル開く
+                setSelectedCards((prev) => {
+                  const nextArr = prev[target].slice(0, i);
+                  const next = { ...prev, [target]: nextArr };
+
+                  // フォームも同期（今の仕様なら）
+                  setValue(target, nextArr.join(""), {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+
+                  return next;
+                });
+
+                setSelectedModal(target); // ここでモーダル開く
+              }}
+            >
+              {v ?? "＋"}
+            </button>
+          );
+        })}
+      </div>
+    );
   };
-  const handleAddFlopCard = (card: string) => {
-    setSelectedFlopCard((prev) => {
-      if (prev.length === 3) return prev;
-      const next = [...prev, card];
-      if (next.length === 3) setValue("flop", next.join(""));
-      return next;
-    });
+
+  //-----------アクション記入欄----------
+  const onAddAction = (targetAction: Actions, targetButton: string) => {
+    setValue(targetAction, getValues(targetAction) + " " + targetButton);
   };
-  const handleAddTurnCard = (card: string) => {
-    setSelectedTurnCard((prev) => {
-      if (prev !== "") return prev;
-      const next = card;
-      if (next !== "") setValue("turn", next);
-      return next;
-    });
+  const onDeleteAction = (targetAction: Actions) => {
+    setValue(targetAction, "");
   };
-  const handleAddRiverCard = (card: string) => {
-    setSelectedRiverCard((prev) => {
-      if (prev !== "") return prev;
-      const next = card;
-      if (next !== "") setValue("river", next);
-      return next;
-    });
-  };
-  const disableCards = [
-    ...selectedHeroHand,
-    ...selectedVillainHand,
-    ...selectedFlopCard,
-    ...(selectedTurnCard ? [selectedTurnCard] : []),
-    ...(selectedRiverCard ? [selectedRiverCard] : []),
-  ];
 
   //-----VillainShowDown-----
   const { fields, append, remove } = useFieldArray({
@@ -171,7 +206,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               <div className="w-full">
                 <div>(Heroポジション)</div>
                 <select
-                  className="border w-full p-2 rounded-xl h-7"
+                  className="border w-full pl-2 rounded-xl h-7"
                   {...register("heroPos", { required: "選択してください。" })}
                 >
                   {positions.map((p) => (
@@ -187,58 +222,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               {/*--------Heroハンド詳細--------*/}
               <div className="w-full">
                 <div>(Heroハンド)</div>
-                <div className="flex items-center justify-center gap-3">
-                  <div>
-                    {selectedHeroHand.length === 0 && (
-                      <button
-                        type="button"
-                        className="border w-7 h-10 rounded"
-                        onClick={() => setSelectedModal("heroHand")}
-                      >
-                        ＋
-                      </button>
-                    )}
-                    {selectedHeroHand.length >= 1 && (
-                      <button
-                        type="button"
-                        className="border w-7 h-10 rounded bg-gray-200"
-                        onClick={() => {
-                          setSelectedModal("heroHand");
-                          setSelectedHeroHand([]);
-                        }}
-                      >
-                        {selectedHeroHand[0]}
-                      </button>
-                    )}
-                  </div>
-                  {selectedHeroHand.length <= 1 && (
-                    <div>
-                      <button
-                        type="button"
-                        className="border w-7 h-10 rounded"
-                        onClick={() => setSelectedModal("heroHand")}
-                      >
-                        ＋
-                      </button>
-                    </div>
-                  )}
-                  {selectedHeroHand.length === 2 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("heroHand");
-                        setSelectedHeroHand((prev) => {
-                          if (prev.length <= 1) return prev;
-                          const next = [prev[0]];
-                          return next;
-                        });
-                      }}
-                    >
-                      {selectedHeroHand[1]}
-                    </button>
-                  )}
-                </div>
+                {renderCardSlots("heroHand")}
                 {errors.heroHand && (
                   <p className="text-xs text-red-500">
                     {errors.heroHand.message}
@@ -276,167 +260,81 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
             <div className="w-full">
               <div className="w-[40vw]">
                 <div>(Flop)</div>
-                <div className="flex items-center justify-center gap-3">
-                  {selectedFlopCard.length === 0 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("flop")}
-                    >
-                      ＋
-                    </button>
-                  )}
-                  {selectedFlopCard.length >= 1 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("flop");
-                        setSelectedFlopCard([]);
-                      }}
-                    >
-                      {selectedFlopCard[0]}
-                    </button>
-                  )}
-                  {selectedFlopCard.length <= 1 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("flop")}
-                    >
-                      ＋
-                    </button>
-                  )}
-                  {selectedFlopCard.length >= 2 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("flop");
-                        setSelectedFlopCard((prev) => {
-                          const next = [prev[0]];
-                          return next;
-                        });
-                      }}
-                    >
-                      {selectedFlopCard[1]}
-                    </button>
-                  )}
-                  {selectedFlopCard.length <= 2 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("flop")}
-                    >
-                      ＋
-                    </button>
-                  )}
-                  {selectedFlopCard.length === 3 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("flop");
-                        setSelectedFlopCard((prev) => {
-                          const next = [prev[0], prev[1]];
-                          return next;
-                        });
-                      }}
-                    >
-                      {selectedFlopCard[2]}
-                    </button>
-                  )}
-                </div>
+                {renderCardSlots("flop")}
               </div>
               <input type="hidden" {...register("flop")} />
             </div>
             {/*--------TurnCard選択--------*/}
             <div className="w-full">
               <div>(Turn)</div>
-              {selectedTurnCard === "" && (
-                <button
-                  type="button"
-                  className="border w-7 h-10 rounded"
-                  onClick={() => setSelectedModal("turn")}
-                >
-                  ＋
-                </button>
-              )}
-              {selectedTurnCard !== "" && (
-                <button
-                  type="button"
-                  className="border w-7 h-10 rounded bg-gray-200"
-                  onClick={() => {
-                    setSelectedModal("turn");
-                    setSelectedTurnCard("");
-                  }}
-                >
-                  {selectedTurnCard}
-                </button>
-              )}
+              {renderCardSlots("turn")}
               <input type="hidden" {...register("turn")} />
             </div>
             {/*-----RiverCard選択-----*/}
             <div className="w-full">
               <div>(River)</div>
-              {selectedRiverCard === "" && (
-                <button
-                  type="button"
-                  className="border w-7 h-10 rounded"
-                  onClick={() => setSelectedModal("river")}
-                >
-                  ＋
-                </button>
-              )}
-              {selectedRiverCard !== "" && (
-                <button
-                  type="button"
-                  className="border w-7 h-10 rounded bg-gray-200"
-                  onClick={() => {
-                    setSelectedModal("river");
-                    setSelectedRiverCard("");
-                  }}
-                >
-                  {selectedRiverCard}
-                </button>
-              )}
+              {renderCardSlots("river")}
               <input type="hidden" {...register("river")} />
             </div>
           </div>
           <div className="mt-3">
             <div className="">
-              <div>Preflop アクション</div>
+              <div>(Preflop アクション)</div>
+              <ActButton
+                positions={positions}
+                onAddAction={onAddAction}
+                targetAction={"preflopAction"}
+                onDeleteAction={onDeleteAction}
+              />
               <textarea
-                className="border rounded-xl p-2 w-full"
+                className="border rounded-xl p-2 w-full mt-1"
                 rows={2}
                 placeholder="UTG r2.5bb
 BTN c"
                 {...register("preflopAction")}
               />
             </div>
-            <div className="">
-              <div>Flop アクション</div>
+            <div className="mt-2">
+              <div>(Flop アクション)</div>
+              <ActButton
+                positions={positions}
+                onAddAction={onAddAction}
+                targetAction={"flopAction"}
+                onDeleteAction={onDeleteAction}
+              />
               <textarea
-                className="border rounded-xl p-2 w-full"
+                className="border rounded-xl p-2 w-full mt-1"
                 rows={2}
                 placeholder="××"
                 {...register("flopAction")}
               />
             </div>
-            <div className="">
-              <div>Turn アクション</div>
+            <div className="mt-2">
+              <div>(Turn アクション)</div>
+              <ActButton
+                positions={positions}
+                onAddAction={onAddAction}
+                targetAction={"turnAction"}
+                onDeleteAction={onDeleteAction}
+              />
               <textarea
-                className="border rounded-xl p-2 w-full"
+                className="border rounded-xl p-2 w-full mt-1"
                 rows={2}
                 placeholder="hero ×/c 
 BTN 3bb"
                 {...register("turnAction")}
               />
             </div>
-            <div className="">
-              <div>River アクション</div>
+            <div className="mt-2">
+              <div>(River アクション)</div>
+              <ActButton
+                positions={positions}
+                onAddAction={onAddAction}
+                targetAction={"riverAction"}
+                onDeleteAction={onDeleteAction}
+              />
               <textarea
-                className="border rounded-xl p-2 w-full"
+                className="border rounded-xl p-2 w-full mt-1"
                 rows={2}
                 placeholder="hero c/f
 BTN 5bb"
@@ -463,7 +361,7 @@ BTN 5bb"
             <div className="w-full">
               <div>(Villainポジション)</div>
               <select
-                className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
+                className="border w-full pl-2 rounded-xl flex items-center justify-center h-7"
                 {...register("villainPos")}
               >
                 {positions.map((p) => (
@@ -473,58 +371,7 @@ BTN 5bb"
             </div>
             <div className="w-full">
               <div>(villainハンド)</div>
-              <div className="flex items-center justify-center gap-3">
-                <div>
-                  {selectedVillainHand.length === 0 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("villainHand")}
-                    >
-                      ＋
-                    </button>
-                  )}
-                  {selectedVillainHand.length >= 1 && (
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded bg-gray-200"
-                      onClick={() => {
-                        setSelectedModal("villainHand");
-                        setSelectedVillainHand([]);
-                      }}
-                    >
-                      {selectedVillainHand[0]}
-                    </button>
-                  )}
-                </div>
-                {selectedVillainHand.length <= 1 && (
-                  <div>
-                    <button
-                      type="button"
-                      className="border w-7 h-10 rounded"
-                      onClick={() => setSelectedModal("villainHand")}
-                    >
-                      ＋
-                    </button>
-                  </div>
-                )}
-                {selectedVillainHand.length === 2 && (
-                  <button
-                    type="button"
-                    className="border w-7 h-10 rounded bg-gray-200"
-                    onClick={() => {
-                      setSelectedModal("villainHand");
-                      setSelectedVillainHand((prev) => {
-                        if (prev.length <= 1) return prev;
-                        const next = [prev[0]];
-                        return next;
-                      });
-                    }}
-                  >
-                    {selectedVillainHand[1]}
-                  </button>
-                )}
-              </div>
+              {renderCardSlots("villainHand")}
               <input type="hidden" {...register("villainHand")} />
             </div>
           </div>

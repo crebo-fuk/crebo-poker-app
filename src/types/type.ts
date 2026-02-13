@@ -59,6 +59,7 @@ export type HandItem = {
 
 export type FxRatesApiResponse = {
   rates: { JPY: number };
+
 };
 
 export type Rank = "A" | "K" | "Q" | "J" | "T" | "9" | "8" | "7" | "6" | "5" | "4" | "3" | "2"
@@ -71,6 +72,10 @@ export type Card = {
 }
 
 export type SelectedModal = "heroHand" | "villainHand" | "flop" | "turn" | "river" | null
+
+export type Target = "heroHand" | "villainHand" | "flop" | "turn" | "river" 
+
+export type Actions = "preflopAction" | "flopAction" | "turnAction" | "riverAction"
 
 export type VillainForm = {
   pos: string;
