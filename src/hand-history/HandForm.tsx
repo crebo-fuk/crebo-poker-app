@@ -4,10 +4,10 @@ import type {
   Target,
   Actions,
 } from "../types/type";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
-import { ActButton } from "./PosButton";
+import { ActButton } from "./ActButton";
 
 type Props = {
   onSubmit: (value: HandFormValue) => void;
@@ -21,7 +21,6 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     setValue,
     getValues,
     reset,
-    control,
     formState: { errors },
   } = useForm<HandFormValue>({
     defaultValues: {
@@ -158,10 +157,10 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   };
 
   //-----VillainShowDown-----
-  const { fields, append, remove } = useFieldArray({
-    name: "villains",
-    control,
-  });
+  // const { fields, append, remove } = useFieldArray({
+  //   name: "villains",
+  //   control,
+  // });
 
   return (
     <>
