@@ -73,7 +73,7 @@ export const ActButton = ({
         <div className="flex gap-1 mt-1">
           <button
             type="button"
-            className="border rounded w-17 h-5"
+            className="border rounded w-17 h-5 bg-red-200"
             onClick={() => onDeleteAction(targetAction)}
           >
             一括消去

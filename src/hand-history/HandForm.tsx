@@ -145,7 +145,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     );
   };
 
-  //-----アクションをボタンで入力-----
+  //-----------アクション記入欄----------
   const onAddAction = (targetAction: Actions, targetButton: string) => {
     setValue(targetAction, getValues(targetAction) + " " + targetButton);
   };
@@ -279,7 +279,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
           </div>
           <div className="mt-3">
             <div className="">
-              <div>Preflop アクション</div>
+              <div>(Preflop アクション)</div>
               <ActButton
                 positions={positions}
                 onAddAction={onAddAction}
@@ -295,11 +295,12 @@ BTN c"
               />
             </div>
             <div className="">
-              <div>Flop アクション</div>
+              <div>(Flop アクション)</div>
               <ActButton
                 positions={positions}
                 onAddAction={onAddAction}
                 targetAction={"flopAction"}
+                onDeleteAction={onDeleteAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
@@ -309,11 +310,12 @@ BTN c"
               />
             </div>
             <div className="">
-              <div>Turn アクション</div>
+              <div>(Turn アクション)</div>
               <ActButton
                 positions={positions}
                 onAddAction={onAddAction}
                 targetAction={"turnAction"}
+                onDeleteAction={onDeleteAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
@@ -324,11 +326,12 @@ BTN 3bb"
               />
             </div>
             <div className="">
-              <div>River アクション</div>
+              <div>(River アクション)</div>
               <ActButton
                 positions={positions}
                 onAddAction={onAddAction}
                 targetAction={"riverAction"}
+                onDeleteAction={onDeleteAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
