@@ -147,7 +147,11 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
 
   //-----------アクション記入欄----------
   const onAddAction = (targetAction: Actions, targetButton: string) => {
-    setValue(targetAction, getValues(targetAction) + " " + targetButton);
+    if (targetButton === "\n") {
+      setValue(targetAction, getValues(targetAction) + targetButton);
+    } else {
+      setValue(targetAction, getValues(targetAction) + targetButton + " ");
+    }
   };
   const onDeleteAction = (targetAction: Actions) => {
     setValue(targetAction, "");
