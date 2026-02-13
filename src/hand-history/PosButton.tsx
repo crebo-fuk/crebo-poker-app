@@ -54,6 +54,15 @@ export const ActButton = ({ positions, onAddAction, targetAction }: Props) => {
           );
         })}
       </div>
+      <div className="flex gap-1 mt-1">
+        <button
+          type="button"
+          className="border rounded w-9.5 h-5"
+          onClick={() => onAddAction(targetAction, "\n")}
+        >
+          改行
+        </button>
+      </div>
     </div>
   );
 };
