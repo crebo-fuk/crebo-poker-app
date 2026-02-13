@@ -203,7 +203,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               <div className="w-full">
                 <div>(Heroポジション)</div>
                 <select
-                  className="border w-full p-2 rounded-xl h-7"
+                  className="border w-full pl-2 rounded-xl h-7"
                   {...register("heroPos", { required: "選択してください。" })}
                 >
                   {positions.map((p) => (
@@ -339,7 +339,7 @@ BTN 5bb"
             <div className="w-full">
               <div>(Villainポジション)</div>
               <select
-                className="border w-full p-2 rounded-xl flex items-center justify-center h-7"
+                className="border w-full pl-2 rounded-xl flex items-center justify-center h-7"
                 {...register("villainPos")}
               >
                 {positions.map((p) => (
