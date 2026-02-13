@@ -149,6 +149,9 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   const onAddAction = (targetAction: Actions, targetButton: string) => {
     setValue(targetAction, getValues(targetAction) + " " + targetButton);
   };
+  const onDeleteAction = (targetAction: Actions) => {
+    setValue(targetAction, "");
+  };
 
   //-----VillainShowDown-----
   const { fields, append, remove } = useFieldArray({
@@ -281,6 +284,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 positions={positions}
                 onAddAction={onAddAction}
                 targetAction={"preflopAction"}
+                onDeleteAction={onDeleteAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
@@ -292,8 +296,13 @@ BTN c"
             </div>
             <div className="">
               <div>Flop アクション</div>
+              <ActButton
+                positions={positions}
+                onAddAction={onAddAction}
+                targetAction={"flopAction"}
+              />
               <textarea
-                className="border rounded-xl p-2 w-full"
+                className="border rounded-xl p-2 w-full mt-1"
                 rows={2}
                 placeholder="××"
                 {...register("flopAction")}
@@ -301,8 +310,13 @@ BTN c"
             </div>
             <div className="">
               <div>Turn アクション</div>
+              <ActButton
+                positions={positions}
+                onAddAction={onAddAction}
+                targetAction={"turnAction"}
+              />
               <textarea
-                className="border rounded-xl p-2 w-full"
+                className="border rounded-xl p-2 w-full mt-1"
                 rows={2}
                 placeholder="hero ×/c 
 BTN 3bb"
@@ -311,8 +325,13 @@ BTN 3bb"
             </div>
             <div className="">
               <div>River アクション</div>
+              <ActButton
+                positions={positions}
+                onAddAction={onAddAction}
+                targetAction={"riverAction"}
+              />
               <textarea
-                className="border rounded-xl p-2 w-full"
+                className="border rounded-xl p-2 w-full mt-1"
                 rows={2}
                 placeholder="hero c/f
 BTN 5bb"
