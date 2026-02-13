@@ -2,6 +2,7 @@ import type { HandFormValue, SelectedModal, Target } from "../types/type";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
+import { PosButton } from "./PosButton";
 
 type Props = {
   onSubmit: (value: HandFormValue) => void;
@@ -39,7 +40,6 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   });
 
   const positions9Max: string[] = [
-    "",
     "UTG",
     "UTG+1",
     "MP",
@@ -50,7 +50,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     "SB",
     "BB",
   ];
-  const positions6Max: string[] = ["", "UTG", "MP", "CO", "BTN", "SB", "BB"];
+  const positions6Max: string[] = ["UTG", "MP", "CO", "BTN", "SB", "BB"];
   const positions = tableSize === 9 ? positions9Max : positions6Max;
 
   const results = ["WIN", "LOSE", "CHOP"];
@@ -59,6 +59,8 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     onSubmit(value);
     reset();
   };
+
+  const betButton = ["2.5bb", "3.0bb", "3.5bb", "4.0bb"];
 
   //-----ハンドセレクトのModal作成-----
   const [selectedModal, setSelectedModal] = useState<SelectedModal>(null);
@@ -138,6 +140,9 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
       </div>
     );
   };
+
+  //-----VillainShowDown-----
+  
 
   //-----VillainShowDown-----
   const { fields, append, remove } = useFieldArray({
@@ -266,8 +271,9 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
           <div className="mt-3">
             <div className="">
               <div>Preflop アクション</div>
+              <PosButton positions={positions} />
               <textarea
-                className="border rounded-xl p-2 w-full"
+                className="border rounded-xl p-2 w-full mt-1"
                 rows={2}
                 placeholder="UTG r2.5bb
 BTN c"
