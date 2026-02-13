@@ -75,6 +75,8 @@ export type SelectedModal = "heroHand" | "villainHand" | "flop" | "turn" | "rive
 
 export type Target = "heroHand" | "villainHand" | "flop" | "turn" | "river" 
 
+export type Actions = "preflopAction" | "flopAction" | "turnAction" | "riverAction"
+
 export type VillainForm = {
   pos: string;
   hand: string;

@@ -1,8 +1,12 @@
+import type { Actions } from "../types/type";
+
 type Props = {
   positions: string[];
+  onAddAction: (action: Actions, targetButton: string) => void;
+  targetAction: Actions;
 };
 
-export const PosButton = ({ positions }: Props) => {
+export const ActButton = ({ positions, onAddAction, targetAction }: Props) => {
   const betButtons = ["2.5bb", "3.0bb", "3.5bb", "4.0bb"];
   const actions = ["r", "c", "b", "×", "f"];
 
@@ -15,6 +19,7 @@ export const PosButton = ({ positions }: Props) => {
               key={pos}
               type="button"
               className="border rounded w-9.5 h-5"
+              onClick={() => onAddAction(targetAction, pos)}
             >
               {pos}
             </button>
@@ -27,7 +32,8 @@ export const PosButton = ({ positions }: Props) => {
             <button
               key={action}
               type="button"
-              className="border rounded w-10 h-5"
+              className="border rounded w-9.5 h-5"
+              onClick={() => onAddAction(targetAction, action)}
             >
               {action}
             </button>
@@ -37,7 +43,12 @@ export const PosButton = ({ positions }: Props) => {
       <div className="flex gap-1 mt-1">
         {betButtons.map((bet) => {
           return (
-            <button key={bet} type="button" className="border rounded w-10 h-5">
+            <button
+              key={bet}
+              type="button"
+              className="border rounded w-9.5 h-5"
+              onClick={() => onAddAction(targetAction, bet)}
+            >
               {bet}
             </button>
           );

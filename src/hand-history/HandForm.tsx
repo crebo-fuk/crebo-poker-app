@@ -1,8 +1,13 @@
-import type { HandFormValue, SelectedModal, Target } from "../types/type";
+import type {
+  HandFormValue,
+  SelectedModal,
+  Target,
+  Actions,
+} from "../types/type";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
-import { PosButton } from "./PosButton";
+import { ActButton } from "./PosButton";
 
 type Props = {
   onSubmit: (value: HandFormValue) => void;
@@ -141,6 +146,9 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   };
 
   //-----アクションをボタンで入力-----
+  const onAddAction = (targetAction: Actions, targetButton: string) => {
+    setValue(targetAction, getValues(targetAction) + " " + targetButton);
+  };
 
   //-----VillainShowDown-----
   const { fields, append, remove } = useFieldArray({
@@ -269,7 +277,11 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
           <div className="mt-3">
             <div className="">
               <div>Preflop アクション</div>
-              <PosButton positions={positions} />
+              <ActButton
+                positions={positions}
+                onAddAction={onAddAction}
+                targetAction={"preflopAction"}
+              />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
                 rows={2}
