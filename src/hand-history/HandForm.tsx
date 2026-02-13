@@ -294,7 +294,7 @@ BTN c"
                 {...register("preflopAction")}
               />
             </div>
-            <div className="">
+            <div className="mt-2">
               <div>(Flop アクション)</div>
               <ActButton
                 positions={positions}
@@ -309,7 +309,7 @@ BTN c"
                 {...register("flopAction")}
               />
             </div>
-            <div className="">
+            <div className="mt-2">
               <div>(Turn アクション)</div>
               <ActButton
                 positions={positions}
@@ -325,7 +325,7 @@ BTN 3bb"
                 {...register("turnAction")}
               />
             </div>
-            <div className="">
+            <div className="mt-2">
               <div>(River アクション)</div>
               <ActButton
                 positions={positions}
