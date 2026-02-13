@@ -14,6 +14,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     reset,
     control,
     formState: { errors },
@@ -59,8 +60,6 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     onSubmit(value);
     reset();
   };
-
-  const betButton = ["2.5bb", "3.0bb", "3.5bb", "4.0bb"];
 
   //-----ハンドセレクトのModal作成-----
   const [selectedModal, setSelectedModal] = useState<SelectedModal>(null);
@@ -141,8 +140,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     );
   };
 
-  //-----VillainShowDown-----
-  
+  //-----アクションをボタンで入力-----
 
   //-----VillainShowDown-----
   const { fields, append, remove } = useFieldArray({
