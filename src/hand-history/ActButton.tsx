@@ -14,7 +14,7 @@ export const ActButton = ({
   targetAction,
 }: Props) => {
   const betButtons = ["2.5bb", "3.0bb", "3.5bb", "4.0bb"];
-  const actions = ["r", "c", "b", "×", "f"];
+  const actions = ["r", "c", "b", "×", "f", "/"];
 
   return (
     <div>
