@@ -230,7 +230,35 @@ export const HandList = ({
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-4 w-full text-left h-30 bg-gray-200 rounded-xl">
+                  {/*-----ショーダウン-----*/}
+                  {hand.villains && (
+                    <div className="flex text-xs">
+                      <div className="ml-2 mr-3 mt-2 flex items-center justify-center">
+                        ショーダウン
+                      </div>
+                      {hand.villains.map((v) => {
+                        return (
+                          <div className="mr-2">
+                            <div className="flex gap-1">
+                              {splitCard(v.villainHand).length === 2 &&
+                                splitCard(v.villainHand).map((f, i) => (
+                                  <div
+                                    key={i}
+                                    className="border rounded-sm text-sm w-7 h-11 flex items-center justify-center "
+                                  >
+                                    {f}
+                                  </div>
+                                ))}
+                            </div>
+                            <div className="border rounded-2xl bg-gray-200 mt-1">
+                              {v.villainPos}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                  <div className="grid grid-cols-4 w-full text-left h-30 bg-gray-200 rounded-xl mt-2">
                     <div className="border-r ml-2">
                       <div>プリフロップ</div>
                       <div className="whitespace-pre-wrap mt-2">
