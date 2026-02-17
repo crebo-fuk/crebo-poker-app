@@ -201,6 +201,32 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     );
   };
 
+  //-----useFieldArrayの使用-----
+  //---追加---
+  const handleAppendVillain = () => {
+    const newIndex = fields.length;
+    append({ villainPos: "", villainHand: "" });
+    setSelectedCards((prev) => {
+      return {
+        ...prev,
+        villainHands: { ...prev.villainHands, [newIndex]: [] },
+      };
+    });
+  };
+  //---削除---
+  const handleRemoveVillain = (index: number) => {
+    remove(index);
+    setSelectedCards((prev) => {
+      const nextVillainHands: Record<number, string[]> = {};
+      Object.entries(prev.villainHands).forEach(([k, v]) => {
+        const i = Number(k);
+        if (i < index) nextVillainHands[i] = v;
+        if (i > index) nextVillainHands[i - 1] = v;
+      });
+      return { ...prev, villainHands: nextVillainHands };
+    });
+  };
+
   //-----------アクション記入欄----------
   const onAddAction = (targetAction: Actions, targetButton: string) => {
     if (targetButton === "\n") {
