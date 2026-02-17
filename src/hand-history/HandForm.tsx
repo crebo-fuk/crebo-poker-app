@@ -116,10 +116,18 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
         setValue(`villains.${index}.villainHand`, next.join(""));
       return {
         ...prev,
-        villainHands: { ...prev, [index]: next },
+        villainHands: { ...prev, [index]: nexjectt },
       };
     });
   };
+
+  const disableCard = [
+    ...selectedCards.heroHand,
+    ...selectedCards.flop,
+    ...selectedCards.turn,
+    ...selectedCards.river,
+    ...Object.values(selectedCards.villainHands).flat(),
+  ];
 
   const renderCardSlots = (target: Target) => {
     const selected = selectedCards[target]; // string[]
