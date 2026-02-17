@@ -432,29 +432,37 @@ BTN 5bb"
           </div>
           <div className="flex text-left mt-3 p-2">
             <div className="flex items-center mr-2">ショーダウン</div>
-            <button type="button" className="text-break p-1 border rounded-xl">
+            <button
+              type="button"
+              className="text-break p-1 border rounded-xl cursor-pointer"
+              onClick={handleAppendVillain}
+            >
               ＋追加
             </button>
           </div>
           {/*--------villainハンド詳細--------*/}
-          <div className="flex items-center justify-between gap-3">
-            <div className="w-full">
-              <div>(Villainポジション)</div>
-              <select
-                className="border w-full pl-2 rounded-xl flex items-center justify-center h-7"
-                {...register("villainPos")}
-              >
-                {positions.map((p) => (
-                  <option key={p}>{p}</option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full">
-              <div>(villainハンド)</div>
-              {renderCardSlots("villainHand")}
-              <input type="hidden" {...register("villainHand")} />
-            </div>
-          </div>
+          {fields.map((field, index) => {
+            return (
+              <div className="flex items-center justify-between gap-3">
+                <div className="w-full">
+                  <div>(Villainポジション)</div>
+                  <select
+                    className="border w-full pl-2 rounded-xl flex items-center justify-center h-7"
+                    {...register("villainPos")}
+                  >
+                    {positions.map((p) => (
+                      <option key={p}>{p}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="w-full">
+                  <div>(villainハンド)</div>
+                  {renderCardSlots("villainHand")}
+                  <input type="hidden" {...register("villainHand")} />
+                </div>
+              </div>
+            );
+          })}
           <div className="p-2">
             <button
               type="submit"
