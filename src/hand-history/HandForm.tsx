@@ -116,7 +116,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
         setValue(`villains.${index}.villainHand`, next.join(""));
       return {
         ...prev,
-        villainHands: { ...prev, [index]: next },
+        villainHands: { ...prev.villainHands, [index]: next },
       };
     });
   };
