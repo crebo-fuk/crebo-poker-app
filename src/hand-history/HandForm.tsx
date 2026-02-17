@@ -116,7 +116,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
         setValue(`villains.${index}.villainHand`, next.join(""));
       return {
         ...prev,
-        villainHands: { ...prev, [index]: nexjectt },
+        villainHands: { ...prev, [index]: next },
       };
     });
   };
@@ -129,27 +129,24 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     ...Object.values(selectedCards.villainHands).flat(),
   ];
 
+  //-----カードスロット（Villain以外）-----
   const renderCardSlots = (target: Target) => {
-    const selected = selectedCards[target]; // string[]
+    const selected = selectedCards[target] ?? [];
     const slots = Array.from({ length: maxLength[target] });
-
     return (
       <div className="flex items-center justify-center gap-3">
         {slots.map((_, i) => {
-          const v = selected[i]; // i枠目のカード（なければ undefined）
-
+          const v = selected[i];
           return (
             <button
               key={`${target}-${i}`}
               type="button"
               className={`border w-7 h-10 rounded ${v ? "bg-gray-200" : ""}`}
               onClick={() => {
-                // その枠から選び直し：i以降を削ってモーダル開く
                 setSelectedCards((prev) => {
                   const nextArr = prev[target].slice(0, i);
                   const next = { ...prev, [target]: nextArr };
 
-                  // フォームも同期（今の仕様なら）
                   setValue(target, nextArr.join(""), {
                     shouldDirty: true,
                     shouldValidate: true,
@@ -158,11 +155,46 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                   return next;
                 });
 
-                setSelectedModal(target); // ここでモーダル開く
+                setSelectedModal(target);
               }}
             >
               {v ?? "＋"}
             </button>
+          );
+        })}
+      </div>
+    );
+  };
+
+  //-----villainカード用スロット-----
+  const renderVillainCardSlots = (index: number) => {
+    const selected = selectedCards.villainHands[index] ?? [];
+    const slots = Array.from({ length: VillainHandMaxLength });
+    return (
+      <div className="flex items-center justify-center gap-3">
+        {slots.map((_, i) => {
+          const v = selected[i];
+          return (
+            <button
+              key={`villain-${index}-${i}`}
+              type="button"
+              className={`border w-7 h-10 rounded ${v ? "bg-gray-200" : ""}`}
+              onClick={() => {
+                setSelectedCards((prev) => {
+                  const nextArr = prev.villainHands[index].slice(0, i);
+                  const nextVIllainHands = {
+                    ...prev.villainHands,
+                    [index]: nextArr,
+                  };
+                  setValue(`villains.${index}.villainHand`, nextArr.join(""), {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                  return { ...prev, villainHands: nextVIllainHands };
+                });
+                setSelectedModal({ type: "villainHand", index });
+              }}
+            ></button>
           );
         })}
       </div>
