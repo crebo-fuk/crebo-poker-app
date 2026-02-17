@@ -181,7 +181,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               className={`border w-7 h-10 rounded ${v ? "bg-gray-200" : ""}`}
               onClick={() => {
                 setSelectedCards((prev) => {
-                  const nextArr = prev.villainHands[index].slice(0, i);
+                  const nextArr = (prev.villainHands[index] ?? []).slice(0, i);
                   const nextVIllainHands = {
                     ...prev.villainHands,
                     [index]: nextArr,
