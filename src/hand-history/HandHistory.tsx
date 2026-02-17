@@ -40,8 +40,10 @@ export const HandHistory = ({
 
     const heroPos = value.heroPos.trim();
     const heroHand = value.heroHand.trim();
-    const villainPos = value.villainPos.trim();
-    const villainHand = value.villainHand.trim();
+    const villains = value.villains.map((v) => ({
+      villainPos: v.villainPos.trim(),
+      villainHand: v.villainHand.trim(),
+    }));
     const memo = value.memo.trim();
     const preflop = heroHand;
     const flop = value.flop.trim();
@@ -61,8 +63,7 @@ export const HandHistory = ({
       tournamentId: selectedTournamentId,
       heroPos,
       heroHand,
-      villainPos,
-      villainHand,
+      villains,
       memo,
       preflop,
       flop,
