@@ -44,8 +44,7 @@ export type HandItem = {
   tournamentId: string;
   heroPos: string;
   heroHand: string;
-  villainPos: string;
-  villainHand: string;
+  villains: VillainFormValue[];
   memo: string;
   preflop: string;
   flop: string;
@@ -102,8 +101,3 @@ export type Actions =
   | "flopAction"
   | "turnAction"
   | "riverAction";
-
-export type VillainForm = {
-  pos: string;
-  hand: string;
-};
