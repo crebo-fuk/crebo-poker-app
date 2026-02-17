@@ -4,7 +4,7 @@ import type {
   Target,
   Actions,
 } from "../types/type";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { useState } from "react";
 import { HandSelectModal } from "./HandSelectModal";
 import { ActButton } from "./ActButton";
@@ -21,13 +21,13 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     setValue,
     getValues,
     reset,
+    control,
     formState: { errors },
   } = useForm<HandFormValue>({
     defaultValues: {
       heroPos: "",
       heroHand: "",
-      villainPos: "",
-      villainHand: "",
+      villains: [{ villainPos: "", villainHand: "" }],
       memo: "",
       preflop: "",
       flop: "",
@@ -65,27 +65,34 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     reset();
   };
 
+  const { fields, append, remove } = useFieldArray({
+    name: "villains",
+    control,
+  });
+
   //-----ハンドセレクトのModal作成-----
   const [selectedModal, setSelectedModal] = useState<SelectedModal>(null);
-  const [selectedCards, setSelectedCards] = useState<Record<Target, string[]>>({
+  const [selectedCards, setSelectedCards] = useState<
+    Record<Target, string[]> & { villainHands: Record<number, string[]> }
+  >({
     heroHand: [],
-    villainHand: [],
     flop: [],
     turn: [],
     river: [],
+    villainHands: {},
   });
   const maxLength: Record<Target, number> = {
     heroHand: 2,
-    villainHand: 2,
     flop: 3,
     turn: 1,
     river: 1,
   };
+  const VillainHandMaxLength = 2;
   const closeModal = () => {
     setSelectedModal(null);
   };
 
-  //-----ハンドセレクト関数・一本化-----
+  //-----ハンドセレクト関数(Villain以外)-----
   const addCard = (target: Target, card: string) => {
     setSelectedCards((prev) => {
       if (prev[target].length >= maxLength[target]) return prev;
@@ -98,11 +105,21 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     });
   };
   const handleAddHeroHand = (card: string) => addCard("heroHand", card);
-  const handleAddVillainHand = (card: string) => addCard("villainHand", card);
   const handleAddFlopCard = (card: string) => addCard("flop", card);
   const handleAddTurnCard = (card: string) => addCard("turn", card);
   const handleAddRiverCard = (card: string) => addCard("river", card);
-  const disableCards = Object.values(selectedCards).flat();
+  const addVillainCard = (index: number, card: string) => {
+    setSelectedCards((prev) => {
+      if (prev.villainHands[index].length >= VillainHandMaxLength) return prev;
+      const next = [...prev.villainHands[index], card];
+      if (next.length === VillainHandMaxLength)
+        setValue(`villains.${index}.villainHand`, next.join(""));
+      return {
+        ...prev,
+        villainHands: { ...prev, [index]: next },
+      };
+    });
+  };
 
   const renderCardSlots = (target: Target) => {
     const selected = selectedCards[target]; // string[]
@@ -155,12 +172,6 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   const onDeleteAction = (targetAction: Actions) => {
     setValue(targetAction, "");
   };
-
-  //-----VillainShowDown-----
-  // const { fields, append, remove } = useFieldArray({
-  //   name: "villains",
-  //   control,
-  // });
 
   return (
     <>
