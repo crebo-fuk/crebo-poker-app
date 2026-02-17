@@ -121,7 +121,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     });
   };
 
-  const disableCard = [
+  const disableCards = [
     ...selectedCards.heroHand,
     ...selectedCards.flop,
     ...selectedCards.turn,
@@ -194,7 +194,9 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 });
                 setSelectedModal({ type: "villainHand", index });
               }}
-            ></button>
+            >
+              {v ?? "＋"}
+            </button>
           );
         })}
       </div>
@@ -443,12 +445,15 @@ BTN 5bb"
           {/*--------villainハンド詳細--------*/}
           {fields.map((field, index) => {
             return (
-              <div className="flex items-center justify-between gap-3">
+              <div
+                key={field.id}
+                className="flex items-center justify-between gap-3"
+              >
                 <div className="w-full">
-                  <div>(Villainポジション)</div>
+                  <div>(Villain{index + 1}ポジション)</div>
                   <select
                     className="border w-full pl-2 rounded-xl flex items-center justify-center h-7"
-                    {...register("villainPos")}
+                    {...register(`villains.${index}.villainPos`)}
                   >
                     {positions.map((p) => (
                       <option key={p}>{p}</option>
@@ -456,9 +461,21 @@ BTN 5bb"
                   </select>
                 </div>
                 <div className="w-full">
-                  <div>(villainハンド)</div>
-                  {renderCardSlots("villainHand")}
-                  <input type="hidden" {...register("villainHand")} />
+                  <div>(villain{index + 1}ハンド)</div>
+                  {renderVillainCardSlots(index)}
+                  <input
+                    type="hidden"
+                    {...register(`villains.${index}.villainHand`)}
+                  />
+                </div>
+                <div className="flex items-center">
+                  <button
+                    type="button"
+                    className="border rounded-xl px-2 py-1 text-xs cursor-pointer"
+                    onClick={() => handleRemoveVillain(index)}
+                  >
+                    削除
+                  </button>
                 </div>
               </div>
             );
@@ -483,13 +500,17 @@ BTN 5bb"
         />
       )}
       {/*---villainHand用--- */}
-      {selectedModal === "villainHand" && (
-        <HandSelectModal
-          onClose={closeModal}
-          onAddSelectedCard={handleAddVillainHand}
-          disableCards={disableCards}
-        />
-      )}
+      {selectedModal !== null &&
+        typeof selectedModal === "object" &&
+        selectedModal.type === "villainHand" && (
+          <HandSelectModal
+            onClose={closeModal}
+            onAddSelectedCard={(card) =>
+              addVillainCard(selectedModal.index, card)
+            }
+            disableCards={disableCards}
+          />
+        )}
       {/*---FlopCard用--- */}
       {selectedModal === "flop" && (
         <HandSelectModal
