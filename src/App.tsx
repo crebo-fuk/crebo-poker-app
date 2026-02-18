@@ -435,7 +435,17 @@ function App() {
             />
           </div>
         )}
-        {screen === "viewStatistics" && <HandStatistics />}
+        {screen === "viewStatistics" && (
+          <div>
+            <button
+              onClick={() => setScreen("hand")}
+              className="cursor-pointer border rounded-2xl px-2 py-1 text-sm flex items-center justify-center"
+            >
+              戻る
+            </button>
+            <HandStatistics />
+          </div>
+        )}
       </main>
       {/* ==============画面下部ボタン============== */}
       <div className="fixed bottom-0 left-1 right-1 border-t grid grid-cols-3 p-2">
