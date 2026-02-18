@@ -279,7 +279,8 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 className="border rounded-xl w-full p-2 h-7"
                 placeholder="65000"
                 type="number"
-                {...register("stack")}
+                step="100"
+                {...register("stack", { valueAsNumber: true })}
               />
             </div>
           </div>
@@ -333,6 +334,15 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                     {errors.result.message}
                   </p>
                 )}
+              </div>
+              <div>
+                <div className="flex items-center justify-center">損益(BB)</div>
+                <input
+                  type="number"
+                  step="0.5"
+                  className="border pl-1 h-7 rounded-xl"
+                  {...register("profitBB", { valueAsNumber: true })}
+                ></input>
               </div>
             </div>
           </div>
