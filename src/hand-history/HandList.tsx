@@ -237,7 +237,7 @@ export const HandList = ({
                         ショーダウン
                       </div>
                       {hand.villains.map((v) => {
-                        return (
+                        return v.villainHand ? (
                           <div className="mr-4">
                             <div className="flex gap-1">
                               {splitCard(v.villainHand).length === 2 &&
@@ -254,7 +254,7 @@ export const HandList = ({
                               {v.villainPos}
                             </div>
                           </div>
-                        );
+                        ) : null;
                       })}
                     </div>
                   )}
