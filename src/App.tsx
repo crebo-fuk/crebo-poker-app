@@ -11,6 +11,7 @@ import type {
 import { RecordForm } from "./components/RecordForm";
 import { CashFlowChart } from "./components/CashFlowChart";
 import { HandHistory } from "./hand-history/HandHistory";
+import { HandStatistics } from "./hand-history/HandStatistics";
 
 function App() {
   const STORAGE_KEY = "poker_record";
@@ -64,7 +65,6 @@ function App() {
 
   //==============Stateで画面遷移==============
   const [screen, setScreen] = useState<Screen>("home");
-  
 
   //==============期間別フィルタリング==============
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
@@ -405,6 +405,19 @@ function App() {
         )}
         {/* ==============ハンド履歴============== */}
         {screen === "hand" && (
+          <div>
+            <button className="border" onClick={() => setScreen("recordHand")}>
+              ハンドを記録
+            </button>
+            <button
+              className="border"
+              onClick={() => setScreen("viewStatistics")}
+            >
+              統計を見る
+            </button>
+          </div>
+        )}
+        {screen === "recordHand" && (
           <HandHistory
             tournaments={filteredRecords}
             onAddHand={handleAddHand}
@@ -414,6 +427,7 @@ function App() {
             toggleReviewHand={toggleReviewHands}
           />
         )}
+        {screen === "viewStatistics" && <HandStatistics />}
       </main>
       {/* ==============画面下部ボタン============== */}
       <div className="fixed bottom-0 left-1 right-1 border-t grid grid-cols-3 p-2">
