@@ -114,6 +114,11 @@ export const HandList = ({
             : resultChop
               ? "bg-gray-100"
               : "";
+        const resultBorder = resultWin
+          ? "border-green-900"
+          : resultLose
+            ? "border-red-900"
+            : "";
         {
           /*---BB計算。後々ハンドそのものにもたせるか */
         }
@@ -132,7 +137,7 @@ export const HandList = ({
                       {splitCard(hand.heroHand).map((h, i) => {
                         return (
                           <div
-                            className="border rounded-sm text-sm w-7 h-11 flex items-center justify-center"
+                            className={`border ${resultBorder} rounded-sm text-sm w-7 h-11 flex items-center justify-center`}
                             key={i}
                           >
                             {h}
