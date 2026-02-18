@@ -2,10 +2,16 @@ import { useState } from "react";
 import "./App.css";
 import { RecordList } from "./components/RecordList";
 import { Summary } from "./components/Summary";
-import type { RecordItems, HandItem, FxRatesApiResponse } from "./types/type";
+import type {
+  RecordItems,
+  HandItem,
+  FxRatesApiResponse,
+  Screen,
+} from "./types/type";
 import { RecordForm } from "./components/RecordForm";
 import { CashFlowChart } from "./components/CashFlowChart";
 import { HandHistory } from "./hand-history/HandHistory";
+import { HandStatistics } from "./hand-history/HandStatistics";
 
 function App() {
   const STORAGE_KEY = "poker_record";
@@ -58,7 +64,6 @@ function App() {
   };
 
   //==============Stateで画面遷移==============
-  type Screen = "tmList" | "form" | "chart" | "home" | "hand";
   const [screen, setScreen] = useState<Screen>("home");
 
   //==============期間別フィルタリング==============
@@ -400,14 +405,46 @@ function App() {
         )}
         {/* ==============ハンド履歴============== */}
         {screen === "hand" && (
-          <HandHistory
-            tournaments={filteredRecords}
-            onAddHand={handleAddHand}
-            hands={hands}
-            onDeleteHand={handleDeleteHand}
-            reviewHandIds={reviewHandIds}
-            toggleReviewHand={toggleReviewHands}
-          />
+          <div>
+            <button className="border" onClick={() => setScreen("recordHand")}>
+              ハンドを記録
+            </button>
+            <button
+              className="border"
+              onClick={() => setScreen("viewStatistics")}
+            >
+              統計を見る
+            </button>
+          </div>
+        )}
+        {screen === "recordHand" && (
+          <div>
+            <button
+              onClick={() => setScreen("hand")}
+              className="cursor-pointer border rounded-2xl px-2 py-1 text-sm flex items-center justify-center"
+            >
+              戻る
+            </button>
+            <HandHistory
+              tournaments={filteredRecords}
+              onAddHand={handleAddHand}
+              hands={hands}
+              onDeleteHand={handleDeleteHand}
+              reviewHandIds={reviewHandIds}
+              toggleReviewHand={toggleReviewHands}
+            />
+          </div>
+        )}
+        {screen === "viewStatistics" && (
+          <div>
+            <button
+              onClick={() => setScreen("hand")}
+              className="cursor-pointer border rounded-2xl px-2 py-1 text-sm flex items-center justify-center"
+            >
+              戻る
+            </button>
+            <HandStatistics hands={hands} />
+          </div>
         )}
       </main>
       {/* ==============画面下部ボタン============== */}

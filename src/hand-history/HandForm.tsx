@@ -285,9 +285,9 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               />
             </div>
           </div>
-          <div className=" mt-3">
-            <div className="flex items-center justify-between gap-3">
-              <div className="w-full">
+          <div className="mt-3 flex items-center">
+            <div className="flex items-center gap-2">
+              <div className="mr-2 w-24">
                 <div>(Heroポジション)</div>
                 <select
                   className="border w-full pl-2 rounded-xl h-7"
@@ -304,7 +304,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 )}
               </div>
               {/*--------Heroハンド詳細--------*/}
-              <div className="w-full">
+              <div className="mr-2">
                 <div>(Heroハンド)</div>
                 {renderCardSlots("heroHand")}
                 {errors.heroHand && (
@@ -317,8 +317,8 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 type="hidden"
                 {...register("heroHand", { required: "選択してください" })}
               />
-              <div className="m-2">
-                <div className="flex items-center justify-center">勝敗</div>
+              <div className="mr-2">
+                <div className="flex items-center justify-center">(勝敗)</div>
                 <select
                   className="border pl-1 h-7 rounded-xl"
                   {...register("result", { required: "選択してください" })}
@@ -336,12 +336,12 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                   </p>
                 )}
               </div>
-              <div>
+              <div className="w-24 flex-none">
                 <div className="flex items-center justify-center">損益(BB)</div>
                 <input
                   type="number"
                   step="0.1"
-                  className="border pl-1 h-7 rounded-xl"
+                  className="border pl-1 h-7 rounded-xl w-full"
                   {...register("profitBB", { valueAsNumber: true })}
                 ></input>
               </div>
