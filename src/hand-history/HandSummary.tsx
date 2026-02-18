@@ -5,9 +5,44 @@ type Props = {
 };
 
 export const HandSummary = ({ hands }: Props) => {
+  const totalHands = hands.length;
+  const totalProfitBB = hands.reduce((sum, r) => sum + (r.profitBB ?? 0), 0);
+  const vallidHands = hands.filter((h) => h.profitBB != null);
+  const avgProfitBB = totalProfitBB / vallidHands.length;
+  const winHands = hands.filter((h) => h.result === "WIN");
+  const loseHands = hands.filter((h) => h.result === "LOSE");
+  const chopHands = hands.filter((h) => h.result === "CHOP");
+  const handsWinRate =
+    totalHands > 0 ? ((winHands.length / totalHands) * 100).toFixed(1) : 0;
   return (
     <div>
-      <div></div>
+      <div>総ハンド数：{totalHands}ハンド</div>
+      <div>
+        合計損益(BB)：{totalProfitBB > 0 ? "+" : ""}
+        {totalProfitBB}BB
+      </div>
+      <div>
+        平均損益(BB)：{avgProfitBB > 0 ? "+" : ""}
+        {avgProfitBB} BB/hand
+      </div>
+      <div className="flex gap-3 items-center justify-center">
+        <div>
+          <div className="text-green-600">WIN</div>
+          <div>{winHands.length}</div>
+        </div>
+        <div>
+          <div className="text-red-600">LOSE</div>
+          <div>{loseHands.length}</div>
+        </div>
+        <div>
+          <div className="text-gray-600">CHOP</div>
+          <div>{chopHands.length}</div>
+        </div>
+        <div>
+          <div>勝率</div>
+          <div>{handsWinRate}%</div>
+        </div>
+      </div>
     </div>
   );
 };
