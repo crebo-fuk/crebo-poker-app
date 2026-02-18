@@ -443,7 +443,7 @@ function App() {
             >
               戻る
             </button>
-            <HandStatistics />
+            <HandStatistics hands={hands} />
           </div>
         )}
       </main>

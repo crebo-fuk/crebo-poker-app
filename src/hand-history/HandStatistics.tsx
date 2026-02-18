@@ -1,7 +1,14 @@
-export const HandStatistics = () => {
+import type { HandItem } from "../types/type";
+import { HandSummary } from "./HandSummary";
+
+type Props = {
+  hands: HandItem[];
+};
+
+export const HandStatistics = ({ hands }: Props) => {
   return (
     <div>
-      <div>統計</div>
+      <HandSummary hands={hands} />
     </div>
   );
 };
