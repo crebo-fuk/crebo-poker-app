@@ -153,6 +153,22 @@ export const HandList = ({
                       {hand.heroPos}
                     </div>
                   </div>
+                  {hand.profitBB && (
+                    <div className="flex items-center justify-center h-11 ml-5 text-sm">
+                      <div
+                        className={
+                          hand.profitBB > 0
+                            ? "text-lime-600"
+                            : hand.profitBB < 0
+                              ? "text-pink-600 font-semibold"
+                              : "text-gray-400"
+                        }
+                      >
+                        {hand.profitBB > 0 ? "+" : ""}
+                        {hand.profitBB}BB
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex gap-8">
