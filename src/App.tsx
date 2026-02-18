@@ -418,14 +418,22 @@ function App() {
           </div>
         )}
         {screen === "recordHand" && (
-          <HandHistory
-            tournaments={filteredRecords}
-            onAddHand={handleAddHand}
-            hands={hands}
-            onDeleteHand={handleDeleteHand}
-            reviewHandIds={reviewHandIds}
-            toggleReviewHand={toggleReviewHands}
-          />
+          <div>
+            <button
+              onClick={() => setScreen("hand")}
+              className="cursor-pointer border rounded-2xl px-2 py-1 text-sm flex items-center justify-center"
+            >
+              戻る
+            </button>
+            <HandHistory
+              tournaments={filteredRecords}
+              onAddHand={handleAddHand}
+              hands={hands}
+              onDeleteHand={handleDeleteHand}
+              reviewHandIds={reviewHandIds}
+              toggleReviewHand={toggleReviewHands}
+            />
+          </div>
         )}
         {screen === "viewStatistics" && <HandStatistics />}
       </main>

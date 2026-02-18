@@ -8,7 +8,9 @@ type Props = {
 export const TournamentList = ({ tournaments, onSelectTournament }: Props) => {
   return (
     <div className="h-[90vh]">
-      <div className="text-xl font-bold p-3">トーナメント一覧(選択)</div>
+      <div className="text-xl font-bold p-1 flex items-center justify-center">
+        トーナメント一覧(選択)
+      </div>
       <div className="h-[65vh] overflow-y-auto overscroll-contain">
         {tournaments.map((tournament: RecordItems) => (
           <button
