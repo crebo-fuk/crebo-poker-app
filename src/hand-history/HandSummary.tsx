@@ -16,6 +16,7 @@ export const HandSummary = ({ hands }: Props) => {
     totalHands > 0 ? ((winHands.length / totalHands) * 100).toFixed(1) : 0;
   return (
     <div>
+      <h2 className="text-lg font-bold text-center mt-2 mb-3">ハンド統計</h2>
       <div>総ハンド数：{totalHands}ハンド</div>
       <div>
         合計損益(BB)：{totalProfitBB > 0 ? "+" : ""}

@@ -1,5 +1,6 @@
 import type { HandItem } from "../types/type";
 import { HandSummary } from "./HandSummary";
+import { PosStats } from "./PosStats";
 
 type Props = {
   hands: HandItem[];
@@ -8,10 +9,8 @@ type Props = {
 export const HandStatistics = ({ hands }: Props) => {
   return (
     <div>
-      <h2 className="text-lg font-bold text-center mt-2 mb-3">ハンド統計</h2>
-      <div>
-        <HandSummary hands={hands} />
-      </div>
+      <HandSummary hands={hands} />
+      <PosStats />
     </div>
   );
 };
