@@ -32,7 +32,7 @@ export type HandFormValue = {
   river: string;
   blindSB: number;
   blindBB: number;
-  stack: number;
+  stackBB: number;
   result: "WIN" | "LOSE" | "CHOP";
   preflopAction: string;
   flopAction: string;
@@ -54,7 +54,7 @@ export type HandItem = {
   river: string;
   blindSB: number;
   blindBB: number;
-  stack: number;
+  stackBB: number;
   result: "WIN" | "LOSE" | "CHOP";
   preflopAction: string;
   flopAction: string;

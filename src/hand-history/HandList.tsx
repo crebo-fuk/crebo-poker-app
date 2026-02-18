@@ -122,8 +122,10 @@ export const HandList = ({
         {
           /*---BB計算。後々ハンドそのものにもたせるか */
         }
-        const stackBB =
-          hand.blindBB > 0 ? (hand.stack / hand.blindBB).toFixed(1) : "";
+        const stackChips =
+          hand.blindBB > 0
+            ? (hand.stackBB * hand.blindBB).toLocaleString()
+            : "";
         return (
           <div
             key={hand.id}
@@ -198,9 +200,9 @@ export const HandList = ({
                     <div className="mr-3 flex items-center justify-center">
                       ES
                     </div>
-                    {hand.stack > 0 && (
+                    {hand.stackBB > 0 && (
                       <div className="flex items-center justify-center">
-                        {hand.stack} ({stackBB}BB)
+                        {hand.stackBB}BB (= {stackChips}chips)
                       </div>
                     )}
                   </div>

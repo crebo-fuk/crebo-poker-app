@@ -52,7 +52,7 @@ export const HandHistory = ({
     const river = value.river.trim();
     const blindSB = value.blindSB;
     const blindBB = value.blindBB;
-    const stack = value.stack;
+    const stackBB = value.stackBB;
     const result = value.result;
     const preflopAction = value.preflopAction.trim();
     const flopAction = value.flopAction.trim();
@@ -73,7 +73,7 @@ export const HandHistory = ({
       river,
       blindSB,
       blindBB,
-      stack,
+      stackBB,
       result,
       preflopAction,
       flopAction,
