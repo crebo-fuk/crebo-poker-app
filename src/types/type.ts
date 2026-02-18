@@ -23,6 +23,7 @@ export type VillainFormValue = {
 export type HandFormValue = {
   heroPos: string;
   heroHand: string;
+  profitBB: number;
   villains: VillainFormValue[];
   memo: string;
   preflop: string;
@@ -31,7 +32,7 @@ export type HandFormValue = {
   river: string;
   blindSB: number;
   blindBB: number;
-  stack: number;
+  stackBB: number;
   result: "WIN" | "LOSE" | "CHOP";
   preflopAction: string;
   flopAction: string;
@@ -44,6 +45,7 @@ export type HandItem = {
   tournamentId: string;
   heroPos: string;
   heroHand: string;
+  profitBB: number;
   villains: VillainFormValue[];
   memo: string;
   preflop: string;
@@ -52,7 +54,7 @@ export type HandItem = {
   river: string;
   blindSB: number;
   blindBB: number;
-  stack: number;
+  stackBB: number;
   result: "WIN" | "LOSE" | "CHOP";
   preflopAction: string;
   flopAction: string;

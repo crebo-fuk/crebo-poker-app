@@ -27,6 +27,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     defaultValues: {
       heroPos: "",
       heroHand: "",
+      profitBB: undefined,
       villains: [{ villainPos: "", villainHand: "" }],
       memo: "",
       preflop: "",
@@ -35,7 +36,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
       river: "",
       blindSB: undefined,
       blindBB: undefined,
-      stack: undefined,
+      stackBB: undefined,
       result: undefined,
       preflopAction: "",
       flopAction: "",
@@ -274,12 +275,13 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
               </div>
             </div>
             <div className="">
-              <div>(ES)</div>
+              <div>ES(BB)</div>
               <input
                 className="border rounded-xl w-full p-2 h-7"
-                placeholder="65000"
+                placeholder="55.5"
                 type="number"
-                {...register("stack")}
+                step="0.1"
+                {...register("stackBB", { valueAsNumber: true })}
               />
             </div>
           </div>
@@ -333,6 +335,15 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                     {errors.result.message}
                   </p>
                 )}
+              </div>
+              <div>
+                <div className="flex items-center justify-center">損益(BB)</div>
+                <input
+                  type="number"
+                  step="0.1"
+                  className="border pl-1 h-7 rounded-xl"
+                  {...register("profitBB", { valueAsNumber: true })}
+                ></input>
               </div>
             </div>
           </div>

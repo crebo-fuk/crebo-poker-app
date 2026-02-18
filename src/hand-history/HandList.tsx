@@ -114,11 +114,18 @@ export const HandList = ({
             : resultChop
               ? "bg-gray-100"
               : "";
+        const resultBorder = resultWin
+          ? "border-green-900"
+          : resultLose
+            ? "border-red-900"
+            : "";
         {
           /*---BB計算。後々ハンドそのものにもたせるか */
         }
-        const stackBB =
-          hand.blindBB > 0 ? (hand.stack / hand.blindBB).toFixed(1) : "";
+        const stackChips =
+          hand.blindBB > 0
+            ? (hand.stackBB * hand.blindBB).toLocaleString()
+            : "";
         return (
           <div
             key={hand.id}
@@ -132,7 +139,7 @@ export const HandList = ({
                       {splitCard(hand.heroHand).map((h, i) => {
                         return (
                           <div
-                            className="border rounded-sm text-sm w-7 h-11 flex items-center justify-center"
+                            className={`border ${resultBorder} rounded-sm text-sm w-7 h-11 flex items-center justify-center`}
                             key={i}
                           >
                             {h}
@@ -146,6 +153,22 @@ export const HandList = ({
                       {hand.heroPos}
                     </div>
                   </div>
+                  {hand.profitBB && (
+                    <div className="flex items-center justify-center h-11 ml-5 text-sm">
+                      <div
+                        className={
+                          hand.profitBB > 0
+                            ? "text-lime-600"
+                            : hand.profitBB < 0
+                              ? "text-pink-600 font-semibold"
+                              : "text-gray-400"
+                        }
+                      >
+                        {hand.profitBB > 0 ? "+" : ""}
+                        {hand.profitBB}BB
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex gap-8">
@@ -193,9 +216,9 @@ export const HandList = ({
                     <div className="mr-3 flex items-center justify-center">
                       ES
                     </div>
-                    {hand.stack > 0 && (
+                    {hand.stackBB > 0 && (
                       <div className="flex items-center justify-center">
-                        {hand.stack} ({stackBB}BB)
+                        {hand.stackBB}BB (= {stackChips}chips)
                       </div>
                     )}
                   </div>
@@ -237,7 +260,7 @@ export const HandList = ({
                         ショーダウン
                       </div>
                       {hand.villains.map((v) => {
-                        return (
+                        return v.villainHand ? (
                           <div className="mr-4">
                             <div className="flex gap-1">
                               {splitCard(v.villainHand).length === 2 &&
@@ -254,7 +277,7 @@ export const HandList = ({
                               {v.villainPos}
                             </div>
                           </div>
-                        );
+                        ) : null;
                       })}
                     </div>
                   )}
