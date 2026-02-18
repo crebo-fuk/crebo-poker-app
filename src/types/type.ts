@@ -7,6 +7,15 @@ export type RecordItems = {
   tableSize: 6 | 9;
 };
 
+export type Screen =
+  | "tmList"
+  | "form"
+  | "chart"
+  | "home"
+  | "hand"
+  | "recordHand"
+  | "viewStatistics";
+
 export type FormValues = {
   date: string;
   name: string;

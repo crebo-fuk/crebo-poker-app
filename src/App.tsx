@@ -2,7 +2,12 @@ import { useState } from "react";
 import "./App.css";
 import { RecordList } from "./components/RecordList";
 import { Summary } from "./components/Summary";
-import type { RecordItems, HandItem, FxRatesApiResponse } from "./types/type";
+import type {
+  RecordItems,
+  HandItem,
+  FxRatesApiResponse,
+  Screen,
+} from "./types/type";
 import { RecordForm } from "./components/RecordForm";
 import { CashFlowChart } from "./components/CashFlowChart";
 import { HandHistory } from "./hand-history/HandHistory";
@@ -58,8 +63,8 @@ function App() {
   };
 
   //==============Stateで画面遷移==============
-  type Screen = "tmList" | "form" | "chart" | "home" | "hand";
   const [screen, setScreen] = useState<Screen>("home");
+  
 
   //==============期間別フィルタリング==============
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
