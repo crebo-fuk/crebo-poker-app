@@ -48,8 +48,15 @@ export const PosStats = ({ hands }: Props) => {
         </button>
       </div>
       {selectedPosMax === "6" && (
-        <div>
-          <Table>
+        <div className="mt-3">
+          <Table
+            sx={{
+              "& .MuiTableCell-root": {
+                paddingTop: 1,
+                paddingBottom: 1,
+              },
+            }}
+          >
             <TableHead>
               <TableCell>Position</TableCell>
               <TableCell>Hands</TableCell>
@@ -57,12 +64,32 @@ export const PosStats = ({ hands }: Props) => {
               <TableCell>Avg BB</TableCell>
               <TableCell>BB/100</TableCell>
             </TableHead>
+            <TableBody>
+              {positions6Max.map((p) => {
+                return (
+                  <TableRow key={p} hover sx={{ cursor: "pointer" }}>
+                    <TableCell>{p}</TableCell>
+                    <TableCell>150</TableCell>
+                    <TableCell>+12</TableCell>
+                    <TableCell>+1</TableCell>
+                    <TableCell>12</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
           </Table>
         </div>
       )}
       {selectedPosMax === "9" && (
-        <div>
-          <Table>
+        <div className="mt-3">
+          <Table
+            sx={{
+              "& .MuiTableCell-root": {
+                paddingTop: 1,
+                paddingBottom: 1,
+              },
+            }}
+          >
             <TableHead>
               <TableCell>Position</TableCell>
               <TableCell>Hands</TableCell>
@@ -70,6 +97,19 @@ export const PosStats = ({ hands }: Props) => {
               <TableCell>Avg BB</TableCell>
               <TableCell>BB/100</TableCell>
             </TableHead>
+            <TableBody>
+              {positions9Max.map((p) => {
+                return (
+                  <TableRow key={p} hover sx={{ cursor: "pointer" }}>
+                    <TableCell>{p}</TableCell>
+                    <TableCell>150</TableCell>
+                    <TableCell>+12</TableCell>
+                    <TableCell>+1</TableCell>
+                    <TableCell>12</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
           </Table>
         </div>
       )}
