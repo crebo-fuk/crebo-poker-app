@@ -1,5 +1,14 @@
 import type { HandItem } from "../types/type";
 import { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 type Props = {
   hands: HandItem[];
@@ -28,15 +37,15 @@ export const PosStats = ({ hands }: Props) => {
         <div className="flex gap-3 items-center justify-center">
           <button
             className="border px-2 py-1"
-            onClick={() => setSelectedPosMax("9")}
-          >
-            9Max
-          </button>
-          <button
-            className="border px-2 py-1"
             onClick={() => setSelectedPosMax("6")}
           >
             6Max
+          </button>
+          <button
+            className="border px-2 py-1"
+            onClick={() => setSelectedPosMax("9")}
+          >
+            9Max
           </button>
         </div>
       )}
