@@ -58,6 +58,7 @@ export const HandHistory = ({
     const flopAction = value.flopAction.trim();
     const turnAction = value.turnAction.trim();
     const riverAction = value.riverAction.trim();
+    const tableSize = selectedTournament?.tableSize;
 
     const newHand: HandItem = {
       id: uuidv4(),
@@ -79,6 +80,7 @@ export const HandHistory = ({
       flopAction,
       turnAction,
       riverAction,
+      tableSize,
     };
 
     onAddHand(newHand);
