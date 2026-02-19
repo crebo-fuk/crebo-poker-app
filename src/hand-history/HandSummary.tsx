@@ -6,7 +6,10 @@ type Props = {
 
 export const HandSummary = ({ hands }: Props) => {
   const totalHands = hands.length;
-  const totalProfitBB = hands.reduce((sum, r) => sum + (r.profitBB ?? 0), 0);
+  const totalProfitBB = hands.reduce((sum, h) => {
+    const n = Number(h.profitBB);
+    return sum + (Number.isFinite(n) ? n : 0);
+  }, 0);
   const vallidHands = hands.filter((h) => h.profitBB != null);
   const avgProfitBB = totalProfitBB / vallidHands.length;
   const winHands = hands.filter((h) => h.result === "WIN");

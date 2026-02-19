@@ -10,7 +10,7 @@ export const HandStatistics = ({ hands }: Props) => {
   return (
     <div>
       <HandSummary hands={hands} />
-      <PosStats />
+      <PosStats hands={hands} />
     </div>
   );
 };

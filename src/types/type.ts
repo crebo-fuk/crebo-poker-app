@@ -69,6 +69,7 @@ export type HandItem = {
   flopAction: string;
   turnAction: string;
   riverAction: string;
+  tableSize: 6 | 9 | undefined;
 };
 
 export type FxRatesApiResponse = {
