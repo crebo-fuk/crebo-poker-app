@@ -4,10 +4,8 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  Paper,
 } from "@mui/material";
 
 type Props = {
@@ -28,6 +26,7 @@ export const PosStats = ({ hands }: Props) => {
     "BB",
   ];
   const positions6Max: string[] = ["UTG", "MP", "CO", "BTN", "SB", "BB"];
+  console.log(hands);
   return (
     <div>
       <h2 className="text-lg font-bold text-center mt-2 mb-3">
