@@ -439,9 +439,9 @@ function App() {
           <div>
             <button
               onClick={() => setScreen("hand")}
-              className="cursor-pointer border rounded-2xl px-2 py-1 text-sm flex items-center justify-center"
+              className="cursor-pointer px-2 py-1 text-sm flex items-center justify-center"
             >
-              戻る
+              ←履歴ホームヘ
             </button>
             <HandStatistics hands={hands} />
           </div>
