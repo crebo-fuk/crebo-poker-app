@@ -10,8 +10,9 @@ export const HandSummary = ({ hands }: Props) => {
     const n = Number(h.profitBB);
     return sum + (Number.isFinite(n) ? n : 0);
   }, 0);
-  const vallidHands = hands.filter((h) => h.profitBB != null);
-  const avgProfitBB = totalProfitBB / vallidHands.length;
+  const validHands = hands.filter((h) => h.profitBB != null);
+  const avgProfitBB =
+    validHands.length > 0 ? totalProfitBB / validHands.length : 0;
   const winHands = hands.filter((h) => h.result === "WIN");
   const loseHands = hands.filter((h) => h.result === "LOSE");
   const chopHands = hands.filter((h) => h.result === "CHOP");
