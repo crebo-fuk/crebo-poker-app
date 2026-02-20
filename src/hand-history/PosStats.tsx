@@ -14,6 +14,7 @@ type Props = {
 
 export const PosStats = ({ hands }: Props) => {
   const [selectedPosMax, setSelectedPosMax] = useState<"6" | "9" | null>(null);
+  const positions6Max: string[] = ["UTG", "MP", "CO", "BTN", "SB", "BB"];
   const positions9Max: string[] = [
     "UTG",
     "UTG+1",
@@ -25,10 +26,16 @@ export const PosStats = ({ hands }: Props) => {
     "SB",
     "BB",
   ];
-  const positions6Max: string[] = ["UTG", "MP", "CO", "BTN", "SB", "BB"];
-  console.log(hands);
+
+  const hands6Max = hands.filter((h) => h.tableSize === 6);
+  const hands9Max = hands.filter((h) => h.tableSize === 9);
+
+  const posFilteredHands = (Pos: string, hands: HandItem[]): HandItem[] => {
+    return hands.filter((h) => h.heroPos === Pos);
+  };
+
   return (
-    <div>
+    <div className="flex flex-col h-[48vh]">
       <h2 className="text-lg font-bold text-center mt-2 mb-3">
         ポジション別収支
       </h2>
@@ -47,7 +54,7 @@ export const PosStats = ({ hands }: Props) => {
         </button>
       </div>
       {selectedPosMax === "6" && (
-        <div className="mt-3">
+        <div className="mt-3 flex-1 min-h-0 overflow-y-auto pb-20">
           <Table
             sx={{
               "& .MuiTableCell-root": {
@@ -57,21 +64,34 @@ export const PosStats = ({ hands }: Props) => {
             }}
           >
             <TableHead>
-              <TableCell>Position</TableCell>
-              <TableCell>Hands</TableCell>
-              <TableCell>Total BB</TableCell>
-              <TableCell>Avg BB</TableCell>
-              <TableCell>BB/100</TableCell>
+              <TableRow>
+                <TableCell>Position</TableCell>
+                <TableCell>Hands</TableCell>
+                <TableCell>Total BB</TableCell>
+                <TableCell>BB/hand</TableCell>
+                <TableCell>BB/100</TableCell>
+              </TableRow>
             </TableHead>
             <TableBody>
               {positions6Max.map((p) => {
+                const validHands = posFilteredHands(p, hands6Max);
+                const totalHands = validHands.length;
+                const totalProfitBB = validHands.reduce((sum, h) => {
+                  const n = Number(h.profitBB);
+                  return sum + (Number.isFinite(n) ? n : 0);
+                }, 0);
+                const avgProfitBB =
+                  totalHands > 0 ? totalProfitBB / totalHands : 0;
+                const avgbb100 = avgProfitBB * 100;
+                const displayAvgBB100 =
+                  validHands.length >= 100 ? avgbb100 : "-";
                 return (
                   <TableRow key={p} hover sx={{ cursor: "pointer" }}>
                     <TableCell>{p}</TableCell>
-                    <TableCell>150</TableCell>
-                    <TableCell>+12</TableCell>
-                    <TableCell>+1</TableCell>
-                    <TableCell>12</TableCell>
+                    <TableCell>{totalHands}</TableCell>
+                    <TableCell>{totalProfitBB}</TableCell>
+                    <TableCell>{avgProfitBB}</TableCell>
+                    <TableCell>{displayAvgBB100}</TableCell>
                   </TableRow>
                 );
               })}
@@ -80,7 +100,7 @@ export const PosStats = ({ hands }: Props) => {
         </div>
       )}
       {selectedPosMax === "9" && (
-        <div className="mt-3">
+        <div className="mt-3 flex-1 min-h-0 overflow-y-auto pb-20">
           <Table
             sx={{
               "& .MuiTableCell-root": {
@@ -90,21 +110,34 @@ export const PosStats = ({ hands }: Props) => {
             }}
           >
             <TableHead>
-              <TableCell>Position</TableCell>
-              <TableCell>Hands</TableCell>
-              <TableCell>Total BB</TableCell>
-              <TableCell>Avg BB</TableCell>
-              <TableCell>BB/100</TableCell>
+              <TableRow>
+                <TableCell>Position</TableCell>
+                <TableCell>Hands</TableCell>
+                <TableCell>Total BB</TableCell>
+                <TableCell>BB/hand</TableCell>
+                <TableCell>BB/100</TableCell>
+              </TableRow>
             </TableHead>
             <TableBody>
               {positions9Max.map((p) => {
+                const validHands = posFilteredHands(p, hands9Max);
+                const totalHands = validHands.length;
+                const totalProfitBB = validHands.reduce((sum, h) => {
+                  const n = Number(h.profitBB);
+                  return sum + (Number.isFinite(n) ? n : 0);
+                }, 0);
+                const avgProfitBB =
+                  totalHands > 0 ? totalProfitBB / totalHands : 0;
+                const avgbb100 = avgProfitBB * 100;
+                const displayAvgBB100 =
+                  validHands.length >= 100 ? avgbb100 : "-";
                 return (
                   <TableRow key={p} hover sx={{ cursor: "pointer" }}>
                     <TableCell>{p}</TableCell>
-                    <TableCell>150</TableCell>
-                    <TableCell>+12</TableCell>
-                    <TableCell>+1</TableCell>
-                    <TableCell>12</TableCell>
+                    <TableCell>{totalHands}</TableCell>
+                    <TableCell>{totalProfitBB}</TableCell>
+                    <TableCell>{avgProfitBB}</TableCell>
+                    <TableCell>{displayAvgBB100}</TableCell>
                   </TableRow>
                 );
               })}
