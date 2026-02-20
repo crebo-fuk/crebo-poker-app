@@ -68,7 +68,7 @@ export const PosStats = ({ hands }: Props) => {
                 <TableCell>Position</TableCell>
                 <TableCell>Hands</TableCell>
                 <TableCell>Total BB</TableCell>
-                <TableCell>Avg BB</TableCell>
+                <TableCell>BB/hand</TableCell>
                 <TableCell>BB/100</TableCell>
               </TableRow>
             </TableHead>
@@ -82,14 +82,16 @@ export const PosStats = ({ hands }: Props) => {
                 }, 0);
                 const avgProfitBB =
                   totalHands > 0 ? totalProfitBB / totalHands : 0;
-                const winHands = validHands.filter((h) => h.result === "WIN");
+                const avgbb100 = avgProfitBB * 100;
+                const displayAvgBB100 =
+                  validHands.length >= 100 ? avgbb100 : "-";
                 return (
                   <TableRow key={p} hover sx={{ cursor: "pointer" }}>
                     <TableCell>{p}</TableCell>
                     <TableCell>{totalHands}</TableCell>
                     <TableCell>{totalProfitBB}</TableCell>
                     <TableCell>{avgProfitBB}</TableCell>
-                    <TableCell>12</TableCell>
+                    <TableCell>{displayAvgBB100}</TableCell>
                   </TableRow>
                 );
               })}
@@ -112,7 +114,7 @@ export const PosStats = ({ hands }: Props) => {
                 <TableCell>Position</TableCell>
                 <TableCell>Hands</TableCell>
                 <TableCell>Total BB</TableCell>
-                <TableCell>Avg BB</TableCell>
+                <TableCell>BB/hand</TableCell>
                 <TableCell>BB/100</TableCell>
               </TableRow>
             </TableHead>
@@ -126,14 +128,16 @@ export const PosStats = ({ hands }: Props) => {
                 }, 0);
                 const avgProfitBB =
                   totalHands > 0 ? totalProfitBB / totalHands : 0;
-                const winHands = validHands.filter((h) => h.result === "WIN");
+                const avgbb100 = avgProfitBB * 100;
+                const displayAvgBB100 =
+                  validHands.length >= 100 ? avgbb100 : "-";
                 return (
                   <TableRow key={p} hover sx={{ cursor: "pointer" }}>
                     <TableCell>{p}</TableCell>
                     <TableCell>{totalHands}</TableCell>
                     <TableCell>{totalProfitBB}</TableCell>
                     <TableCell>{avgProfitBB}</TableCell>
-                    <TableCell>12</TableCell>
+                    <TableCell>{displayAvgBB100}</TableCell>
                   </TableRow>
                 );
               })}
