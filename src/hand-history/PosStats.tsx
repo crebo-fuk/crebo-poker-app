@@ -26,7 +26,11 @@ export const PosStats = ({ hands }: Props) => {
     "BB",
   ];
   const positions6Max: string[] = ["UTG", "MP", "CO", "BTN", "SB", "BB"];
-  console.log(hands);
+
+  const posFilteredHands = (Pos: string): HandItem[] => {
+    return hands.filter((h) => h.heroPos === Pos);
+  };
+
   return (
     <div className="flex flex-col h-[48vh]">
       <h2 className="text-lg font-bold text-center mt-2 mb-3">
@@ -67,6 +71,8 @@ export const PosStats = ({ hands }: Props) => {
             </TableHead>
             <TableBody>
               {positions6Max.map((p) => {
+                const validHands = posFilteredHands(p);
+                console.log(validHands);
                 return (
                   <TableRow key={p} hover sx={{ cursor: "pointer" }}>
                     <TableCell>{p}</TableCell>
@@ -92,11 +98,13 @@ export const PosStats = ({ hands }: Props) => {
             }}
           >
             <TableHead>
-              <TableCell>Position</TableCell>
-              <TableCell>Hands</TableCell>
-              <TableCell>Total BB</TableCell>
-              <TableCell>Avg BB</TableCell>
-              <TableCell>BB/100</TableCell>
+              <TableRow>
+                <TableCell>Position</TableCell>
+                <TableCell>Hands</TableCell>
+                <TableCell>Total BB</TableCell>
+                <TableCell>Avg BB</TableCell>
+                <TableCell>BB/100</TableCell>
+              </TableRow>
             </TableHead>
             <TableBody>
               {positions9Max.map((p) => {
