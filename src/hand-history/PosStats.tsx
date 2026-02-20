@@ -75,6 +75,7 @@ export const PosStats = ({ hands }: Props) => {
             <TableBody>
               {positions6Max.map((p) => {
                 const validHands = posFilteredHands(p, hands6Max);
+                console.log(validHands);
                 const totalHands = validHands.length;
                 const totalProfitBB = validHands.reduce((sum, h) => {
                   const n = Number(h.profitBB);
