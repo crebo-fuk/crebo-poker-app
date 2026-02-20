@@ -12,7 +12,7 @@ export const HandSummary = ({ hands }: Props) => {
   }, 0);
   const validHands = hands.filter((h) => h.profitBB != null);
   const avgProfitBB =
-    validHands.length > 0 ? (totalProfitBB / validHands.length).toFixed(1) : 0;
+    validHands.length > 0 ? totalProfitBB / validHands.length : 0;
   const winHands = hands.filter((h) => h.result === "WIN");
   const loseHands = hands.filter((h) => h.result === "LOSE");
   const chopHands = hands.filter((h) => h.result === "CHOP");
@@ -28,7 +28,7 @@ export const HandSummary = ({ hands }: Props) => {
       </div>
       <div>
         平均損益(BB)：{avgProfitBB > 0 ? "+" : ""}
-        {avgProfitBB} BB/hand
+        {avgProfitBB.toFixed(1)} BB/hand
       </div>
       <div className="flex gap-3 items-center justify-center">
         <div>
