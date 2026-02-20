@@ -14,6 +14,7 @@ type Props = {
 
 export const PosStats = ({ hands }: Props) => {
   const [selectedPosMax, setSelectedPosMax] = useState<"6" | "9" | null>(null);
+  const positions6Max: string[] = ["UTG", "MP", "CO", "BTN", "SB", "BB"];
   const positions9Max: string[] = [
     "UTG",
     "UTG+1",
@@ -25,9 +26,11 @@ export const PosStats = ({ hands }: Props) => {
     "SB",
     "BB",
   ];
-  const positions6Max: string[] = ["UTG", "MP", "CO", "BTN", "SB", "BB"];
 
-  const posFilteredHands = (Pos: string): HandItem[] => {
+  const hands6Max = hands.filter((h) => h.tableSize === 6);
+  const hands9Max = hands.filter((h) => h.tableSize === 9);
+
+  const posFilteredHands = (Pos: string, hands: HandItem[]): HandItem[] => {
     return hands.filter((h) => h.heroPos === Pos);
   };
 
@@ -71,19 +74,21 @@ export const PosStats = ({ hands }: Props) => {
             </TableHead>
             <TableBody>
               {positions6Max.map((p) => {
-                const validHands = posFilteredHands(p);
+                const validHands = posFilteredHands(p, hands6Max);
                 const totalHands = validHands.length;
                 const totalProfitBB = validHands.reduce((sum, h) => {
                   const n = Number(h.profitBB);
                   return sum + (Number.isFinite(n) ? n : 0);
                 }, 0);
+                const avgProfitBB =
+                  totalHands > 0 ? totalProfitBB / totalHands : 0;
                 const winHands = validHands.filter((h) => h.result === "WIN");
                 return (
                   <TableRow key={p} hover sx={{ cursor: "pointer" }}>
                     <TableCell>{p}</TableCell>
                     <TableCell>{totalHands}</TableCell>
                     <TableCell>{totalProfitBB}</TableCell>
-                    <TableCell>+1</TableCell>
+                    <TableCell>{avgProfitBB}</TableCell>
                     <TableCell>12</TableCell>
                   </TableRow>
                 );
