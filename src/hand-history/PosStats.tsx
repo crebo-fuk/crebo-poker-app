@@ -72,12 +72,17 @@ export const PosStats = ({ hands }: Props) => {
             <TableBody>
               {positions6Max.map((p) => {
                 const validHands = posFilteredHands(p);
-                console.log(validHands);
+                const totalHands = validHands.length;
+                const totalProfitBB = validHands.reduce((sum, h) => {
+                  const n = Number(h.profitBB);
+                  return sum + (Number.isFinite(n) ? n : 0);
+                }, 0);
+                const winHands = validHands.filter((h) => h.result === "WIN");
                 return (
                   <TableRow key={p} hover sx={{ cursor: "pointer" }}>
                     <TableCell>{p}</TableCell>
-                    <TableCell>150</TableCell>
-                    <TableCell>+12</TableCell>
+                    <TableCell>{totalHands}</TableCell>
+                    <TableCell>{totalProfitBB}</TableCell>
                     <TableCell>+1</TableCell>
                     <TableCell>12</TableCell>
                   </TableRow>
