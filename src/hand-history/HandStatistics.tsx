@@ -8,7 +8,7 @@ type Props = {
 
 export const HandStatistics = ({ hands }: Props) => {
   return (
-    <div>
+    <div className="">
       <HandSummary hands={hands} />
       <PosStats hands={hands} />
     </div>

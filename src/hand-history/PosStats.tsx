@@ -28,7 +28,7 @@ export const PosStats = ({ hands }: Props) => {
   const positions6Max: string[] = ["UTG", "MP", "CO", "BTN", "SB", "BB"];
   console.log(hands);
   return (
-    <div>
+    <div className="flex flex-col h-[48vh]">
       <h2 className="text-lg font-bold text-center mt-2 mb-3">
         ポジション別収支
       </h2>
@@ -47,7 +47,7 @@ export const PosStats = ({ hands }: Props) => {
         </button>
       </div>
       {selectedPosMax === "6" && (
-        <div className="mt-3">
+        <div className="mt-3 flex-1 min-h-0 overflow-y-auto pb-20">
           <Table
             sx={{
               "& .MuiTableCell-root": {
@@ -57,11 +57,13 @@ export const PosStats = ({ hands }: Props) => {
             }}
           >
             <TableHead>
-              <TableCell>Position</TableCell>
-              <TableCell>Hands</TableCell>
-              <TableCell>Total BB</TableCell>
-              <TableCell>Avg BB</TableCell>
-              <TableCell>BB/100</TableCell>
+              <TableRow>
+                <TableCell>Position</TableCell>
+                <TableCell>Hands</TableCell>
+                <TableCell>Total BB</TableCell>
+                <TableCell>Avg BB</TableCell>
+                <TableCell>BB/100</TableCell>
+              </TableRow>
             </TableHead>
             <TableBody>
               {positions6Max.map((p) => {
@@ -80,7 +82,7 @@ export const PosStats = ({ hands }: Props) => {
         </div>
       )}
       {selectedPosMax === "9" && (
-        <div className="mt-3">
+        <div className="mt-3 flex-1 min-h-0 overflow-y-auto pb-20">
           <Table
             sx={{
               "& .MuiTableCell-root": {
