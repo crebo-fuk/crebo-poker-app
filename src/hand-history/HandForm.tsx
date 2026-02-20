@@ -342,8 +342,16 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                   type="number"
                   step="0.1"
                   className="border pl-1 h-7 rounded-xl w-full"
-                  {...register("profitBB", { valueAsNumber: true })}
+                  {...register("profitBB", {
+                    valueAsNumber: true,
+                    required: "入力してください",
+                  })}
                 ></input>
+                {errors.profitBB && (
+                  <p className="text-xs text-red-500">
+                    {errors.profitBB.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
