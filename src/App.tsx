@@ -201,9 +201,9 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col p-1">
-      <header className="mb-1 h-[35%]">
-        <h1 className="flex items-center justify-center text-xl">
+    <div className="h-dvh flex flex-col p-1">
+      <header className="mb-1">
+        <h1 className="flex items-center justify-center text-xl font-medium">
           ポーカー収支管理アプリ
         </h1>
         <div className="flex items-center justify-between border-b">
@@ -231,12 +231,12 @@ function App() {
         </div>
         {(screen === "home" || screen === "tmList" || screen === "form") && (
           <div>
-            <div className="pb-1 pt-1 flex items-center justify-center">
+            <div className="text-sm text-zinc-500 text-center pt-1">
               【{periodLabel}】
             </div>
             <Summary records={filteredRecords} exchange={exchangeMoney} />
             <div>
-              <div className="grid grid-cols-2">
+              <div className="grid grid-cols-2 border-b py-2 gap-1">
                 <button
                   onClick={() => {
                     setScreen("tmList");
@@ -244,7 +244,7 @@ function App() {
                     setSelectedMonth(null);
                     setSelectedDay(null);
                   }}
-                  className={`border-b p-2 mt-1 min-w-full cursor-pointer ${(screen === "home" || screen === "tmList") && "text-green-500"}`}
+                  className={`rounded-xl border p-2 cursor-pointer text-sm ${screen === "home" || screen === "tmList" ? "border-green-500 text-green-600 bg-green-50" : "border-zinc-200"}`}
                 >
                   履歴一覧
                 </button>
@@ -252,7 +252,7 @@ function App() {
                   onClick={() => {
                     setScreen("form");
                   }}
-                  className={`border-b p-2 mt-1 min-w-full cursor-pointer ${screen === "form" && "text-green-500"}`}
+                  className={`rounded-xl border p-2 cursor-pointer text-sm ${screen === "form" ? "border-green-500 text-green-600 bg-green-50" : "border-zinc-200"}`}
                 >
                   ＋新規登録
                 </button>
@@ -261,11 +261,11 @@ function App() {
           </div>
         )}
       </header>
-      <main className="flex-1 h-[50vh] pb-20">
+      <main className="flex-1 min-h-0 pb-20 overflow-hidden flex flex-col">
         {/* ==============履歴一覧============== */}
         {/* ===年月別フィルタリング=== */}
         {(screen === "home" || screen === "tmList") && (
-          <div className="flex h-[10vh]">
+          <div className="shrink-0">
             <div>
               <div className="flex">
                 <button
@@ -333,7 +333,7 @@ function App() {
         )}
         {/* ===履歴詳細=== */}
         {(screen === "home" || screen === "tmList") && (
-          <div className="h-[32vh] overflow-y-auto overscroll-contain p-1 mt-3">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-1 mt-3">
             <RecordList
               records={filteredRecords}
               onDelete={handleDelete}
