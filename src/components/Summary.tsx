@@ -31,15 +31,15 @@ export const Summary = ({ records, exchange }: Props) => {
   return (
     <div className="">
       <div className="grid grid-cols-2 text-xs">
-        <div className="border rounded-xl mt-1 mr-2 mb-2 p-2 text-left">
+        <div className="border border-zinc-200 rounded-xl shadow-sm mt-1 mr-2 mb-2 p-2 text-left">
           <p className="">トータル収支</p>
           <p
-            className={`text-xl ${
+            className={`text-xl tabular-nums leading-tight ${
               totalProfit > 0
-                ? "text-green-500"
+                ? "text-green-600"
                 : totalProfit < 0
-                  ? "text-red-500"
-                  : "text-black"
+                  ? "text-red-600"
+                  : "text-zinc-800"
             }`}
           >
             {totalProfit >= 0 ? "+" : ""}
@@ -47,7 +47,7 @@ export const Summary = ({ records, exchange }: Props) => {
           </p>
         </div>
         <div className="grid grid-cols-2">
-          <div className="border rounded-xl mt-1 mr-2 mb-2 p-2 text-left">
+          <div className="border border-zinc-200 shadow-sm rounded-xl mt-1 mr-2 mb-2 p-2 text-left">
             <p>
               ITM({itmCount}/{totalTmCount})
             </p>
@@ -56,22 +56,22 @@ export const Summary = ({ records, exchange }: Props) => {
               <p className=" flex items-center justify-center text-xs"></p>
             </div>
           </div>
-          <div className="border rounded-xl mt-1 mr-2 mb-2 p-2 text-left">
+          <div className="border border-zinc-200 shadow-sm rounded-xl mt-1 mr-2 mb-2 p-2 text-left">
             <p>ROI</p>
             <p className="text-xl">{Roi}%</p>
           </div>
         </div>
       </div>
       <div className="grid grid-cols-3 text-sm">
-        <div className="ring ring-zinc-900 rounded-xl mt-1 mr-2 p-2">
+        <div className="border border-zinc-200 shadow-sm rounded-xl mt-1 mr-2 p-2">
           <p>total賞金</p>
           <p className="text-yellow-600">{exchange(totalPrize)}</p>
         </div>
-        <div className="ring ring-zinc-900 rounded-xl mt-1 mr-2 p-2">
+        <div className="border border-zinc-200 shadow-sm rounded-xl mt-1 mr-2 p-2">
           <p>最大賞金</p>
           <p className="text-yellow-600">{exchange(maxPrize)}</p>
         </div>
-        <div className="ring ring-zinc-900 rounded-xl mt-1 mr-2 p-2">
+        <div className="border border-zinc-200 shadow-sm rounded-xl mt-1 mr-2 p-2">
           <p>平均buy-in</p>
           <p>{exchange(averageBuyIn)}</p>
         </div>
