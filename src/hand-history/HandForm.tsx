@@ -408,6 +408,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 onAddAction={onAddAction}
                 targetAction={"preflopAction"}
                 onDeleteAction={onDeleteAction}
+                onUndoAction={onUndoAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
@@ -424,6 +425,7 @@ BTN c"
                 onAddAction={onAddAction}
                 targetAction={"flopAction"}
                 onDeleteAction={onDeleteAction}
+                onUndoAction={onUndoAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
@@ -439,6 +441,7 @@ BTN c"
                 onAddAction={onAddAction}
                 targetAction={"turnAction"}
                 onDeleteAction={onDeleteAction}
+                onUndoAction={onUndoAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
@@ -455,6 +458,7 @@ BTN 3bb"
                 onAddAction={onAddAction}
                 targetAction={"riverAction"}
                 onDeleteAction={onDeleteAction}
+                onUndoAction={onUndoAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
