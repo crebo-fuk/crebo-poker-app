@@ -5,7 +5,7 @@ import type {
   Actions,
 } from "../types/type";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { HandSelectModal } from "./HandSelectModal";
 import { ActButton } from "./ActButton";
 
@@ -231,14 +231,36 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   };
 
   //-----------アクション記入欄----------
+  //-----一つ戻るボタン-----
+  const actionUndoRef = useRef<Record<Actions, string[]>>({
+    preflopAction: [],
+    flopAction: [],
+    turnAction: [],
+    riverAction: [],
+  });
+  const pushActionHistory = (targetAction: Actions) => {
+    const current = getValues(targetAction);
+    actionUndoRef.current[targetAction].push(current);
+  };
+  const onUndoAction = (targetAction: Actions) => {
+    const prev = actionUndoRef.current[targetAction].pop();
+    if (prev === undefined) return;
+    setValue(targetAction, prev);
+  };
+
+  //-----追加ボタン-----
   const onAddAction = (targetAction: Actions, targetButton: string) => {
+    pushActionHistory(targetAction);
+
     if (targetButton === "\n") {
       setValue(targetAction, getValues(targetAction) + targetButton);
     } else {
       setValue(targetAction, getValues(targetAction) + targetButton + " ");
     }
   };
+  //-----一括削除ボタン-----
   const onDeleteAction = (targetAction: Actions) => {
+    pushActionHistory(targetAction);
     setValue(targetAction, "");
   };
 
@@ -287,7 +309,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
           </div>
           <div className="mt-3 flex items-center">
             <div className="flex items-center gap-2">
-              <div className="mr-2 w-24">
+              <div className="mr-2">
                 <div>(Heroポジション)</div>
                 <select
                   className="border w-full pl-2 rounded-xl h-7"
@@ -386,6 +408,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
                 onAddAction={onAddAction}
                 targetAction={"preflopAction"}
                 onDeleteAction={onDeleteAction}
+                onUndoAction={onUndoAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
@@ -402,6 +425,7 @@ BTN c"
                 onAddAction={onAddAction}
                 targetAction={"flopAction"}
                 onDeleteAction={onDeleteAction}
+                onUndoAction={onUndoAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
@@ -417,6 +441,7 @@ BTN c"
                 onAddAction={onAddAction}
                 targetAction={"turnAction"}
                 onDeleteAction={onDeleteAction}
+                onUndoAction={onUndoAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"
@@ -433,6 +458,7 @@ BTN 3bb"
                 onAddAction={onAddAction}
                 targetAction={"riverAction"}
                 onDeleteAction={onDeleteAction}
+                onUndoAction={onUndoAction}
               />
               <textarea
                 className="border rounded-xl p-2 w-full mt-1"

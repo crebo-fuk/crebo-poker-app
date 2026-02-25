@@ -5,6 +5,7 @@ type Props = {
   onAddAction: (targetAction: Actions, targetButton: string) => void;
   onDeleteAction: (targetAction: Actions) => void;
   targetAction: Actions;
+  onUndoAction: (targetAction: Actions) => void;
 };
 
 export const ActButton = ({
@@ -12,11 +13,11 @@ export const ActButton = ({
   onAddAction,
   onDeleteAction,
   targetAction,
+  onUndoAction,
 }: Props) => {
   const betButtons = ["2.5bb", "3.0bb", "3.5bb", "4.0bb"];
 
   const actions = ["r", "c", "b", "×", "f", "/"];
-
 
   return (
     <div>
@@ -70,6 +71,15 @@ export const ActButton = ({
             onClick={() => onAddAction(targetAction, "\n")}
           >
             改行
+          </button>
+        </div>
+        <div className="flex gap-1 mt-1">
+          <button
+            type="button"
+            className="border rounded w-17 h-5 bg-red-200"
+            onClick={() => onUndoAction(targetAction)}
+          >
+            一つ戻る
           </button>
         </div>
         <div className="flex gap-1 mt-1">
