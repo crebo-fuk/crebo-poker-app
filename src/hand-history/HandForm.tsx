@@ -238,9 +238,15 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     turnAction: [],
     riverAction: [],
   });
+  const pushActionHistory = (targetAction: Actions) => {
+    const current = getValues(targetAction);
+    actionUndoRef.current[targetAction].push(current);
+  };
 
   //-----追加ボタン-----
   const onAddAction = (targetAction: Actions, targetButton: string) => {
+    pushActionHistory(targetAction);
+
     if (targetButton === "\n") {
       setValue(targetAction, getValues(targetAction) + targetButton);
     } else {
@@ -249,6 +255,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   };
   //-----一括削除微単-----
   const onDeleteAction = (targetAction: Actions) => {
+    pushActionHistory(targetAction);
     setValue(targetAction, "");
   };
 
