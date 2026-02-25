@@ -5,7 +5,7 @@ import type {
   Actions,
 } from "../types/type";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { HandSelectModal } from "./HandSelectModal";
 import { ActButton } from "./ActButton";
 
@@ -231,6 +231,15 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
   };
 
   //-----------アクション記入欄----------
+  //-----一つ戻るボタン-----
+  const actionUndoRef = useRef<Record<Actions, string[]>>({
+    preflopAction: [],
+    flopAction: [],
+    turnAction: [],
+    riverAction: [],
+  });
+
+  //-----追加ボタン-----
   const onAddAction = (targetAction: Actions, targetButton: string) => {
     if (targetButton === "\n") {
       setValue(targetAction, getValues(targetAction) + targetButton);
@@ -238,6 +247,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
       setValue(targetAction, getValues(targetAction) + targetButton + " ");
     }
   };
+  //-----一括削除微単-----
   const onDeleteAction = (targetAction: Actions) => {
     setValue(targetAction, "");
   };
@@ -287,7 +297,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
           </div>
           <div className="mt-3 flex items-center">
             <div className="flex items-center gap-2">
-              <div className="mr-2 w-24">
+              <div className="mr-2">
                 <div>(Heroポジション)</div>
                 <select
                   className="border w-full pl-2 rounded-xl h-7"
