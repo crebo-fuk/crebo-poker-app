@@ -242,6 +242,11 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
     const current = getValues(targetAction);
     actionUndoRef.current[targetAction].push(current);
   };
+  const onUndoAction = (targetAction: Actions) => {
+    const prev = actionUndoRef.current[targetAction].pop();
+    if (prev === undefined) return;
+    setValue(targetAction, prev);
+  };
 
   //-----追加ボタン-----
   const onAddAction = (targetAction: Actions, targetButton: string) => {
@@ -253,7 +258,7 @@ export const HandForm = ({ onSubmit, tableSize }: Props) => {
       setValue(targetAction, getValues(targetAction) + targetButton + " ");
     }
   };
-  //-----一括削除微単-----
+  //-----一括削除ボタン-----
   const onDeleteAction = (targetAction: Actions) => {
     pushActionHistory(targetAction);
     setValue(targetAction, "");
