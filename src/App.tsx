@@ -405,12 +405,15 @@ function App() {
         )}
         {/* ==============ハンド履歴============== */}
         {screen === "hand" && (
-          <div>
-            <button className="border" onClick={() => setScreen("recordHand")}>
+          <div className="flex- items-center justify-center">
+            <button
+              className="border border-zinc-200 rounded-xl shadow-sm mt-1 mr-2 mb-2 p-2 w-[30%]"
+              onClick={() => setScreen("recordHand")}
+            >
               ハンドを記録
             </button>
             <button
-              className="border"
+              className="border border-zinc-200 rounded-xl shadow-sm mt-1 mr-2 mb-2 p-2 w-[30%]"
               onClick={() => setScreen("viewStatistics")}
             >
               統計を見る
@@ -421,7 +424,7 @@ function App() {
           <div>
             <button
               onClick={() => setScreen("hand")}
-              className="cursor-pointer px-2 py-1 text-sm flex items-center justify-center"
+              className="border border-zinc-200 rounded-xl shadow-sm mb-1 p-2 ml-1 mt-1 text-xs flex item-left"
             >
               ←履歴ホームヘ
             </button>
@@ -439,7 +442,7 @@ function App() {
           <div>
             <button
               onClick={() => setScreen("hand")}
-              className="cursor-pointer px-2 py-1 text-sm flex items-center justify-center"
+              className="border border-zinc-200 rounded-xl shadow-sm mb-1 p-2 ml-1 mt-1 text-xs flex item-left"
             >
               ←履歴ホームヘ
             </button>
