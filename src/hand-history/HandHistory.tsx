@@ -108,7 +108,7 @@ export const HandHistory = ({
       <div className="">
         <div className="flex items-center justify-between m-3">
           <button
-            className="cursor-pointer border rounded-2xl p-2 text-sm"
+            className="border border-zinc-400 rounded-xl shadow-sm mb-1 p-2 ml-1 mt-1 text-sm"
             onClick={() => {
               setTournamentId(null);
               setIsFormOpen(false);
@@ -119,7 +119,7 @@ export const HandHistory = ({
           </button>
           {!isFormOpen && (
             <button
-              className="cursor-pointer border rounded-2xl p-2 text-sm"
+              className="border border-zinc-400 rounded-xl shadow-sm mb-1 p-2 ml-1 mt-1 text-sm"
               onClick={() => setIsFormOpen(true)}
             >
               ハンド新規作成＋
@@ -127,7 +127,7 @@ export const HandHistory = ({
           )}
           {isFormOpen && (
             <button
-              className="cursor-pointer border rounded-2xl px-4 py-2 text-sm"
+              className="border border-zinc-400 rounded-xl shadow-sm mb-1 p-2 ml-1 mt-1 text-sm"
               onClick={() => setIsFormOpen(false)}
             >
               戻る
